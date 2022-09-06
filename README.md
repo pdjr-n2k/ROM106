@@ -1,10 +1,10 @@
 # ROM104 - NMEA 2000 relay output module
 
-__ROM104__ is an NMEA 2000 relay output module (switchbank) with
-support for four SPDT output channels.
+__ROM104__ is an NMEA 2000 relay output module which supports four SPDT
+output channels.
 
-Each output channel is operates an 8A SPDT latching relay rated at
-220VAC or 48VDC maximum.
+Each output channel operates an SPDT latching relay rated at 220VAC/2A
+or 48VDC/2A maximum.
 
 The module connects to the host NMEA bus by either a screw terminal
 block or M12 5-pin circular connector.
@@ -13,17 +13,18 @@ resistor across the host data bus permitting the module to be installed
 as either a drop node or a bus termination node.
 The module is powered from the NMEA bus and has an LEN of 1.0.
 
-Switchbank state information is transmitted over NMEA 2000 using 
+The switchbank's instance number is configured during installation
+using an 8-position DIL switch.
+
+__ROM104__ accepts instructions for relay operation over the NMEA 2000
+bus by responding to
+[PGN 127502 Binary Status Update]()
+messages addressed to its defined switchbank instance. 
+
+The module reports relay state information over NMEA 2000 using 
 [PGN 127501 Binary Status Report]().
 Switchbank status messages are transmitted once every four seconds or
 immediately a state change is executed on an output channel.
-
-The switchbank state can changed by issuing a
-[PGN 127502 Binary Status Update]()
-message to the switchbank instance. 
-
-The switchbank's instance number is configured during installation
-using an 8-position DIL switch.
 
 ## Hardware design
 
@@ -36,8 +37,8 @@ output for all electronic components.
 NMEA/CAN interfacing is provided by an
 [MCP2551 High-speed CAN Transceiver](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf).
 
-Each output channel drives a latching relay.
-
+Each output channel drives a latching relay with zero-volt NO, COM and
+NC connections.
 The state of switchbank channels (as detected by the microcontroller)
 is reported visually by four LEDs.
 
