@@ -14,7 +14,7 @@ Scheduler::Scheduler(unsigned long loopInterval) {
 
 /**********************************************************************
  * This function must be called from the main loop(). It will execute
- * any scheduled callback function and then delete it from the
+ * any scheduled callback functions and then delete it from the
  * collection of scheduled callback functions (unless the callback was
  * scheduled with a repeat flag in which cast the callback will be
  * re-scheduled).
@@ -27,7 +27,7 @@ void Scheduler::loop() {
     if (now > next) {
         for (unsigned int i = 0; i < 10; i++) {
             if (this->scheduledEvents[i].next >= now) {
-                this->scheduledEvents[i].func(this->scheduledEvents[i].opcode);
+                this->scheduledEvents[i].func();
                 this->scheduledEvents[i].next = (this->scheduledEvents[i].repeat)?(now + this->scheduledEvents[i].interval):0UL;
             }
         }
@@ -35,16 +35,21 @@ void Scheduler::loop() {
     } 
 }
 
-bool Scheduler::schedule(void (*func)(), unsigned long interval, bool repeat, unsigned int opcode) {
+/**********************************************************************
+ * Schedule <func> for callback in <interval> milliseconds. If <repeat>
+ * is omitted or false, then the <func> will be called once, otherwise
+ * it will be called repeatedly every <interval> milliseconds.
+ */
+
+bool Scheduler::schedule(void (*func)(), unsigned long interval, bool repeat) {
     bool retval = false;
 
     for (unsigned int i = 0; i < 10; i++) {
-        if (this->scheduledEvents[i].interval == 0UL) {
+        if (this->scheduledEvents[i].next == 0UL) {
             this->scheduledEvents[i].func = func;
             this->scheduledEvents[i].interval = interval;
             this->scheduledEvents[i].next = (millis() + interval);
             this->scheduledEvents[i].repeat = repeat;
-            this->scheduledEvents[i].opcode = opcode;
             retval = true;
             break;
         }

@@ -28,16 +28,16 @@
 class Scheduler {
 
 public:
-    Scheduler(unsigned long loopInterval);
-    bool schedule(void (*func)(), unsigned long interval, bool repeat, unsigned int opcode);
+    Scheduler(unsigned long loopInterval = 20UL);
+    bool schedule(void (*func)(), unsigned long interval, bool repeat = false);
     void loop();
 
 protected:
 
 private:
-    struct schduledEvent { void (*func)(), unsigned long interval, unsigned long next, bool repeat = false, unsigned int opcode = 0 };
-    scheduledEvent[] scheduledEvents = { {0,0UL,0UL,false,0},{0,0UL,0UL,false,0},{0,0UL,0UL,false,0},{0,0UL,0UL,false,0},{0,0UL,0UL,false,0},{0,0UL,0UL,false,0},{0,0UL,0UL,false,0},{0,0UL,0UL,false,0},{0,0UL,0UL,false,0},{0,0UL,0UL,false,0} };
-    unsigned long loopInterval = 100UL;
+    struct schduledEvent { void (*func)(), unsigned long interval, unsigned long next, bool repeat = false };
+    scheduledEvent[] scheduledEvents = { {0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false} };
+    unsigned long loopInterval;
 
 }
 

@@ -189,7 +189,7 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
  * SWITCHBANK_STATUS - working storage for holding the most recently
  * read state of the Teensy switch inputs.
  */
-tN2kBinaryStatus SWITCHBANK_STATUS;
+bool SWITCHBANK_STATUS[] = { false, false, false, false };
 
 unsigned int RELAY_SET_PINS[] = GPIO_SET_PINS;
 unsigned int RELAY_RST_PINS[] = GPIO_RST_PINS;
@@ -277,8 +277,7 @@ void loop() {
   // executing our only substantive function ... but only if we have a
   // valid switchbank instance number.
   if ((!JUST_STARTED) && (SWITCHBANK_INSTANCE < 253)) {
-    switchChange = checkSwitchStates();
-    transmitSwitchbankStatusMaybe(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS, switchChange);
+    transmitSwitchbankStatusMaybe(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS);
   }
   
   // Update the states of connected LEDs
@@ -287,50 +286,26 @@ void loop() {
   // Process deferred callbacks.
   SCHEDULER.loop();
 }
-
-/**********************************************************************
- * checkSwitchStates() should be called directly from loop(). The
- * function checks switch states every SWITCH_PROCESS_INTERVAL and
- * returns true iff a switch state change is detected.
- */
-bool checkSwitchStates() {
-  static unsigned long deadline = 0UL;
-  static unsigned char lastKnownStatus = 0x00;
-  unsigned long now = millis();
-  bool retval = false;
-
-  if (now > deadline) {
-    retval = ((SWITCHBANK_STATUS = DEBOUNCER.getStates()) != lastKnownStatus);
-    lastKnownStatus = SWITCHBANK_STATUS;
-    deadline = (now + SWITCH_PROCESS_INTERVAL);
-  }
-  return(retval);
-}
   
 /**********************************************************************
  * transmitSwitchbankStatusMaybe() should be called directly from
  * loop(). The function proceeds to transmit a switchbank binary status
  * message if TRANSMIT_INTERVAL has elapsed or <force> is true.
  */
-void transmitSwitchbankStatusMaybe(unsigned char instance, unsigned char status, bool force) {
+void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool force) {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
 
   if ((now > deadline) || force) {
     #ifdef DEBUG_SERIAL
     Serial.print("Transmitting status:");
-    Serial.print(" "); Serial.print(status & 0x01); 
-    Serial.print(" "); Serial.print((status & 0x02) >> 1); 
-    Serial.print(" "); Serial.print((status & 0x04) >> 2); 
-    Serial.print(" "); Serial.print((status & 0x08) >> 3); 
-    Serial.print(" "); Serial.print((status & 0x10) >> 4); 
-    Serial.print(" "); Serial.print((status & 0x20) >> 5); 
-    Serial.print(" "); Serial.print((status & 0x40) >> 6); 
-    Serial.print(" "); Serial.println((status & 0x80) >> 7); 
+    Serial.print(" "); Serial.print((status[0])?"1":"0"); 
+    Serial.print(" "); Serial.print((status[1])?"1":"0"); 
+    Serial.print(" "); Serial.print((status[2])?"1":"0"); 
+    Serial.print(" "); Serial.println((status[3])?"1":"0"); 
     #endif
 
     transmitPGN127501(instance, status);
-    updateLeds(status);
     deadline = (now + TRANSMIT_INTERVAL);
   }
 }
@@ -340,11 +315,12 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, unsigned char status,
  * transmitted and update the shift register so that the channel
  * indicator LEDs reflect the value of <status>.
  */ 
-void updateLeds(unsigned char status) {
+void updateLeds(bool *status) {
   LED_MANAGER.operate(GPIO_POWER_LED, 0, 1);
-  digitalWrite(GPIO_MPX_LATCH, LOW);
-  shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, MSBFIRST, status);
-  digitalWrite(GPIO_MPX_LATCH, HIGH);
+  digitalWrite(GPIO_CH0_LED, (status[0])?ON:OFF);
+  digitalWrite(GPIO_CH1_LED, (status[1])?ON:OFF);
+  digitalWrite(GPIO_CH2_LED, (status[2])?ON:OFF);
+  digitalWrite(GPIO_CH3_LED, (status[3])?ON:OFF);
 }
 
 /**********************************************************************
@@ -352,19 +328,15 @@ void updateLeds(unsigned char status) {
  * the host NMEA bus. <instance> specifies the switchbank instance
  * number and <status> the switchbank channel states. 
  */
-void transmitPGN127501(unsigned char instance, tN2kOnOff *status) {
+void transmitPGN127501(unsigned char instance, bool *status) {
   static tN2kBinaryStatus N2kBinaryStatus;
   static tN2kMsg N2kMsg;
 
   N2kResetBinaryStatus(N2kBinaryStatus);
-  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff((status & 0x01) != 0), 1);
-  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff((status & 0x02) != 0), 2);
-  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff((status & 0x04) != 0), 3);
-  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff((status & 0x08) != 0), 4);
-  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff((status & 0x10) != 0), 5);
-  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff((status & 0x20) != 0), 6);
-  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff((status & 0x40) != 0), 7);
-  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff((status & 0x80) != 0), 8);
+  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[0]), 1);
+  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[1]), 2);
+  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[2]), 3);
+  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[3]), 4);
 
   SetN2kPGN127501(N2kMsg, instance, N2kBinaryStatus);
   NMEA2000.SendMsg(N2kMsg);
@@ -378,15 +350,21 @@ tN2kOnOff bool2tN2kOnOff(bool state) {
   return((state)?N2kOnOff_On:N2kOnOff_Off);
 }
 
-void updateRelayChannel(unsigned int c) {
-  digitalWrite((SWITCHBANK_STATUS[c])?RELAY_SET_PINS[c]:RELAY_RST_PINS[c], ON);
-  SCHEDULER.schedule(depowerRelayChannel, c);
+bool tN2kOnOff2bool(tN2kOnOff state) {
+  return(state == N2kOnOff_On);
 }
 
-void depowerRelayChannel(unsigned int c) {
-  digitalWrite(RELAY_SET_PINS[c], OFF);
-  digitalWrite(RELAY_RST_PINS[c], OFF);
+/**********************************************************************
+ * Operate the latching relay on channel <c> by setting it to the state
+ * defined by SWITCHBANK_STATUS[<c>]. The selected latching relay's
+ * state is changed by issuing an ON pulse to either its SET or ReSeT
+ * GPIO pin and holding this pulse for 100ms.
+ */
+void operateRelay(unsigned int c) {
+  digitalWrite((SWITCHBANK_STATUS[c])?RELAY_SET_PINS[c]:RELAY_RST_PINS[c], ON);
+  SCHEDULER.schedule([](){ digitalWrite(RELAY_SET_PINS[c], OFF); digitalWrite(RELAY_RST_PINS[c], OFF); }, 100);
 }
+
 
 void binarySwitchControl(const tN2kMsg n2kMsg) {
   unsigned char instance;
@@ -395,21 +373,23 @@ void binarySwitchControl(const tN2kMsg n2kMsg) {
   bool changed = false;
   
   if (ParseN2kPGN127501(n2kMsg, instance, bankStatus)) {
-    for (unsigned int c = 0; c < 4; c++) {
-      channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, (c + 1));
-      if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {
-        if (channelStatus != SWITCHBANK_STATUS[c]) {
-          SWITCHBANK_STATUS[c] = channelStatus;
-          updateRelayChannel(c);
-          changed = true;
+    if (instance == SWITCHBANK_INSTANCE) {
+      for (unsigned int c = 0; c < 4; c++) {
+        channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, (c + 1));
+        if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {
+          if (tN2kOnOff2bool(channelStatus) != SWITCHBANK_STATUS[c]) {
+            SWITCHBANK_STATUS[c] = tN2kOnOff2bool(channelStatus);
+            operateRelay(c);
+            changed = true;
+          }
         }
       }
-    }
-    if (changed) {
-      transmitPGN127501(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS);
+      if (changed) {
+        transmitSwitchbankStatusMaybe(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS, true);
+        updateLeds(SWITCHBANK_STATUS);
+      }
     }
   }
-
 }
 
 /**********************************************************************
