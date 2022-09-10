@@ -45,7 +45,7 @@ is reported visually by four LEDs.
 ## PCB
 
 The
-[module PCB](./SIM108.brd.pdf)
+[module PCB](./ROM104.brd.pdf)
 is a 75mm x 75mm square. 
 
 ### Electronic components
@@ -118,9 +118,13 @@ expose the PCB mounted LEDs is not required.
    Setting an address outside this range will disable the module.
    SW1[1] sets address bit 0; SW1[8] sets address bit 7.
    
-### Connecting switch inputs
+### Connecting relay outputs
 
-1. Connect a reference switch input ground to J2[9].
+1. Each relay output channel supports CO (COmmon), NO (Normally Open) and NC
+   (Normally Closed) connections. a reference switch input ground to J2[9].
+   CO is connected to NO and disconnected from NC when the associated switchbank
+   channel is ON and is connected to NC and disconnected from NO when the
+   channel is OFF.
 
 2. Connect up to a maximum of eight switch inputs to J2[1..8].
    Each input must supply an ON voltage in the range 5VDC through 50VDC
