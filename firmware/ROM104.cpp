@@ -21,6 +21,7 @@
 #include <Debouncer.h>
 #include <LedManager.h>
 #include <DilSwitch.h>
+#include <Scheduler.h>
 #include <arraymacros.h>
 
 /**********************************************************************
@@ -73,6 +74,8 @@
 #define GPIO_ENCODER_BIT7 21
 #define GPIO_CH3_LED 22
 #define GPIO_CH2_LED 23
+#define GPIO_SET_PINS = { GPIO_CH0_SET, GPIO_CH1_SET, GPIO_CH2_SET, GPIO_CH3_SET }
+#define GPIO_RST_PINS = { GPIO_CH0_RST, GPIO_CH1_RST, GPIO_CH2_RST, GPIO_CH3_RST }
 #define GPIO_ENCODER_PINS { GPIO_ENCODER_BIT0, GPIO_ENCODER_BIT1, GPIO_ENCODER_BIT2, GPIO_ENCODER_BIT3, GPIO_ENCODER_BIT4, GPIO_ENCODER_BIT5, GPIO_ENCODER_BIT6, GPIO_ENCODER_BIT7 }
 #define GPIO_INPUT_PINS { GPIO_ENCODER_BIT0, GPIO_ENCODER_BIT1, GPIO_ENCODER_BIT2, GPIO_ENCODER_BIT3, GPIO_ENCODER_BIT4, GPIO_ENCODER_BIT5, GPIO_ENCODER_BIT6, GPIO_ENCODER_BIT7 }
 #define GPIO_OUTPUT_PINS { GPIO_POWER_LED, GPIO_CH0_LED, GPIO_CH0_SET, GPIO_CH0_RST, GPIO_CH1_LED, GPIO_CH1_SET, GPIO_CH1_RST, GPIO_CH2_LED, GPIO_CH2_SET, GPIO_CH2_RST, GPIO_CH3_LED, GPIO_CH3_SET, GPIO_CH3_RST }
@@ -127,10 +130,8 @@
 #define DEFAULT_SOURCE_ADDRESS 22         // Seed value for source address claim
 #define INSTANCE_UNDEFINED 255            // Flag value
 #define STARTUP_SETTLE_PERIOD 5000        // Wait this many ms after boot before entering production
-#define SWITCH_PROCESS_INTERVAL 100       // Process switch inputs every n ms
 #define LED_MANAGER_HEARTBEAT 200         // Number of ms on / off
 #define LED_MANAGER_INTERVAL 10           // Number of heartbeats between repeats
-#define DEBOUNCER_SIZE 8                  // Number of IO channels to debounce
 
 /**********************************************************************
  * NMEA transmit configuration. Modules that transmit PGN 127501 are
@@ -162,7 +163,7 @@ const unsigned long TransmitMessages[] PROGMEM={ 127501L, 0 };
  * There are none.
  */
 typedef struct { unsigned long PGN; void (*Handler)(const tN2kMsg &N2kMsg); } tNMEA2000Handler;
-tNMEA2000Handler NMEA2000Handlers[]={ {0, 0} };
+tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, binaryStateChange } };
 
 /**********************************************************************
  * DIL_SWITCH switch decoder.
@@ -171,15 +172,11 @@ int ENCODER_PINS[] = GPIO_ENCODER_PINS;
 DilSwitch DIL_SWITCH (ENCODER_PINS, ELEMENTCOUNT(ENCODER_PINS));
 
 /**********************************************************************
- * DEBOUNCER for the switch inputs.
- */
-int SWITCHES[DEBOUNCER_SIZE] = { GPIO_SENSOR0, GPIO_SENSOR1, GPIO_SENSOR2, GPIO_SENSOR3, GPIO_SENSOR4, GPIO_SENSOR5, GPIO_SENSOR6, GPIO_SENSOR7 };
-Debouncer DEBOUNCER (SWITCHES);
-
-/**********************************************************************
  * LED_MANAGER for LEDs directly connected to Teensy.
  */
 LedManager LED_MANAGER (LED_MANAGER_HEARTBEAT, LED_MANAGER_INTERVAL);
+
+Scheduler SCHEDULER (SCHEDULER_TICK);
 
 /**********************************************************************
  * SWITCHBANK_INSTANCE - working storage for the switchbank module
@@ -192,7 +189,10 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
  * SWITCHBANK_STATUS - working storage for holding the most recently
  * read state of the Teensy switch inputs.
  */
-unsigned char SWITCHBANK_STATUS = 0x00;
+tN2kBinaryStatus SWITCHBANK_STATUS;
+
+unsigned int RELAY_SET_PINS[] = GPIO_SET_PINS;
+unsigned int RELAY_RST_PINS[] = GPIO_RST_PINS;
 
 /**********************************************************************
  * MAIN PROGRAM - setup()
@@ -283,6 +283,9 @@ void loop() {
   
   // Update the states of connected LEDs
   LED_MANAGER.loop();
+
+  // Process deferred callbacks.
+  SCHEDULER.loop();
 }
 
 /**********************************************************************
@@ -349,7 +352,7 @@ void updateLeds(unsigned char status) {
  * the host NMEA bus. <instance> specifies the switchbank instance
  * number and <status> the switchbank channel states. 
  */
-void transmitPGN127501(unsigned char instance, unsigned char status) {
+void transmitPGN127501(unsigned char instance, tN2kOnOff *status) {
   static tN2kBinaryStatus N2kBinaryStatus;
   static tN2kMsg N2kMsg;
 
@@ -373,6 +376,40 @@ void transmitPGN127501(unsigned char instance, unsigned char status) {
  */
 tN2kOnOff bool2tN2kOnOff(bool state) {
   return((state)?N2kOnOff_On:N2kOnOff_Off);
+}
+
+void updateRelayChannel(unsigned int c) {
+  digitalWrite((SWITCHBANK_STATUS[c])?RELAY_SET_PINS[c]:RELAY_RST_PINS[c], ON);
+  SCHEDULER.schedule(depowerRelayChannel, c);
+}
+
+void depowerRelayChannel(unsigned int c) {
+  digitalWrite(RELAY_SET_PINS[c], OFF);
+  digitalWrite(RELAY_RST_PINS[c], OFF);
+}
+
+void binarySwitchControl(const tN2kMsg n2kMsg) {
+  unsigned char instance;
+  tN2kBinaryStatus bankStatus;
+  tN2kOnOff channelStatus;
+  bool changed = false;
+  
+  if (ParseN2kPGN127501(n2kMsg, instance, bankStatus)) {
+    for (unsigned int c = 0; c < 4; c++) {
+      channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, (c + 1));
+      if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {
+        if (channelStatus != SWITCHBANK_STATUS[c]) {
+          SWITCHBANK_STATUS[c] = channelStatus;
+          updateRelayChannel(c);
+          changed = true;
+        }
+      }
+    }
+    if (changed) {
+      transmitPGN127501(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS);
+    }
+  }
+
 }
 
 /**********************************************************************
