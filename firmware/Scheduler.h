@@ -35,8 +35,9 @@ public:
 protected:
 
 private:
-    struct callback { void (*func)(), unsigned long interval, unsigned long when, bool repeat = false };
-    ArduinoQueue<callback> callbacks(10);
+    struct Callback { void (*func)(), unsigned long interval, unsigned long when, bool repeat = false };
+    Callback callbacks[10] = { {NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false} };
+    int size = 0;
     unsigned long loopInterval;
 
 }

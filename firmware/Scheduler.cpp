@@ -10,7 +10,7 @@
  */
  
 Scheduler::Scheduler(unsigned long loopInterval) {
-    this->scheduledEvents = NULL;
+    this->size = 0;
     this->loopInterval = loopInterval;
 }
 
@@ -25,23 +25,18 @@ Scheduler::Scheduler(unsigned long loopInterval) {
 void Scheduler::loop() {
     static unsigned long deadline = 0UL;
     unsigned long now = millis();
-    struct scheduledEvent *ptr = this->scheduledEvents;
 
-    if ((now > deadline) && (ptr)) {
-        while (ptr) {
-            if (ptr->deadline >= now) {
-                ptr->func();
-                if (!ptr->repeat) {
-                    if (this->scheduledEvents == ptr) {
-                        this->scheduledEvents = ptr->next;
-                    } else {
-                        
-                    }
-                } 
-                
-                this->scheduledEvents[i].next = (this->scheduledEvents[i].repeat)?(now + this->scheduledEvents[i].interval):0UL;
+    if ((now > deadline) && (this->size > 0)) {
+        for (unsigned int i = 0; i < 10; i++) {
+            if (this->callbacks[i].when >= now) {
+                this->callbacks[i].func();
+                if (!this->callbacks[i].repeat) {
+                    this->callbacks[i].when = 0UL;
+                    this->size--;
+                } else {
+                    this->callbacks[i].when = (now + this.callbacks[i].interval);
+                }
             }
-            ptr = ptr->next;
         }
         deadline = (now + this->loopInterval);
     } 
@@ -56,14 +51,17 @@ void Scheduler::loop() {
 bool Scheduler::schedule(void (*func)(), unsigned long interval, bool repeat) {
     bool retval = false;
 
-    for (unsigned int i = 0; i < 10; i++) {
-        if (this->scheduledEvents[i].next == 0UL) {
-            this->scheduledEvents[i].func = func;
-            this->scheduledEvents[i].interval = interval;
-            this->scheduledEvents[i].next = (millis() + interval);
-            this->scheduledEvents[i].repeat = repeat;
-            retval = true;
-            break;
+    if (this.size < 10) {
+        for (unsigned int i = 0; i < 10; i++) {
+            if (this->callbacks[i].when == 0UL) {
+                this->callbacks[i].func = func;
+                this->callbacks[i].interval = interval;
+                this->callbacks[i].repeat = repeat;
+                this->callbacks[i].when = (millis() + interval);
+                this->size++;
+                retval = true;
+                break;
+            }
         }
     }
     return(retval);
