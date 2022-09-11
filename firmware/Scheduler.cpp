@@ -1,5 +1,3 @@
-#include <Arduino.h>
-#include <ArduinoQueue.h>
 #include "Scheduler.h"
 
 /**********************************************************************

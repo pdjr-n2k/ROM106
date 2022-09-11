@@ -252,17 +252,12 @@ void setup() {
  * inputs have been debounced.
  */ 
 void loop() {
-  static bool JUST_STARTED = true;
-
-  if (JUST_STARTED && (millis() > STARTUP_SETTLE_PERIOD)) {
-    #ifdef DEBUG_SERIAL
-    Serial.println();
-    Serial.println("Starting:");
-    Serial.print("  N2K Source address is "); Serial.println(NMEA2000.GetN2kSource());
-    Serial.print("  Module instance number is "); Serial.println(SWITCHBANK_INSTANCE);
-    #endif
-    JUST_STARTED = false;
-  }
+  #ifdef DEBUG_SERIAL
+  Serial.println();
+  Serial.println("Starting:");
+  Serial.print("  N2K Source address is "); Serial.println(NMEA2000.GetN2kSource());
+  Serial.print("  Module instance number is "); Serial.println(SWITCHBANK_INSTANCE);
+  #endif
 
   // Before we transmit anything, let's do the NMEA housekeeping and
   // process any received messages. This call may result in acquisition
@@ -274,9 +269,7 @@ void loop() {
   // Once the start-up settle period is over we can enter production by
   // executing our only substantive function ... but only if we have a
   // valid switchbank instance number.
-  if ((!JUST_STARTED) && (SWITCHBANK_INSTANCE < 253)) {
-    transmitSwitchbankStatusMaybe(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS);
-  }
+  if (SWITCHBANK_INSTANCE < 253) transmitSwitchbankStatusMaybe(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS);
   
   // Update the states of connected LEDs
   LED_MANAGER.loop();
@@ -304,6 +297,8 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
     #endif
 
     transmitPGN127501(instance, status);
+    LED_MANAGER.operate(GPIO_POWER_LED, 0, 1);
+
     deadline = (now + TRANSMIT_INTERVAL);
   }
 }
@@ -314,7 +309,6 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
  * indicator LEDs reflect the value of <status>.
  */ 
 void updateLeds(bool *status) {
-  LED_MANAGER.operate(GPIO_POWER_LED, 0, 1);
   digitalWrite(GPIO_CH0_LED, (status[0])?HIGH:LOW);
   digitalWrite(GPIO_CH1_LED, (status[1])?HIGH:LOW);
   digitalWrite(GPIO_CH2_LED, (status[2])?HIGH:LOW);
