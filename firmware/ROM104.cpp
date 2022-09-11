@@ -1,16 +1,17 @@
 /**********************************************************************
- * SIM108.cpp - firmware for the SIM108 switch input module.
+ * ROM104.cpp - firmware for the ROM104 relay output module.
  * Copyright (c) 2021-22 Paul Reeve <preeve@pdjr.eu>
  *
  * Target platform: Teensy 3.2
  * 
- * SIM108 is an 8-channel NMEA switch input module built around a
+ * ROM104 is a 4-channel NMEA relay output module built around a
  * Teensy 3.2 microcontroller.
  * 
- * This firmware recovers the state of sensor channel inputs, assembles
- * a switchbank Binary Status Report and transmits this over NMEA using 
- * PGN127501. Local feedback on detected switch channel states is
- * presented by modulating some indicator LEDs. 
+ * This firmware responds to PGN 127502 Binary Status Update messages
+ * by setting the state of its output relays. The firmware reports the
+ * state of its relays by assembling a switchbank Binary Status Report
+ * and transmits this over NMEA using PGN 127501. Local feedback on
+ * relay states is presented by modulating some indicator LEDs. 
  */
 
 #include <Arduino.h>
@@ -18,8 +19,6 @@
 #include <NMEA2000_CAN.h>
 #include <N2kTypes.h>
 #include <N2kMessages.h>
-#include <Debouncer.h>
-#include <LedManager.h>
 #include <DilSwitch.h>
 #include <Scheduler.h>
 #include <arraymacros.h>
@@ -118,7 +117,7 @@
 #define PRODUCT_LEN 1
 #define PRODUCT_N2K_VERSION 2101
 #define PRODUCT_SERIAL_CODE "002-849" // PRODUCT_CODE + DEVICE_UNIQUE_NUMBER
-#define PRODUCT_TYPE "SIM108"
+#define PRODUCT_TYPE "ROM104"
 #define PRODUCT_VERSION "1.0 (Mar 2022)"
 
 /**********************************************************************
@@ -129,10 +128,7 @@
 
 #define DEFAULT_SOURCE_ADDRESS 22         // Seed value for source address claim
 #define INSTANCE_UNDEFINED 255            // Flag value
-#define STARTUP_SETTLE_PERIOD 5000        // Wait this many ms after boot before entering production
-#define LED_MANAGER_HEARTBEAT 200         // Number of ms on / off
-#define LED_MANAGER_INTERVAL 10           // Number of heartbeats between repeats
-#define SCHEDULER_TICK 100
+#define SCHEDULER_TICK 20                 // The frequency of scheduler management
 
 /**********************************************************************
  * NMEA transmit configuration. Modules that transmit PGN 127501 are
@@ -144,13 +140,13 @@
 /**********************************************************************
  * Declarations of local functions.
  */
-bool checkSwitchStates();
 void messageHandler(const tN2kMsg&);
-void transmitPGN127501(unsigned char instance, bool *status);
 void handlePGN127502(const tN2kMsg n2kMsg);
 void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool force = false);
+void transmitPGN127501(unsigned char instance, bool *status);
 void updateLeds(unsigned char status);
 tN2kOnOff bool2tN2kOnOff(bool state);
+bool tN2kOnOff2bool(tN2kOnOff state);
 
 /**********************************************************************
  * PGNs of messages transmitted by this program.
@@ -172,11 +168,6 @@ tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0L, 0 } };
  */
 int ENCODER_PINS[] = GPIO_ENCODER_PINS;
 DilSwitch DIL_SWITCH (ENCODER_PINS, ELEMENTCOUNT(ENCODER_PINS));
-
-/**********************************************************************
- * LED_MANAGER for LEDs directly connected to Teensy.
- */
-LedManager LED_MANAGER (LED_MANAGER_HEARTBEAT, LED_MANAGER_INTERVAL);
 
 Scheduler SCHEDULER (SCHEDULER_TICK);
 
@@ -297,16 +288,16 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
     #endif
 
     transmitPGN127501(instance, status);
-    LED_MANAGER.operate(GPIO_POWER_LED, 0, 1);
+    digitalWrite(GPIO_POWER_LED, HIGH);
+    SCHEDULER.schedule([](){ digitalWrite(GPIO_POWER_LED, LOW); }, 50);
 
     deadline = (now + TRANSMIT_INTERVAL);
   }
 }
 
 /**********************************************************************
- * Flash the power LED once to indicate that a data packet has been
- * transmitted and update the shift register so that the channel
- * indicator LEDs reflect the value of <status>.
+ * Update the relay state indicator LEDs so that they reflect the value
+ * of <status>.
  */ 
 void updateLeds(bool *status) {
   digitalWrite(GPIO_CH0_LED, (status[0])?HIGH:LOW);
@@ -352,7 +343,7 @@ bool tN2kOnOff2bool(tN2kOnOff state) {
  * state is changed by issuing an ON pulse to either its SET or ReSeT
  * GPIO pin and holding this pulse for 100ms.
  */
-void operateRelay(unsigned int c) {
+void operateRelay(const unsigned int c) {
   digitalWrite((SWITCHBANK_STATUS[c])?RELAY_SET_PINS[c]:RELAY_RST_PINS[c], HIGH);
   SCHEDULER.schedule([&c](){ digitalWrite(RELAY_SET_PINS[c], LOW); digitalWrite(RELAY_RST_PINS[c], LOW); }, 100, false);
 }
