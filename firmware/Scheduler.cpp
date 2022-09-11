@@ -9,6 +9,7 @@
  */
  
 Scheduler::Scheduler(unsigned long loopInterval) {
+    this->scheduledEvents = NULL;
     this->loopInterval = loopInterval;
 }
 
@@ -21,17 +22,27 @@ Scheduler::Scheduler(unsigned long loopInterval) {
  */
 
 void Scheduler::loop() {
-    static unsigned long next = 0UL;
+    static unsigned long deadline = 0UL;
     unsigned long now = millis();
+    struct scheduledEvent *ptr = this->scheduledEvents;
 
-    if (now > next) {
-        for (unsigned int i = 0; i < 10; i++) {
-            if (this->scheduledEvents[i].next >= now) {
-                this->scheduledEvents[i].func();
+    if ((now > deadline) && (ptr)) {
+        while (ptr) {
+            if (ptr->deadline >= now) {
+                ptr->func();
+                if (!ptr->repeat) {
+                    if (this->scheduledEvents == ptr) {
+                        this->scheduledEvents = ptr->next;
+                    } else {
+                        
+                    }
+                } 
+                
                 this->scheduledEvents[i].next = (this->scheduledEvents[i].repeat)?(now + this->scheduledEvents[i].interval):0UL;
             }
+            ptr = ptr->next;
         }
-        next = (now + this->loopInterval);
+        deadline = (now + this->loopInterval);
     } 
 }
 

@@ -2,9 +2,9 @@
  * Scheduler - callback scheduler.
  * 2022 (c) Paul Reeve.
  * 
- * Example
+ * Example:
  * 
- * #define LOOP_INTERVAL 100UL
+ * #define LOOP_INTERVAL 20UL
  * 
  * Scheduler myScheduler(LOOP_INTERVAL);
  * 
@@ -35,8 +35,8 @@ public:
 protected:
 
 private:
-    struct schduledEvent { void (*func)(), unsigned long interval, unsigned long next, bool repeat = false };
-    scheduledEvent[] scheduledEvents = { {0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false},{0,0UL,0UL,false} };
+    struct scheduledEvent { void (*func)(), unsigned long interval, unsigned long deadline, bool repeat = false, schduledEvent *next };
+    scheduledEvent *scheduledEvents = NULL;
     unsigned long loopInterval;
 
 }
