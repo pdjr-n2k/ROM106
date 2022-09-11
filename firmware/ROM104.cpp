@@ -146,6 +146,7 @@
 bool checkSwitchStates();
 void messageHandler(const tN2kMsg&);
 void transmitPGN127501(unsigned char instance, unsigned char status);
+void handlePGN127502(const tN2kMsg n2kMsg);
 void transmitSwitchbankStatusMaybe(unsigned char instance, unsigned char status, bool force);
 void updateLeds(unsigned char status);
 tN2kOnOff bool2tN2kOnOff(bool state);
@@ -163,7 +164,7 @@ const unsigned long TransmitMessages[] PROGMEM={ 127501L, 0 };
  * There are none.
  */
 typedef struct { unsigned long PGN; void (*Handler)(const tN2kMsg &N2kMsg); } tNMEA2000Handler;
-tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, binaryStateChange } };
+tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0UL, 0 } };
 
 /**********************************************************************
  * DIL_SWITCH switch decoder.
@@ -365,8 +366,12 @@ void operateRelay(unsigned int c) {
   SCHEDULER.schedule([](){ digitalWrite(RELAY_SET_PINS[c], OFF); digitalWrite(RELAY_RST_PINS[c], OFF); }, 100);
 }
 
-
-void binarySwitchControl(const tN2kMsg n2kMsg) {
+/**********************************************************************
+ * Process a received PGN 127502 Switch Bank Control message by
+ * decoding the switchbank status and using the channel status data to
+ * appropriately set or reset the attached relays.
+ */
+void handlePGN127502(const tN2kMsg n2kMsg) {
   unsigned char instance;
   tN2kBinaryStatus bankStatus;
   tN2kOnOff channelStatus;
