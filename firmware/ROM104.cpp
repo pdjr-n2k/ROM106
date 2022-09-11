@@ -68,14 +68,14 @@
 #define GPIO_ENCODER_BIT1 15
 #define GPIO_ENCODER_BIT2 16
 #define GPIO_ENCODER_BIT3 17
-#define GPIO_ENCIDER_BIT4 18
+#define GPIO_ENCODER_BIT4 18
 #define GPIO_ENCODER_BIT5 19
 #define GPIO_ENCODER_BIT6 20
 #define GPIO_ENCODER_BIT7 21
 #define GPIO_CH3_LED 22
 #define GPIO_CH2_LED 23
-#define GPIO_SET_PINS = { GPIO_CH0_SET, GPIO_CH1_SET, GPIO_CH2_SET, GPIO_CH3_SET }
-#define GPIO_RST_PINS = { GPIO_CH0_RST, GPIO_CH1_RST, GPIO_CH2_RST, GPIO_CH3_RST }
+#define GPIO_SET_PINS { GPIO_CH0_SET, GPIO_CH1_SET, GPIO_CH2_SET, GPIO_CH3_SET }
+#define GPIO_RST_PINS { GPIO_CH0_RST, GPIO_CH1_RST, GPIO_CH2_RST, GPIO_CH3_RST }
 #define GPIO_ENCODER_PINS { GPIO_ENCODER_BIT0, GPIO_ENCODER_BIT1, GPIO_ENCODER_BIT2, GPIO_ENCODER_BIT3, GPIO_ENCODER_BIT4, GPIO_ENCODER_BIT5, GPIO_ENCODER_BIT6, GPIO_ENCODER_BIT7 }
 #define GPIO_INPUT_PINS { GPIO_ENCODER_BIT0, GPIO_ENCODER_BIT1, GPIO_ENCODER_BIT2, GPIO_ENCODER_BIT3, GPIO_ENCODER_BIT4, GPIO_ENCODER_BIT5, GPIO_ENCODER_BIT6, GPIO_ENCODER_BIT7 }
 #define GPIO_OUTPUT_PINS { GPIO_POWER_LED, GPIO_CH0_LED, GPIO_CH0_SET, GPIO_CH0_RST, GPIO_CH1_LED, GPIO_CH1_SET, GPIO_CH1_RST, GPIO_CH2_LED, GPIO_CH2_SET, GPIO_CH2_RST, GPIO_CH3_LED, GPIO_CH3_SET, GPIO_CH3_RST }
@@ -132,6 +132,7 @@
 #define STARTUP_SETTLE_PERIOD 5000        // Wait this many ms after boot before entering production
 #define LED_MANAGER_HEARTBEAT 200         // Number of ms on / off
 #define LED_MANAGER_INTERVAL 10           // Number of heartbeats between repeats
+#define SCHEDULER_TICK 100
 
 /**********************************************************************
  * NMEA transmit configuration. Modules that transmit PGN 127501 are
@@ -145,9 +146,9 @@
  */
 bool checkSwitchStates();
 void messageHandler(const tN2kMsg&);
-void transmitPGN127501(unsigned char instance, unsigned char status);
+void transmitPGN127501(unsigned char instance, bool *status);
 void handlePGN127502(const tN2kMsg n2kMsg);
-void transmitSwitchbankStatusMaybe(unsigned char instance, unsigned char status, bool force);
+void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool force = false);
 void updateLeds(unsigned char status);
 tN2kOnOff bool2tN2kOnOff(bool state);
 
@@ -164,7 +165,7 @@ const unsigned long TransmitMessages[] PROGMEM={ 127501L, 0 };
  * There are none.
  */
 typedef struct { unsigned long PGN; void (*Handler)(const tN2kMsg &N2kMsg); } tNMEA2000Handler;
-tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0UL, 0 } };
+tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0L, 0 } };
 
 /**********************************************************************
  * DIL_SWITCH switch decoder.
@@ -252,7 +253,6 @@ void setup() {
  */ 
 void loop() {
   static bool JUST_STARTED = true;
-  bool switchChange;
 
   if (JUST_STARTED && (millis() > STARTUP_SETTLE_PERIOD)) {
     #ifdef DEBUG_SERIAL
@@ -263,9 +263,6 @@ void loop() {
     #endif
     JUST_STARTED = false;
   }
-
-  // Debounce all switch inputs.
-  DEBOUNCER.debounce();
 
   // Before we transmit anything, let's do the NMEA housekeeping and
   // process any received messages. This call may result in acquisition
@@ -318,10 +315,10 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
  */ 
 void updateLeds(bool *status) {
   LED_MANAGER.operate(GPIO_POWER_LED, 0, 1);
-  digitalWrite(GPIO_CH0_LED, (status[0])?ON:OFF);
-  digitalWrite(GPIO_CH1_LED, (status[1])?ON:OFF);
-  digitalWrite(GPIO_CH2_LED, (status[2])?ON:OFF);
-  digitalWrite(GPIO_CH3_LED, (status[3])?ON:OFF);
+  digitalWrite(GPIO_CH0_LED, (status[0])?HIGH:LOW);
+  digitalWrite(GPIO_CH1_LED, (status[1])?HIGH:LOW);
+  digitalWrite(GPIO_CH2_LED, (status[2])?HIGH:LOW);
+  digitalWrite(GPIO_CH3_LED, (status[3])?HIGH:LOW);
 }
 
 /**********************************************************************
@@ -362,8 +359,8 @@ bool tN2kOnOff2bool(tN2kOnOff state) {
  * GPIO pin and holding this pulse for 100ms.
  */
 void operateRelay(unsigned int c) {
-  digitalWrite((SWITCHBANK_STATUS[c])?RELAY_SET_PINS[c]:RELAY_RST_PINS[c], ON);
-  SCHEDULER.schedule([](){ digitalWrite(RELAY_SET_PINS[c], OFF); digitalWrite(RELAY_RST_PINS[c], OFF); }, 100);
+  digitalWrite((SWITCHBANK_STATUS[c])?RELAY_SET_PINS[c]:RELAY_RST_PINS[c], HIGH);
+  SCHEDULER.schedule([&c](){ digitalWrite(RELAY_SET_PINS[c], LOW); digitalWrite(RELAY_RST_PINS[c], LOW); }, 100, false);
 }
 
 /**********************************************************************

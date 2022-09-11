@@ -34,7 +34,7 @@ void Scheduler::loop() {
                     this->callbacks[i].when = 0UL;
                     this->size--;
                 } else {
-                    this->callbacks[i].when = (now + this.callbacks[i].interval);
+                    this->callbacks[i].when = (now + this->callbacks[i].interval);
                 }
             }
         }
@@ -51,7 +51,7 @@ void Scheduler::loop() {
 bool Scheduler::schedule(void (*func)(), unsigned long interval, bool repeat) {
     bool retval = false;
 
-    if (this.size < 10) {
+    if (this->size < 10) {
         for (unsigned int i = 0; i < 10; i++) {
             if (this->callbacks[i].when == 0UL) {
                 this->callbacks[i].func = func;

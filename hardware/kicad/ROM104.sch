@@ -450,7 +450,6 @@ Wire Wire Line
 Wire Wire Line
 	2000 1700 2000 1800
 Connection ~ 2000 1700
-NoConn ~ 9550 5150
 $Comp
 L Switch:SW_DIP_x08 SW1
 U 1 1 605A9AEF
@@ -532,9 +531,9 @@ Text Label 9550 5250 0    50   ~ 0
 CH0_LED
 Text Label 9550 5350 0    50   ~ 0
 CH1_LED
-Text Label 8450 5150 2    50   ~ 0
+Text Label 9550 5150 0    50   ~ 0
 CH2_LED
-Text Label 8450 5050 2    50   ~ 0
+Text Label 8450 5150 2    50   ~ 0
 CH3_LED
 $Sheet
 S 1600 5050 650  500 
@@ -888,15 +887,5 @@ Text Label 1050 6950 2    50   ~ 0
 CH2_LED
 Text Label 1050 7150 2    50   ~ 0
 CH3_LED
-$Comp
-L Driver_Motor:L293 U?
-U 1 1 631CCE25
-P 4450 4250
-F 0 "U?" H 4450 5431 50  0000 C CNN
-F 1 "L293" H 4450 5340 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm" H 4700 3500 50  0001 L CNN
-F 3 "http://www.ti.com/lit/ds/symlink/l293.pdf" H 4150 4950 50  0001 C CNN
-	1    4450 4250
-	1    0    0    -1  
-$EndComp
+NoConn ~ 8450 5050
 $EndSCHEMATC

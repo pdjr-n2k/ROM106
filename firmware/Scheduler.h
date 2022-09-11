@@ -35,11 +35,11 @@ public:
 protected:
 
 private:
-    struct Callback { void (*func)(), unsigned long interval, unsigned long when, bool repeat = false };
+    struct Callback { void (*func)(); unsigned long interval; unsigned long when; bool repeat; };
     Callback callbacks[10] = { {NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false},{NULL,0UL,0UL,false} };
     int size = 0;
     unsigned long loopInterval;
 
-}
+};
 
 #endif
