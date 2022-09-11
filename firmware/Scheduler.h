@@ -35,8 +35,8 @@ public:
 protected:
 
 private:
-    struct scheduledEvent { void (*func)(), unsigned long interval, unsigned long deadline, bool repeat = false, schduledEvent *next };
-    scheduledEvent *scheduledEvents = NULL;
+    struct callback { void (*func)(), unsigned long interval, unsigned long when, bool repeat = false };
+    ArduinoQueue<callback> callbacks(10);
     unsigned long loopInterval;
 
 }
