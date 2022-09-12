@@ -140,13 +140,7 @@
 #define DEFAULT_SOURCE_ADDRESS 22         // Seed value for source address claim
 #define INSTANCE_UNDEFINED 255            // Flag value
 #define SCHEDULER_TICK 20                 // The frequency of scheduler management
-
-/**********************************************************************
- * NMEA transmit configuration. Modules that transmit PGN 127501 are
- * required to report switch bank state every four seconds, or
- * immediately on a detected state change.
- */
-#define TRANSMIT_INTERVAL 4000UL
+#define PGN127501_TRANSMIT_INTERVAL 4000UL
 
 /**********************************************************************
  * Declarations of local functions.
@@ -253,14 +247,10 @@ void setup() {
 /**********************************************************************
  * MAIN PROGRAM - loop()
  * 
- * With the exception of NMEA2000.parseMessages() all of the functions
- * called from loop() implement interval timers which ensure that they
- * will mostly return immediately, only performing their substantive
- * tasks at intervals defined by program constants.
- * 
- * The global constant JUST_STARTED is used to delay acting on switch
- * inputs until a newly started system has stabilised and the GPIO
- * inputs have been debounced.
+ * Local functions called from loop() implement interval timers which
+ * ensure that they will only perform their substantive tasks at
+ * meaningful intervals (typically defined by program constants) rather
+ * than every loop cycle.
  */ 
 void loop() {
   #ifdef DEBUG_SERIAL
@@ -278,12 +268,8 @@ void loop() {
   if (NMEA2000.ReadResetAddressChanged()) EEPROM.update(SOURCE_ADDRESS_EEPROM_ADDRESS, NMEA2000.GetN2kSource());
 
   // Once the start-up settle period is over we can enter production by
-  // executing our only substantive function ... but only if we have a
-  // valid switchbank instance number.
+  // executing our only substantive function.
   if (SWITCHBANK_INSTANCE < 253) transmitSwitchbankStatusMaybe(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS);
-  
-  // Update the states of connected LEDs
-  LED_MANAGER.loop();
 
   // Process deferred callbacks.
   SCHEDULER.loop();
@@ -292,7 +278,7 @@ void loop() {
 /**********************************************************************
  * transmitSwitchbankStatusMaybe() should be called directly from
  * loop(). The function proceeds to transmit a switchbank binary status
- * message if TRANSMIT_INTERVAL has elapsed or <force> is true.
+ * message if PGN127501_TRANSMIT_INTERVAL has elapsed or <force> is true.
  */
 void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool force) {
   static unsigned long deadline = 0UL;
@@ -311,7 +297,7 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
     digitalWrite(GPIO_POWER_LED, HIGH);
     SCHEDULER.schedule([](){ digitalWrite(GPIO_POWER_LED, LOW); }, 50);
 
-    deadline = (now + TRANSMIT_INTERVAL);
+    deadline = (now + PGN127501_TRANSMIT_INTERVAL);
   }
 }
 
