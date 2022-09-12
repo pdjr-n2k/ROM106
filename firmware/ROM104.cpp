@@ -4,14 +4,18 @@
  *
  * Target platform: Teensy 3.2
  * 
- * ROM104 is a 4-channel NMEA relay output module built around a
- * Teensy 3.2 microcontroller.
+ * ROM104 is a 4-channel NMEA relay output module built around a Teensy
+ * 3.2 microcontroller.
  * 
  * This firmware responds to PGN 127502 Binary Status Update messages
- * by setting the state of its output relays. The firmware reports the
- * state of its relays by assembling a switchbank Binary Status Report
- * and transmits this over NMEA using PGN 127501. Local feedback on
- * relay states is presented by modulating some indicator LEDs. 
+ * by setting the state of the host ROM104's output relays.
+ * 
+ * The firmware reports the state of its relays by assembling a
+ * switchbank Binary Status Report and transmitting this over NMEA
+ * using PGN 127501.
+ * 
+ * Local feedback on relay states is presented by modulating ROM104's
+ * indicator LEDs. 
  */
 
 #include <Arduino.h>
@@ -20,8 +24,8 @@
 #include <N2kTypes.h>
 #include <N2kMessages.h>
 #include <DilSwitch.h>
-#include <Scheduler.h>
 #include <arraymacros.h>
+#include <Scheduler.h>
 
 /**********************************************************************
  * SERIAL DEBUG
@@ -169,6 +173,9 @@ tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0L, 0 } };
 int ENCODER_PINS[] = GPIO_ENCODER_PINS;
 DilSwitch DIL_SWITCH (ENCODER_PINS, ELEMENTCOUNT(ENCODER_PINS));
 
+/**********************************************************************
+ * SCHEDULER callback scheduler.
+ */
 Scheduler SCHEDULER (SCHEDULER_TICK);
 
 /**********************************************************************
@@ -183,6 +190,12 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
  * read state of the Teensy switch inputs.
  */
 bool SWITCHBANK_STATUS[] = { false, false, false, false };
+
+/**********************************************************************
+ * SWITCHBANK_CHANNEL_LOCK - working storage which allows us to record
+ * when a state change request on a channel is in-process.
+ */
+bool SWITCHBANK_CHANNEL_LOCK[] = { false, false, false, false };
 
 unsigned int RELAY_SET_PINS[] = GPIO_SET_PINS;
 unsigned int RELAY_RST_PINS[] = GPIO_RST_PINS;
@@ -344,8 +357,18 @@ bool tN2kOnOff2bool(tN2kOnOff state) {
  * GPIO pin and holding this pulse for 100ms.
  */
 void operateRelay(const unsigned int c) {
-  digitalWrite((SWITCHBANK_STATUS[c])?RELAY_SET_PINS[c]:RELAY_RST_PINS[c], HIGH);
-  SCHEDULER.schedule([&c](){ digitalWrite(RELAY_SET_PINS[c], LOW); digitalWrite(RELAY_RST_PINS[c], LOW); }, 100, false);
+  if (!SWITCHBANK_CHANNEL_LOCK[c]) {
+    SWITCHBANK_CHANNEL_LOCK[c] = true;
+    if (SWITCHBANK_STATUS[c]) {
+      digitalWrite(RELAY_RST_PINS[c]. LOW);
+      digitalWrite(RELAY_SET_PINS[c], HIGH);
+      SCHEDULER.schedule([&c](){ digitalWrite(RELAY_SET_PINS[c], LOW); SWITCHBANK_CHANNEL_LOCK[c] = false; }, 100, false);
+    } else {
+      digitalWrite(RELAY_SET_PINS[c]. LOW);
+      digitalWrite(RELAY_RST_PINS[c], HIGH);
+      SCHEDULER.schedule([&c](){ digitalWrite(RELAY_RST_PINS[c], LOW); SWITCHBANK_CHANNEL_LOCK[c] = false; }, 100, false);
+    }
+  }
 }
 
 /**********************************************************************
