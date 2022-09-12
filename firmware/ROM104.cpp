@@ -26,6 +26,7 @@
  */
 
 #include <Arduino.h>
+#include <ArduinoQueue.h>
 #include <EEPROM.h>
 #include <NMEA2000_CAN.h>
 #include <N2kTypes.h>
@@ -141,6 +142,7 @@
 #define INSTANCE_UNDEFINED 255            // Flag value
 #define SCHEDULER_TICK 20                 // The frequency of scheduler management
 #define PGN127501_TRANSMIT_INTERVAL 4000UL
+#define RELAY_OPERATION_QUEUE_SIZE 10
 
 /**********************************************************************
  * Declarations of local functions.
@@ -179,6 +181,9 @@ DilSwitch DIL_SWITCH (ENCODER_PINS, ELEMENTCOUNT(ENCODER_PINS));
  */
 Scheduler SCHEDULER (SCHEDULER_TICK);
 
+typedef struct { int channel; bool op; } RelayOperation;
+ArduinoQueue<RelayOperation> RELAY_OPERATION_QUEUE(RELAY_OPERATION_QUEUE_SIZE);
+
 /**********************************************************************
  * SWITCHBANK_INSTANCE - working storage for the switchbank module
  * instance number. The user selected value is recovered from hardware
@@ -192,11 +197,6 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
  */
 bool SWITCHBANK_STATUS[] = { false, false, false, false };
 
-/**********************************************************************
- * SWITCHBANK_CHANNEL_LOCK - working storage which al0s us to record
- * when a state change request on a channel is in-process.
- */
-bool SWITCHBANK_CHANNEL_LOCK[] = { false, false, false, false };
 
 unsigned int RELAY_SET_PINS[] = GPIO_SET_PINS;
 unsigned int RELAY_RST_PINS[] = GPIO_RST_PINS;
@@ -271,8 +271,46 @@ void loop() {
   // executing our only substantive function.
   if (SWITCHBANK_INSTANCE < 253) transmitSwitchbankStatusMaybe(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS);
 
+  // Process relay operation queue.
+  processRelayOperationQueue();
+
   // Process deferred callbacks.
   SCHEDULER.loop();
+}
+
+void processRelayOperationQueue() {
+  static unsigned long deadline = 0UL;
+  unsigned long now = millis();
+  static int offalready = false;
+  int opcode;
+  int action;
+
+  if (now > deadline) {
+    if (RELAY_OPERATION_QUEUE.isEmpty()) {
+      if (!offalready) {
+        digitalWrite(GPIO_RELAY_ENABLE_CH0, 0);
+        digitalWrite(GPIO_RELAY_ENABLE_CH1, 0);
+        digitalWrite(GPIO_RELAY_ENABLE_CH2, 0);
+        digitalWrite(GPIO_RELAY_ENABLE_CH3, 0);
+        offalready = true;
+      }
+    } else {
+      opcode = RELAY_OPERATION_QUEUE.deQueue();
+      if (opcode > 0) {
+        digitalWrite(GPIO_RELAY_SET, 1); digitalWrite(GPIO_RELAY_RST, 0);
+      } else {
+        digitalWrite(GPIO_RELAY_SET, 0); digitalWrite(GPIO_RELAY_RST, 1);
+      }
+      switch (opcode) {
+        case 1: case -1: digitalWrite(GPIO_RELAY_ENABLE_CH0, 1); break;
+        case 2: case -2: digitalWrite(GPIO_RELAY_ENABLE_CH1, 1); break;
+        case 3: case -3: digitalWrite(GPIO_RELAY_ENABLE_CH2, 1); break;
+        case 4: case -4: digitalWrite(GPIO_RELAY_ENABLE_CH3, 1); break;
+      }
+      offalready = false;
+    }
+    deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
+  }
 }
   
 /**********************************************************************
@@ -343,44 +381,6 @@ bool tN2kOnOff2bool(tN2kOnOff state) {
   return(state == N2kOnOff_On);
 }
 
-void unlockChannel0SET() { digitalWrite(RELAY_SET_PINS[0], 0); SWITCHBANK_CHANNEL_LOCK[0] = false; }
-void unlockChannel0RST() { digitalWrite(RELAY_RST_PINS[0], 0); SWITCHBANK_CHANNEL_LOCK[0] = false; }
-void unlockChannel1SET() { digitalWrite(RELAY_SET_PINS[1], 0); SWITCHBANK_CHANNEL_LOCK[1] = false; }
-void unlockChannel1RST() { digitalWrite(RELAY_RST_PINS[1], 0); SWITCHBANK_CHANNEL_LOCK[1] = false; }
-void unlockChannel2SET() { digitalWrite(RELAY_SET_PINS[2], 0); SWITCHBANK_CHANNEL_LOCK[2] = false; }
-void unlockChannel2RST() { digitalWrite(RELAY_RST_PINS[2], 0); SWITCHBANK_CHANNEL_LOCK[2] = false; }
-void unlockChannel3SET() { digitalWrite(RELAY_SET_PINS[3], 0); SWITCHBANK_CHANNEL_LOCK[3] = false; }
-void unlockChannel3RST() { digitalWrite(RELAY_RST_PINS[3], 0); SWITCHBANK_CHANNEL_LOCK[3] = false; }
-
-/**********************************************************************
- * Operate the latching relay on channel <c> by setting it to the state
- * defined by SWITCHBANK_STATUS[<c>]. The selected latching relay's
- * state is changed by issuing an ON pulse to either its SET or ReSeT
- * GPIO pin and holding this pulse for 100ms.
- */
-void operateRelay(const unsigned int c) {
-  void (*sptr)() = NULL;
-  void (*rptr)() = NULL;
-  if (!SWITCHBANK_CHANNEL_LOCK[c]) {
-    SWITCHBANK_CHANNEL_LOCK[c] = true;
-    switch (c) {
-      case 0: sptr = unlockChannel0SET; rptr = unlockChannel0RST; break;
-      case 1: sptr = unlockChannel1SET; rptr = unlockChannel1RST; break;
-      case 2: sptr = unlockChannel2SET; rptr = unlockChannel2RST; break;
-      case 3: sptr = unlockChannel3SET; rptr = unlockChannel3RST; break;
-    }
-    if (SWITCHBANK_STATUS[c]) {
-      digitalWrite(RELAY_RST_PINS[c], 0);
-      digitalWrite(RELAY_SET_PINS[c], 1);
-      SCHEDULER.schedule(sptr, 100, false);
-    } else {
-      digitalWrite(RELAY_SET_PINS[c], 0);
-      digitalWrite(RELAY_RST_PINS[c], 1);
-      SCHEDULER.schedule(rptr, 100, false);
-    }
-  }
-}
-
 /**********************************************************************
  * Process a received PGN 127502 Switch Bank Control message by
  * decoding the switchbank status and using the channel status data to
@@ -399,7 +399,7 @@ void handlePGN127502(const tN2kMsg n2kMsg) {
         if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {
           if (tN2kOnOff2bool(channelStatus) != SWITCHBANK_STATUS[c]) {
             SWITCHBANK_STATUS[c] = tN2kOnOff2bool(channelStatus);
-            operateRelay(c);
+            RELAY_OPERATION_QUEUE.enqueue((int) ((c + 1) * ((SWITCHBANK_STATUS[c])?1:-1)));
             changed = true;
           }
         }
