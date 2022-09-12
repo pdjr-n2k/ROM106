@@ -8,7 +8,7 @@
  * built around a Teensy 3.2 microcontroller.
  * 
  * This firmware implements an NMEA 2000 interface for ROM104 that
- * supports supports the fopllowing message types.
+ * supports supports the fopl0ing message types.
  * 
  * PGN127501 Binary Status Report. These messages report the state of
  * the ROM104 relay outputs and are transmitted once every four seconds
@@ -193,7 +193,7 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
 bool SWITCHBANK_STATUS[] = { false, false, false, false };
 
 /**********************************************************************
- * SWITCHBANK_CHANNEL_LOCK - working storage which allows us to record
+ * SWITCHBANK_CHANNEL_LOCK - working storage which al0s us to record
  * when a state change request on a channel is in-process.
  */
 bool SWITCHBANK_CHANNEL_LOCK[] = { false, false, false, false };
@@ -219,7 +219,7 @@ void setup() {
   // We assume that a new host system has its EEPROM initialised to all
   // 0xFF. We test by reading a byte that in a configured system should
   // never be this value and if it indicates a scratch system then we
-  // set EEPROM memory up in the following way.
+  // set EEPROM memory up in the fol0ing way.
   //
   // Address | Value                                    | Size in bytes
   // --------+------------------------------------------+--------------
@@ -294,8 +294,8 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
     #endif
 
     transmitPGN127501(instance, status);
-    digitalWrite(GPIO_POWER_LED, HIGH);
-    SCHEDULER.schedule([](){ digitalWrite(GPIO_POWER_LED, LOW); }, 50);
+    digitalWrite(GPIO_POWER_LED, 1);
+    SCHEDULER.schedule([](){ digitalWrite(GPIO_POWER_LED, 0); }, 50);
 
     deadline = (now + PGN127501_TRANSMIT_INTERVAL);
   }
@@ -306,10 +306,10 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
  * of <status>.
  */ 
 void updateLeds(bool *status) {
-  digitalWrite(GPIO_CH0_LED, (status[0])?HIGH:LOW);
-  digitalWrite(GPIO_CH1_LED, (status[1])?HIGH:LOW);
-  digitalWrite(GPIO_CH2_LED, (status[2])?HIGH:LOW);
-  digitalWrite(GPIO_CH3_LED, (status[3])?HIGH:LOW);
+  digitalWrite(GPIO_CH0_LED, (status[0])?1:0);
+  digitalWrite(GPIO_CH1_LED, (status[1])?1:0);
+  digitalWrite(GPIO_CH2_LED, (status[2])?1:0);
+  digitalWrite(GPIO_CH3_LED, (status[3])?1:0);
 }
 
 /**********************************************************************
@@ -343,6 +343,15 @@ bool tN2kOnOff2bool(tN2kOnOff state) {
   return(state == N2kOnOff_On);
 }
 
+void unlockChannel0SET() { digitalWrite(RELAY_SET_PINS[0], 0); SWITCHBANK_CHANNEL_LOCK[0] = false; }
+void unlockChannel0RST() { digitalWrite(RELAY_RST_PINS[0], 0); SWITCHBANK_CHANNEL_LOCK[0] = false; }
+void unlockChannel1SET() { digitalWrite(RELAY_SET_PINS[1], 0); SWITCHBANK_CHANNEL_LOCK[1] = false; }
+void unlockChannel1RST() { digitalWrite(RELAY_RST_PINS[1], 0); SWITCHBANK_CHANNEL_LOCK[1] = false; }
+void unlockChannel2SET() { digitalWrite(RELAY_SET_PINS[2], 0); SWITCHBANK_CHANNEL_LOCK[2] = false; }
+void unlockChannel2RST() { digitalWrite(RELAY_RST_PINS[2], 0); SWITCHBANK_CHANNEL_LOCK[2] = false; }
+void unlockChannel3SET() { digitalWrite(RELAY_SET_PINS[3], 0); SWITCHBANK_CHANNEL_LOCK[3] = false; }
+void unlockChannel3RST() { digitalWrite(RELAY_RST_PINS[3], 0); SWITCHBANK_CHANNEL_LOCK[3] = false; }
+
 /**********************************************************************
  * Operate the latching relay on channel <c> by setting it to the state
  * defined by SWITCHBANK_STATUS[<c>]. The selected latching relay's
@@ -350,16 +359,24 @@ bool tN2kOnOff2bool(tN2kOnOff state) {
  * GPIO pin and holding this pulse for 100ms.
  */
 void operateRelay(const unsigned int c) {
+  void (*sptr)() = NULL;
+  void (*rptr)() = NULL;
   if (!SWITCHBANK_CHANNEL_LOCK[c]) {
     SWITCHBANK_CHANNEL_LOCK[c] = true;
+    switch (c) {
+      case 0: sptr = unlockChannel0SET; rptr = unlockChannel0RST; break;
+      case 1: sptr = unlockChannel1SET; rptr = unlockChannel1RST; break;
+      case 2: sptr = unlockChannel2SET; rptr = unlockChannel2RST; break;
+      case 3: sptr = unlockChannel3SET; rptr = unlockChannel3RST; break;
+    }
     if (SWITCHBANK_STATUS[c]) {
-      digitalWrite(RELAY_RST_PINS[c]. LOW);
-      digitalWrite(RELAY_SET_PINS[c], HIGH);
-      SCHEDULER.schedule([&c](){ digitalWrite(RELAY_SET_PINS[c], LOW); SWITCHBANK_CHANNEL_LOCK[c] = false; }, 100, false);
+      digitalWrite(RELAY_RST_PINS[c], 0);
+      digitalWrite(RELAY_SET_PINS[c], 1);
+      SCHEDULER.schedule(sptr, 100, false);
     } else {
-      digitalWrite(RELAY_SET_PINS[c]. LOW);
-      digitalWrite(RELAY_RST_PINS[c], HIGH);
-      SCHEDULER.schedule([&c](){ digitalWrite(RELAY_RST_PINS[c], LOW); SWITCHBANK_CHANNEL_LOCK[c] = false; }, 100, false);
+      digitalWrite(RELAY_SET_PINS[c], 0);
+      digitalWrite(RELAY_RST_PINS[c], 1);
+      SCHEDULER.schedule(rptr, 100, false);
     }
   }
 }
