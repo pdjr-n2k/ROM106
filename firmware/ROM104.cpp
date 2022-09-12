@@ -4,17 +4,24 @@
  *
  * Target platform: Teensy 3.2
  * 
- * ROM104 is a 4-channel NMEA relay output module built around a Teensy
- * 3.2 microcontroller.
+ * ROM104 is a 4-channel relay module with integrated CAN connectivity
+ * built around a Teensy 3.2 microcontroller.
  * 
- * This firmware responds to PGN 127502 Binary Status Update messages
- * by setting the state of the host ROM104's output relays.
+ * This firmware implements an NMEA 2000 interface for ROM104 that
+ * supports supports the fopllowing message types.
  * 
- * The firmware reports the state of its relays by assembling a
- * switchbank Binary Status Report and transmitting this over NMEA
- * using PGN 127501.
+ * PGN127501 Binary Status Report. These messages report the state of
+ * the ROM104 relay outputs and are transmitted once every four seconds
+ * or immediately upon a relay state change.
  * 
- * Local feedback on relay states is presented by modulating ROM104's
+ * PGN127502 Binary Status Update. These messages operate the ROM104
+ * relay outputs.
+ * 
+ * The module's NMEA 2000 instance address is read from the ROM104 DIL
+ * switch and is used to identify the module in all network
+ * communication.
+ * 
+ * Local feedback on relay states is presented by modulating the ROM104
  * indicator LEDs. 
  */
 
