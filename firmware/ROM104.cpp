@@ -272,27 +272,34 @@ void loop() {
   if (SWITCHBANK_INSTANCE < 253) transmitSwitchbankStatusMaybe(SWITCHBANK_INSTANCE, SWITCHBANK_STATUS);
 
   // Process relay operation queue.
-  processRelayOperationQueue();
+  processRelayOperationQueueMaybe();
 
   // Process deferred callbacks.
   SCHEDULER.loop();
 }
 
-void processRelayOperationQueue() {
+/**********************************************************************
+ * processRelayOperationQueueMaybe() should be called directly from
+ * loop. The function is triggered each RELAY_OPERATION_QUEUE_INTERVAL
+ * and it is important that this value matches the actuating signal
+ * hold period of physical relays installed on the host PCB. the queue is checked for
+ * the presence of a relay operation request
+ */
+void processRelayOperationQueueMaybe() {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
-  static int offalready = false;
+  static bool operating = false;
   int opcode;
   int action;
 
   if (now > deadline) {
     if (RELAY_OPERATION_QUEUE.isEmpty()) {
-      if (!offalready) {
+      if (operating) {
         digitalWrite(GPIO_RELAY_ENABLE_CH0, 0);
         digitalWrite(GPIO_RELAY_ENABLE_CH1, 0);
         digitalWrite(GPIO_RELAY_ENABLE_CH2, 0);
         digitalWrite(GPIO_RELAY_ENABLE_CH3, 0);
-        offalready = true;
+        operating = false;
       }
     } else {
       opcode = RELAY_OPERATION_QUEUE.deQueue();
@@ -307,7 +314,7 @@ void processRelayOperationQueue() {
         case 3: case -3: digitalWrite(GPIO_RELAY_ENABLE_CH2, 1); break;
         case 4: case -4: digitalWrite(GPIO_RELAY_ENABLE_CH3, 1); break;
       }
-      offalready = false;
+      operating = true;
     }
     deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
   }
