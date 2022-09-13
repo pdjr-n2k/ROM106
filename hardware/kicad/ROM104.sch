@@ -464,13 +464,13 @@ $EndComp
 $Comp
 L Connector:Screw_Terminal_01x12 J1
 U 1 1 631D36BE
-P 650 4300
-F 0 "J1" H 568 3475 50  0000 C CNN
-F 1 "Screw_Terminal_01x12" H 568 3566 50  0000 C CNN
-F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO_236-112_1x12_P5.00mm_45Degree" H 650 4300 50  0001 C CNN
-F 3 "~" H 650 4300 50  0001 C CNN
-	1    650  4300
-	-1   0    0    1   
+P 650 4200
+F 0 "J1" H 568 3375 50  0000 C CNN
+F 1 "Screw_Terminal_01x12" H 568 3466 50  0000 C CNN
+F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO_236-112_1x12_P5.00mm_45Degree" H 650 4200 50  0001 C CNN
+F 3 "~" H 650 4200 50  0001 C CNN
+	1    650  4200
+	-1   0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0101
@@ -677,7 +677,6 @@ Text Label 900  7150 2    50   ~ 0
 CH2_LED
 Text Label 900  7350 2    50   ~ 0
 CH3_LED
-NoConn ~ 8450 5050
 $Comp
 L Driver_Motor:L293D U5
 U 1 1 631FC180
@@ -689,8 +688,6 @@ F 3 "http://www.ti.com/lit/ds/symlink/l293.pdf" H 3650 3500 50  0001 C CNN
 	1    3950 2800
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	850  4200 1800 4200
 $Comp
 L Relay:DIPxx-1Cxx-51x K2
 U 1 1 632F5385
@@ -702,10 +699,6 @@ F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.
 	1    1900 3500
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	1600 4100 1600 3800
-Wire Wire Line
-	850  4100 1600 4100
 Wire Wire Line
 	1800 3800 1800 4200
 Wire Wire Line
@@ -724,10 +717,6 @@ F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	1700 4400 1700 4300
-Wire Wire Line
-	1700 4300 850  4300
-Wire Wire Line
 	1600 5000 1600 5100
 Wire Wire Line
 	1600 5100 1400 5100
@@ -735,10 +724,6 @@ Wire Wire Line
 	1800 5000 1800 5200
 Wire Wire Line
 	1800 5200 1300 5200
-Wire Wire Line
-	850  4400 1400 4400
-Wire Wire Line
-	1400 4400 1400 5100
 Wire Wire Line
 	850  4500 1300 4500
 Wire Wire Line
@@ -765,9 +750,7 @@ Wire Wire Line
 Wire Wire Line
 	1700 2200 1700 2100
 Wire Wire Line
-	1700 2100 1100 2100
-Wire Wire Line
-	1100 2100 1100 3700
+	1700 2100 1050 2100
 $Comp
 L Relay:DIPxx-1Cxx-51x K4
 U 1 1 633A9E65
@@ -780,9 +763,7 @@ F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	850  4600 1200 4600
-Wire Wire Line
-	1200 4600 1200 5300
+	850  4600 1100 4600
 Wire Wire Line
 	1200 5300 1700 5300
 Wire Wire Line
@@ -791,10 +772,6 @@ Wire Wire Line
 	1600 6000 1600 6100
 Wire Wire Line
 	1600 6100 1100 6100
-Wire Wire Line
-	1100 6100 1100 4700
-Wire Wire Line
-	1100 4700 850  4700
 Wire Wire Line
 	1800 6000 1800 6200
 Wire Wire Line
@@ -1015,20 +992,6 @@ Wire Wire Line
 	2400 4000 2500 4000
 Wire Wire Line
 	3100 4800 3400 4800
-Wire Wire Line
-	850  4000 1350 4000
-Wire Wire Line
-	1350 3100 1350 4000
-Wire Wire Line
-	1250 3900 850  3900
-Wire Wire Line
-	1250 3000 1250 3900
-Wire Wire Line
-	1150 2900 1150 3800
-Wire Wire Line
-	850  3700 1100 3700
-Wire Wire Line
-	850  3800 1150 3800
 Wire Wire Line
 	2100 4400 2100 4300
 Wire Wire Line
@@ -1298,13 +1261,13 @@ Connection ~ 3700 4100
 Connection ~ 3300 4100
 Wire Wire Line
 	3300 4100 3300 6300
-Text Label 5250 2400 0    50   ~ 0
-CH3_EN
-Text Label 5250 3000 0    50   ~ 0
-CH2_EN
-Text Label 5250 4600 0    50   ~ 0
-CH1_EN
 Text Label 5250 5200 0    50   ~ 0
+CH3_EN
+Text Label 5250 4600 0    50   ~ 0
+CH2_EN
+Text Label 5250 3000 0    50   ~ 0
+CH1_EN
+Text Label 5250 2400 0    50   ~ 0
 CH0_EN
 Wire Wire Line
 	4450 2600 5050 2600
@@ -1368,6 +1331,43 @@ Text Label 9550 4550 0    50   ~ 0
 SET
 Text Label 9550 4650 0    50   ~ 0
 RST
+Wire Wire Line
+	850  3800 1050 3800
+Wire Wire Line
+	1050 2100 1050 3800
+Wire Wire Line
+	1150 2900 1150 3700
+Wire Wire Line
+	850  3700 1150 3700
+Wire Wire Line
+	1250 3000 1250 3900
+Wire Wire Line
+	850  3900 1250 3900
+Wire Wire Line
+	850  4100 1350 4100
+Wire Wire Line
+	1350 3100 1350 4100
+Wire Wire Line
+	850  4200 1800 4200
+Wire Wire Line
+	850  4000 1600 4000
+Wire Wire Line
+	1600 4000 1600 3800
+Wire Wire Line
+	1400 4300 850  4300
+Wire Wire Line
+	1400 4300 1400 5100
+Wire Wire Line
+	850  4400 1700 4400
+Wire Wire Line
+	1200 4700 1200 5300
+Wire Wire Line
+	1100 4600 1100 6100
+Wire Wire Line
+	850  4700 1200 4700
+NoConn ~ 8450 4150
+NoConn ~ 9950 3700
 NoConn ~ 9550 4750
 NoConn ~ 9550 4850
+NoConn ~ 8450 5050
 $EndSCHEMATC

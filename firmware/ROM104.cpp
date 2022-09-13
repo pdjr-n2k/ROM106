@@ -71,14 +71,13 @@
  */
 #define GPIO_CH1_LED 0
 #define GPIO_CH0_LED 1
-#define GPIO_CH3_SET 5
-#define GPIO_CH3_RST 6
-#define GPIO_CH2_SET 7
-#define GPIO_CH2_RST 8
-#define GPIO_CH1_SET 9
-#define GPIO_CH1_RST 10
-#define GPIO_CH0_SET 11
-#define GPIO_CH0_RST 12
+#define GPIO_CH2_LED 2
+#define GPIO_RELAY_RST 7
+#define GPIO_RELAY_SET 8
+#define GPIO_CH3_RELAY_ENABLE 9
+#define GPIO_CH2_RELAY_ENABLE 10
+#define GPIO_CH1_RELAY_ENABLE 11
+#define GPIO_CH0_RELAY_ENABLE 12
 #define GPIO_POWER_LED 13
 #define GPIO_ENCODER_BIT0 14
 #define GPIO_ENCODER_BIT1 15
@@ -88,13 +87,10 @@
 #define GPIO_ENCODER_BIT5 19
 #define GPIO_ENCODER_BIT6 20
 #define GPIO_ENCODER_BIT7 21
-#define GPIO_CH3_LED 22
-#define GPIO_CH2_LED 23
-#define GPIO_SET_PINS { GPIO_CH0_SET, GPIO_CH1_SET, GPIO_CH2_SET, GPIO_CH3_SET }
-#define GPIO_RST_PINS { GPIO_CH0_RST, GPIO_CH1_RST, GPIO_CH2_RST, GPIO_CH3_RST }
+#define GPIO_CH3_LED 23
 #define GPIO_ENCODER_PINS { GPIO_ENCODER_BIT0, GPIO_ENCODER_BIT1, GPIO_ENCODER_BIT2, GPIO_ENCODER_BIT3, GPIO_ENCODER_BIT4, GPIO_ENCODER_BIT5, GPIO_ENCODER_BIT6, GPIO_ENCODER_BIT7 }
 #define GPIO_INPUT_PINS { GPIO_ENCODER_BIT0, GPIO_ENCODER_BIT1, GPIO_ENCODER_BIT2, GPIO_ENCODER_BIT3, GPIO_ENCODER_BIT4, GPIO_ENCODER_BIT5, GPIO_ENCODER_BIT6, GPIO_ENCODER_BIT7 }
-#define GPIO_OUTPUT_PINS { GPIO_POWER_LED, GPIO_CH0_LED, GPIO_CH0_SET, GPIO_CH0_RST, GPIO_CH1_LED, GPIO_CH1_SET, GPIO_CH1_RST, GPIO_CH2_LED, GPIO_CH2_SET, GPIO_CH2_RST, GPIO_CH3_LED, GPIO_CH3_SET, GPIO_CH3_RST }
+#define GPIO_OUTPUT_PINS { GPIO_POWER_LED, GPIO_CH0_RELAY_ENABLE, GPIO_CH0_LED, GPIO_CH1_RELAY_ENABLE, GPIO_CH1_LED, GPIO_CH2_RELAY_ENABLE, GPIO_CH2_LED, GPIO_CH3_RELAY_ENABLE, GPIO_CH3_LED, GPIO_RELAY_SET, GPIO_RELAY_RST }
 
 /**********************************************************************
  * DEVICE INFORMATION
@@ -148,6 +144,7 @@
 #define SCHEDULER_TICK 20                 // The frequency of scheduler management
 #define PGN127501_TRANSMIT_INTERVAL 4000UL
 #define RELAY_OPERATION_QUEUE_SIZE 10
+#define RELAY_OPERATION_QUEUE_INTERVAL 20UL
 
 /**********************************************************************
  * Declarations of local functions.
@@ -157,6 +154,7 @@ void handlePGN127502(const tN2kMsg n2kMsg);
 void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool force = false);
 void transmitPGN127501(unsigned char instance, bool *status);
 void updateLeds(unsigned char status);
+void processRelayOperationQueueMaybe();
 tN2kOnOff bool2tN2kOnOff(bool state);
 bool tN2kOnOff2bool(tN2kOnOff state);
 
@@ -208,10 +206,6 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
  * read state of the Teensy switch inputs.
  */
 bool SWITCHBANK_STATUS[] = { false, false, false, false };
-
-
-unsigned int RELAY_SET_PINS[] = GPIO_SET_PINS;
-unsigned int RELAY_RST_PINS[] = GPIO_RST_PINS;
 
 /**********************************************************************
  * MAIN PROGRAM - setup()
@@ -311,24 +305,24 @@ void processRelayOperationQueueMaybe() {
   if (now > deadline) {
     if (RELAY_OPERATION_QUEUE.isEmpty()) {
       if (operating) {
-        digitalWrite(GPIO_RELAY_ENABLE_CH0, 0);
-        digitalWrite(GPIO_RELAY_ENABLE_CH1, 0);
-        digitalWrite(GPIO_RELAY_ENABLE_CH2, 0);
-        digitalWrite(GPIO_RELAY_ENABLE_CH3, 0);
+        digitalWrite(GPIO_CH0_RELAY_ENABLE, 0);
+        digitalWrite(GPIO_CH1_RELAY_ENABLE, 0);
+        digitalWrite(GPIO_CH2_RELAY_ENABLE, 0);
+        digitalWrite(GPIO_CH3_RELAY_ENABLE, 0);
         operating = false;
       }
     } else {
-      opcode = RELAY_OPERATION_QUEUE.deQueue();
+      opcode = RELAY_OPERATION_QUEUE.dequeue();
       if (opcode > 0) {
         digitalWrite(GPIO_RELAY_SET, 1); digitalWrite(GPIO_RELAY_RST, 0);
       } else {
         digitalWrite(GPIO_RELAY_SET, 0); digitalWrite(GPIO_RELAY_RST, 1);
       }
       switch (opcode) {
-        case 1: case -1: digitalWrite(GPIO_RELAY_ENABLE_CH0, 1); break;
-        case 2: case -2: digitalWrite(GPIO_RELAY_ENABLE_CH1, 1); break;
-        case 3: case -3: digitalWrite(GPIO_RELAY_ENABLE_CH2, 1); break;
-        case 4: case -4: digitalWrite(GPIO_RELAY_ENABLE_CH3, 1); break;
+        case 1: case -1: digitalWrite(GPIO_CH0_RELAY_ENABLE, 1); break;
+        case 2: case -2: digitalWrite(GPIO_CH1_RELAY_ENABLE, 1); break;
+        case 3: case -3: digitalWrite(GPIO_CH2_RELAY_ENABLE, 1); break;
+        case 4: case -4: digitalWrite(GPIO_CH3_RELAY_ENABLE, 1); break;
       }
       operating = true;
     }
