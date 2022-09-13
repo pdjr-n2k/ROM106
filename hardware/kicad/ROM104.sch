@@ -475,23 +475,23 @@ $EndComp
 $Comp
 L power:GND #PWR0101
 U 1 1 632898A8
-P -1050 6200
-F 0 "#PWR0101" H -1050 5950 50  0001 C CNN
-F 1 "GND" H -1045 6027 50  0000 C CNN
-F 2 "" H -1050 6200 50  0001 C CNN
-F 3 "" H -1050 6200 50  0001 C CNN
-	1    -1050 6200
+P 3000 6300
+F 0 "#PWR0101" H 3000 6050 50  0001 C CNN
+F 1 "GND" H 3005 6127 50  0000 C CNN
+F 2 "" H 3000 6300 50  0001 C CNN
+F 3 "" H 3000 6300 50  0001 C CNN
+	1    3000 6300
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+5V #PWR0102
 U 1 1 6328D23C
-P 2850 1900
-F 0 "#PWR0102" H 2850 1750 50  0001 C CNN
-F 1 "+5V" H 2850 2050 50  0000 C CNN
-F 2 "" H 2850 1900 50  0001 C CNN
-F 3 "" H 2850 1900 50  0001 C CNN
-	1    2850 1900
+P 2900 1900
+F 0 "#PWR0102" H 2900 1750 50  0001 C CNN
+F 1 "+5V" H 2900 2050 50  0000 C CNN
+F 2 "" H 2900 1900 50  0001 C CNN
+F 3 "" H 2900 1900 50  0001 C CNN
+	1    2900 1900
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -535,92 +535,6 @@ Text Label 9550 5150 0    50   ~ 0
 CH2_LED
 Text Label 8450 5150 2    50   ~ 0
 CH3_LED
-Wire Wire Line
-	-1150 3750 -950 3750
-Wire Wire Line
-	-950 3750 -950 3150
-Wire Wire Line
-	-950 3750 -950 4450
-Wire Wire Line
-	-950 4450 -1150 4450
-Connection ~ -950 3750
-Wire Wire Line
-	-950 4450 -950 5150
-Wire Wire Line
-	-950 5150 -1150 5150
-Connection ~ -950 4450
-Wire Wire Line
-	-950 5150 -950 5850
-Wire Wire Line
-	-950 5850 -1150 5850
-Connection ~ -950 5150
-Wire Wire Line
-	-1150 3450 -1050 3450
-Wire Wire Line
-	-1050 3450 -1050 4150
-Wire Wire Line
-	-1050 4150 -1150 4150
-Wire Wire Line
-	-1050 4150 -1050 4850
-Wire Wire Line
-	-1050 4850 -1150 4850
-Connection ~ -1050 4150
-Wire Wire Line
-	-1050 4850 -1050 5550
-Wire Wire Line
-	-1050 5550 -1150 5550
-Connection ~ -1050 4850
-Wire Wire Line
-	-1050 5550 -1050 6200
-Connection ~ -1050 5550
-Wire Wire Line
-	-1150 3550 -750 3550
-Wire Wire Line
-	-1150 3650 -750 3650
-Wire Wire Line
-	-1150 4250 -750 4250
-Wire Wire Line
-	-1150 4350 -750 4350
-Wire Wire Line
-	-1150 4950 -750 4950
-Wire Wire Line
-	-1150 5050 -750 5050
-Wire Wire Line
-	-1150 5650 -750 5650
-Wire Wire Line
-	-1150 5750 -750 5750
-Text Label -750 5650 0    50   ~ 0
-CH0_RST
-Text Label -750 5750 0    50   ~ 0
-CH0_SET
-Text Label -750 5050 0    50   ~ 0
-CH1_SET
-Text Label -750 4950 0    50   ~ 0
-CH1_RST
-Text Label -750 4350 0    50   ~ 0
-CH2_SET
-Text Label -750 4250 0    50   ~ 0
-CH2_RST
-Text Label -750 3650 0    50   ~ 0
-CH3_SET
-Text Label 9550 4750 0    50   ~ 0
-CH3_RST
-Text Label 9550 4150 0    50   ~ 0
-CH0_RST
-Text Label 9550 4250 0    50   ~ 0
-CH0_SET
-Text Label 9550 4350 0    50   ~ 0
-CH1_RST
-Text Label 9550 4450 0    50   ~ 0
-CH1_SET
-Text Label 9550 4550 0    50   ~ 0
-CH2_RST
-Text Label 9550 4650 0    50   ~ 0
-CH2_SET
-Text Label -750 3550 0    50   ~ 0
-CH3_RST
-Text Label 9550 4850 0    50   ~ 0
-CH3_SET
 $Comp
 L Device:R R9
 U 1 1 631C1A0C
@@ -765,23 +679,23 @@ Text Label 900  7350 2    50   ~ 0
 CH3_LED
 NoConn ~ 8450 5050
 $Comp
-L Driver_Motor:L293D U?
+L Driver_Motor:L293D U5
 U 1 1 631FC180
-P 3850 2800
-F 0 "U?" H 3850 3889 50  0000 C CNN
-F 1 "L293D" H 3850 3980 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm" H 4100 2050 50  0001 L CNN
-F 3 "http://www.ti.com/lit/ds/symlink/l293.pdf" H 3550 3500 50  0001 C CNN
-	1    3850 2800
+P 3950 2800
+F 0 "U5" H 3950 3889 50  0000 C CNN
+F 1 "L293D" H 3950 3980 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 4200 2050 50  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/l293.pdf" H 3650 3500 50  0001 C CNN
+	1    3950 2800
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	850  4200 1800 4200
 $Comp
-L Relay:DIPxx-1Cxx-51x K?
+L Relay:DIPxx-1Cxx-51x K2
 U 1 1 632F5385
 P 1900 3500
-F 0 "K?" H 1470 3454 50  0000 R CNN
+F 0 "K2" H 1470 3454 50  0000 R CNN
 F 1 "DIPxx-1Cxx-51x" H 1470 3545 50  0000 R CNN
 F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 2350 3450 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 1900 3500 50  0001 C CNN
@@ -799,10 +713,10 @@ Wire Wire Line
 Wire Wire Line
 	1700 3100 1700 3200
 $Comp
-L Relay:DIPxx-1Cxx-51x K?
+L Relay:DIPxx-1Cxx-51x K3
 U 1 1 63338136
 P 1900 4700
-F 0 "K?" H 1470 4654 50  0000 R CNN
+F 0 "K3" H 1470 4654 50  0000 R CNN
 F 1 "DIPxx-1Cxx-51x" H 1470 4745 50  0000 R CNN
 F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 2350 4650 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 1900 4700 50  0001 C CNN
@@ -830,10 +744,10 @@ Wire Wire Line
 Wire Wire Line
 	1300 4500 1300 5200
 $Comp
-L Relay:DIPxx-1Cxx-51x K?
+L Relay:DIPxx-1Cxx-51x K1
 U 1 1 63388BFA
 P 1900 2500
-F 0 "K?" H 1470 2454 50  0000 R CNN
+F 0 "K1" H 1470 2454 50  0000 R CNN
 F 1 "DIPxx-1Cxx-51x" H 1470 2545 50  0000 R CNN
 F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 2350 2450 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 1900 2500 50  0001 C CNN
@@ -855,10 +769,10 @@ Wire Wire Line
 Wire Wire Line
 	1100 2100 1100 3700
 $Comp
-L Relay:DIPxx-1Cxx-51x K?
+L Relay:DIPxx-1Cxx-51x K4
 U 1 1 633A9E65
 P 1900 5700
-F 0 "K?" H 1470 5654 50  0000 R CNN
+F 0 "K4" H 1470 5654 50  0000 R CNN
 F 1 "DIPxx-1Cxx-51x" H 1470 5745 50  0000 R CNN
 F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 2350 5650 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 1900 5700 50  0001 C CNN
@@ -900,45 +814,45 @@ Wire Wire Line
 Wire Wire Line
 	3100 3900 3100 3400
 $Comp
-L Device:D D?
+L Device:D D6
 U 1 1 6343553D
 P 2650 2200
-F 0 "D?" H 2650 2417 50  0000 C CNN
+F 0 "D6" H 2650 2417 50  0000 C CNN
 F 1 "D" H 2650 2326 50  0000 C CNN
-F 2 "" H 2650 2200 50  0001 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 2200 50  0001 C CNN
 F 3 "~" H 2650 2200 50  0001 C CNN
 	1    2650 2200
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:D D?
+L Device:D D8
 U 1 1 6343E421
 P 2650 2900
-F 0 "D?" H 2650 3117 50  0000 C CNN
+F 0 "D8" H 2650 3117 50  0000 C CNN
 F 1 "D" H 2650 3026 50  0000 C CNN
-F 2 "" H 2650 2900 50  0001 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 2900 50  0001 C CNN
 F 3 "~" H 2650 2900 50  0001 C CNN
 	1    2650 2900
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:D D?
+L Device:D D5
 U 1 1 6343ED46
 P 2650 2000
-F 0 "D?" H 2650 1783 50  0000 C CNN
+F 0 "D5" H 2650 1783 50  0000 C CNN
 F 1 "D" H 2650 1874 50  0000 C CNN
-F 2 "" H 2650 2000 50  0001 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 2000 50  0001 C CNN
 F 3 "~" H 2650 2000 50  0001 C CNN
 	1    2650 2000
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:D D?
+L Device:D D7
 U 1 1 6343F6D9
 P 2650 2700
-F 0 "D?" H 2650 2483 50  0000 C CNN
+F 0 "D7" H 2650 2483 50  0000 C CNN
 F 1 "D" H 2650 2574 50  0000 C CNN
-F 2 "" H 2650 2700 50  0001 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 2700 50  0001 C CNN
 F 3 "~" H 2650 2700 50  0001 C CNN
 	1    2650 2700
 	-1   0    0    1   
@@ -977,53 +891,53 @@ Connection ~ 2900 2000
 Wire Wire Line
 	3100 2100 3100 2600
 Wire Wire Line
-	3100 2600 3350 2600
+	3100 2600 3450 2600
 Wire Wire Line
-	2400 2800 3350 2800
+	2400 2800 3450 2800
 Wire Wire Line
 	2100 3200 2400 3200
 Wire Wire Line
-	3100 3400 3350 3400
+	3100 3400 3450 3400
 $Comp
-L Device:D D?
+L Device:D D9
 U 1 1 63200125
 P 2650 3100
-F 0 "D?" H 2650 2883 50  0000 C CNN
+F 0 "D9" H 2650 2883 50  0000 C CNN
 F 1 "D" H 2650 2974 50  0000 C CNN
-F 2 "" H 2650 3100 50  0001 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 3100 50  0001 C CNN
 F 3 "~" H 2650 3100 50  0001 C CNN
 	1    2650 3100
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:D D?
+L Device:D D10
 U 1 1 632008C7
 P 2650 3300
-F 0 "D?" H 2650 3517 50  0000 C CNN
+F 0 "D10" H 2650 3517 50  0000 C CNN
 F 1 "D" H 2650 3426 50  0000 C CNN
-F 2 "" H 2650 3300 50  0001 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 3300 50  0001 C CNN
 F 3 "~" H 2650 3300 50  0001 C CNN
 	1    2650 3300
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:D D?
+L Device:D D11
 U 1 1 63201287
 P 2650 3800
-F 0 "D?" H 2650 3583 50  0000 C CNN
+F 0 "D11" H 2650 3583 50  0000 C CNN
 F 1 "D" H 2650 3674 50  0000 C CNN
-F 2 "" H 2650 3800 50  0001 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 3800 50  0001 C CNN
 F 3 "~" H 2650 3800 50  0001 C CNN
 	1    2650 3800
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:D D?
+L Device:D D12
 U 1 1 63201A05
 P 2650 4000
-F 0 "D?" H 2650 4217 50  0000 C CNN
+F 0 "D12" H 2650 4217 50  0000 C CNN
 F 1 "D" H 2650 4126 50  0000 C CNN
-F 2 "" H 2650 4000 50  0001 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 4000 50  0001 C CNN
 F 3 "~" H 2650 4000 50  0001 C CNN
 	1    2650 4000
 	1    0    0    -1  
@@ -1055,35 +969,35 @@ Wire Wire Line
 	3000 4000 2800 4000
 Connection ~ 3000 3300
 Wire Wire Line
-	2100 5000 3300 5000
+	2100 5000 2400 5000
 Wire Wire Line
-	2100 5400 3300 5400
+	2100 5400 2400 5400
 $Comp
-L Driver_Motor:L293D U?
+L Driver_Motor:L293D U1
 U 1 1 6324970B
-P 3800 5000
-F 0 "U?" H 3800 6089 50  0000 C CNN
-F 1 "L293D" H 3800 6180 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm" H 4050 4250 50  0001 L CNN
-F 3 "http://www.ti.com/lit/ds/symlink/l293.pdf" H 3500 5700 50  0001 C CNN
-	1    3800 5000
+P 3900 5000
+F 0 "U1" H 3900 6089 50  0000 C CNN
+F 1 "L293D" H 3900 6180 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 4150 4250 50  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/l293.pdf" H 3600 5700 50  0001 C CNN
+	1    3900 5000
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	2100 6000 2100 6100
 Wire Wire Line
-	2100 6100 3100 6100
+	2100 6100 2400 6100
 Wire Wire Line
 	3100 6100 3100 5600
 Wire Wire Line
-	3100 5600 3300 5600
+	3100 5600 3400 5600
 Wire Wire Line
 	2500 3100 2400 3100
 Wire Wire Line
 	2400 3100 2400 3200
 Connection ~ 2400 3200
 Wire Wire Line
-	2400 3200 3350 3200
+	2400 3200 3450 3200
 Wire Wire Line
 	2400 3200 2400 3300
 Wire Wire Line
@@ -1100,11 +1014,7 @@ Wire Wire Line
 Wire Wire Line
 	2400 4000 2500 4000
 Wire Wire Line
-	2100 4400 3100 4400
-Wire Wire Line
-	3100 4400 3100 4800
-Wire Wire Line
-	3100 4800 3300 4800
+	3100 4800 3400 4800
 Wire Wire Line
 	850  4000 1350 4000
 Wire Wire Line
@@ -1119,4 +1029,345 @@ Wire Wire Line
 	850  3700 1100 3700
 Wire Wire Line
 	850  3800 1150 3800
+Wire Wire Line
+	2100 4400 2100 4300
+Wire Wire Line
+	2100 4300 2400 4300
+Wire Wire Line
+	3100 4300 3100 4800
+$Comp
+L Device:D D13
+U 1 1 63229F2E
+P 2650 4200
+F 0 "D13" H 2650 3983 50  0000 C CNN
+F 1 "D" H 2650 4074 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 4200 50  0001 C CNN
+F 3 "~" H 2650 4200 50  0001 C CNN
+	1    2650 4200
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:D D14
+U 1 1 6322ABA2
+P 2650 4400
+F 0 "D14" H 2650 4617 50  0000 C CNN
+F 1 "D" H 2650 4526 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 4400 50  0001 C CNN
+F 3 "~" H 2650 4400 50  0001 C CNN
+	1    2650 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D D15
+U 1 1 6322B525
+P 2650 4900
+F 0 "D15" H 2650 4683 50  0000 C CNN
+F 1 "D" H 2650 4774 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 4900 50  0001 C CNN
+F 3 "~" H 2650 4900 50  0001 C CNN
+	1    2650 4900
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:D D16
+U 1 1 6322BE78
+P 2650 5100
+F 0 "D16" H 2650 5317 50  0000 C CNN
+F 1 "D" H 2650 5226 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 5100 50  0001 C CNN
+F 3 "~" H 2650 5100 50  0001 C CNN
+	1    2650 5100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D D17
+U 1 1 6322C75F
+P 2650 5300
+F 0 "D17" H 2650 5083 50  0000 C CNN
+F 1 "D" H 2650 5174 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 5300 50  0001 C CNN
+F 3 "~" H 2650 5300 50  0001 C CNN
+	1    2650 5300
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:D D18
+U 1 1 6322D138
+P 2650 5500
+F 0 "D18" H 2650 5717 50  0000 C CNN
+F 1 "D" H 2650 5626 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 5500 50  0001 C CNN
+F 3 "~" H 2650 5500 50  0001 C CNN
+	1    2650 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D D19
+U 1 1 6322DC0D
+P 2650 6000
+F 0 "D19" H 2650 5783 50  0000 C CNN
+F 1 "D" H 2650 5874 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 6000 50  0001 C CNN
+F 3 "~" H 2650 6000 50  0001 C CNN
+	1    2650 6000
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:D D20
+U 1 1 6322E630
+P 2650 6200
+F 0 "D20" H 2650 6417 50  0000 C CNN
+F 1 "D" H 2650 6326 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 2650 6200 50  0001 C CNN
+F 3 "~" H 2650 6200 50  0001 C CNN
+	1    2650 6200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2500 4200 2400 4200
+Wire Wire Line
+	2400 4200 2400 4300
+Connection ~ 2400 4300
+Wire Wire Line
+	2400 4300 3100 4300
+Wire Wire Line
+	2400 4300 2400 4400
+Wire Wire Line
+	2400 4400 2500 4400
+Wire Wire Line
+	2500 4900 2400 4900
+Wire Wire Line
+	2400 4900 2400 5000
+Connection ~ 2400 5000
+Wire Wire Line
+	2400 5000 3400 5000
+Wire Wire Line
+	2400 5000 2400 5100
+Wire Wire Line
+	2400 5100 2500 5100
+Wire Wire Line
+	2500 5300 2400 5300
+Wire Wire Line
+	2400 5300 2400 5400
+Connection ~ 2400 5400
+Wire Wire Line
+	2400 5400 3400 5400
+Wire Wire Line
+	2400 5400 2400 5500
+Wire Wire Line
+	2400 5500 2500 5500
+Wire Wire Line
+	2500 6000 2400 6000
+Wire Wire Line
+	2400 6000 2400 6100
+Connection ~ 2400 6100
+Wire Wire Line
+	2400 6100 3100 6100
+Wire Wire Line
+	2400 6100 2400 6200
+Wire Wire Line
+	2400 6200 2500 6200
+Wire Wire Line
+	2900 3800 2900 4200
+Wire Wire Line
+	2900 4200 2800 4200
+Connection ~ 2900 3800
+Wire Wire Line
+	2900 4200 2900 4900
+Wire Wire Line
+	2900 4900 2800 4900
+Connection ~ 2900 4200
+Wire Wire Line
+	2900 4900 2900 5300
+Wire Wire Line
+	2900 5300 2800 5300
+Connection ~ 2900 4900
+Wire Wire Line
+	2900 5300 2900 6000
+Wire Wire Line
+	2900 6000 2800 6000
+Connection ~ 2900 5300
+Wire Wire Line
+	3000 4000 3000 4400
+Wire Wire Line
+	3000 4400 2800 4400
+Connection ~ 3000 4000
+Wire Wire Line
+	3000 4400 3000 5100
+Wire Wire Line
+	3000 5100 2800 5100
+Connection ~ 3000 4400
+Wire Wire Line
+	3000 5100 3000 5500
+Wire Wire Line
+	3000 5500 2800 5500
+Connection ~ 3000 5100
+Wire Wire Line
+	3000 5500 3000 6200
+Wire Wire Line
+	3000 6200 2800 6200
+Connection ~ 3000 5500
+Wire Wire Line
+	3000 6200 3000 6300
+Connection ~ 3000 6200
+Wire Wire Line
+	3850 3900 3850 3800
+Wire Wire Line
+	4050 3900 4050 3800
+Wire Wire Line
+	3800 6000 3800 6100
+Wire Wire Line
+	3800 6100 4000 6100
+Wire Wire Line
+	4000 6100 4000 6000
+Wire Wire Line
+	3200 3900 3200 6100
+Wire Wire Line
+	3200 6100 3800 6100
+Wire Wire Line
+	3200 3900 3850 3900
+Connection ~ 3850 3900
+Wire Wire Line
+	3850 3900 4050 3900
+Connection ~ 3800 6100
+Connection ~ 3200 3900
+Wire Wire Line
+	3200 1900 3200 3900
+$Comp
+L power:+5V #PWR03
+U 1 1 634BDEB3
+P 3200 1900
+F 0 "#PWR03" H 3200 1750 50  0001 C CNN
+F 1 "+5V" H 3200 2050 50  0000 C CNN
+F 2 "" H 3200 1900 50  0001 C CNN
+F 3 "" H 3200 1900 50  0001 C CNN
+	1    3200 1900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4150 2000 4150 1900
+Wire Wire Line
+	4150 1900 4050 1900
+Wire Wire Line
+	4050 1900 4050 2000
+Wire Wire Line
+	4050 1900 3850 1900
+Wire Wire Line
+	3850 1900 3850 2000
+Connection ~ 4050 1900
+Wire Wire Line
+	3850 1900 3750 1900
+Wire Wire Line
+	3750 1900 3750 2000
+Connection ~ 3850 1900
+Wire Wire Line
+	3750 1900 3300 1900
+Wire Wire Line
+	3300 1900 3300 4100
+Connection ~ 3750 1900
+$Comp
+L power:GND #PWR011
+U 1 1 6365743E
+P 3300 6300
+F 0 "#PWR011" H 3300 6050 50  0001 C CNN
+F 1 "GND" H 3305 6127 50  0000 C CNN
+F 2 "" H 3300 6300 50  0001 C CNN
+F 3 "" H 3300 6300 50  0001 C CNN
+	1    3300 6300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4100 4200 4100 4100
+Wire Wire Line
+	4100 4100 4000 4100
+Wire Wire Line
+	4000 4100 4000 4200
+Wire Wire Line
+	4000 4100 3800 4100
+Wire Wire Line
+	3800 4100 3800 4200
+Connection ~ 4000 4100
+Wire Wire Line
+	3800 4100 3700 4100
+Wire Wire Line
+	3700 4100 3700 4200
+Connection ~ 3800 4100
+Wire Wire Line
+	3700 4100 3300 4100
+Connection ~ 3700 4100
+Connection ~ 3300 4100
+Wire Wire Line
+	3300 4100 3300 6300
+Text Label 5250 2400 0    50   ~ 0
+CH3_EN
+Text Label 5250 3000 0    50   ~ 0
+CH2_EN
+Text Label 5250 4600 0    50   ~ 0
+CH1_EN
+Text Label 5250 5200 0    50   ~ 0
+CH0_EN
+Wire Wire Line
+	4450 2600 5050 2600
+Wire Wire Line
+	5050 2600 5050 3200
+Wire Wire Line
+	4450 3200 5050 3200
+Connection ~ 5050 2600
+Wire Wire Line
+	5050 2600 5250 2600
+Wire Wire Line
+	5050 3200 5050 4800
+Wire Wire Line
+	4400 4800 5050 4800
+Connection ~ 5050 3200
+Wire Wire Line
+	5050 4800 5050 5400
+Wire Wire Line
+	4400 5400 5050 5400
+Connection ~ 5050 4800
+Wire Wire Line
+	4450 2800 5150 2800
+Wire Wire Line
+	5150 2800 5150 3400
+Wire Wire Line
+	4450 3400 5150 3400
+Connection ~ 5150 2800
+Wire Wire Line
+	5150 2800 5250 2800
+Wire Wire Line
+	5150 3400 5150 5000
+Wire Wire Line
+	4400 5000 5150 5000
+Connection ~ 5150 3400
+Wire Wire Line
+	5150 5000 5150 5600
+Wire Wire Line
+	4400 5600 5150 5600
+Connection ~ 5150 5000
+Wire Wire Line
+	4450 2400 5250 2400
+Wire Wire Line
+	4450 3000 5250 3000
+Wire Wire Line
+	4400 4600 5250 4600
+Wire Wire Line
+	4400 5200 5250 5200
+Text Label 5250 2600 0    50   ~ 0
+SET
+Text Label 5250 2800 0    50   ~ 0
+RST
+Text Label 9550 4450 0    50   ~ 0
+CH3_EN
+Text Label 9550 4350 0    50   ~ 0
+CH2_EN
+Text Label 9550 4250 0    50   ~ 0
+CH1_EN
+Text Label 9550 4150 0    50   ~ 0
+CH0_EN
+Text Label 9550 4550 0    50   ~ 0
+SET
+Text Label 9550 4650 0    50   ~ 0
+RST
+NoConn ~ 9550 4750
+NoConn ~ 9550 4850
 $EndSCHEMATC
