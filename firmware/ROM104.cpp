@@ -7,27 +7,36 @@
  * ROM104 is a 4-channel relay module with integrated CAN connectivity
  * built around a Teensy 3.2 microcontroller.
  * 
- * This firmware implements an NMEA 2000 interface for ROM104 that
- * supports supports the following message types.
+ * This firmware implements an NMEA 2000 interface for ROM104.
  * 
- * PGN127501 Binary Status Report. These messages report the state of
- * the ROM104 relay outputs and are transmitted once every four seconds
- * or immediately upon a relay state change.
+ * In NMEA 2000 networks, relay output modules (and switch input
+ * modules) are identified by an 8-bit instance address which is set by
+ * the network engineer when the module is installed. ROM104 includes a
+ * DIL switch which is used to configure the module's instance address
+ * and this is read by firmware ononfigure when the module boots.
  * 
- * PGN127502 Binary Status Update. These messages operate the ROM104
- * relay outputs.
+ * Once started the firmware issues a PGN127501 Binary Status Report
+ * every four seconds or immediately upon a relay state change. This
+ * message broadcasts the current state of the module's relays.
  * 
- * The module's NMEA 2000 instance address is read from the ROM104 DIL
- * switch and is used to identify the module in all network
- * communication.
+ * The firmware listens on the NMEA 2000 bus for PGN127502 Binary
+ * Status Update messages addressed to its configured instance number.
+ * These messages operate the ROM104 relay outputs whilst attempting to
+ * minimise the module's overall power consumption. The relay's used
+ * in the ROM104 module are single-coil, bistable, latching devices.
+ * 
+ * The use of latching relays reduces power consumption because the
+ * relay coil only needs to be energised for a short time in order to
+ * effect a state change. The firmware further manages power use by
+ * queueing state change requests so that only one relay coil will be
+ * energised at a time.
+ * 
+ * Use of a single coil relay demands polarity changes across the coil
+ * to effect set and reset operations. ROM104 includes twin H-bridge
+ * drivers that the firmware manipulates to operate the relay outputs.
  * 
  * Local feedback on relay states is presented by modulating the ROM104
  * indicator LEDs.
- * 
- * This firmware assumes that the connected relays are single-coil,
- * bistable, latching devices that are SET or RESET by a polarised
- * pulse across the relay coil. The assumption is that the relays
- * are operated by a simple H-bridge.
  */
 
 #include <Arduino.h>
