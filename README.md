@@ -1,28 +1,23 @@
 # ROM104 - NMEA 2000 relay output module
 
-__ROM104__ is a 4-channel relay output module with an integrated CAN
-interface. The module was designed for use in an NMEA 2000 network.
+__ROM104__ is an NMEA 2000 relay output module with four zero-volt
+SPDT latching relay output channels rated at 220VAC/5A, 30VDC/5A.
 
-Each output channel is implemented using a zero-volt latching relay
-rated at 220VAC/5A, 30VDC/5A maximum and LED indicators are used to
-give clear information on current relay state.
+The module is powered from the NMEA bus and has an LEN of 1.0.
+A PCB nounted DIL switch allows the installer to connect a 120 Ohm
+resistor across host NMEA data bus permitting the module to be installed
+as either a drop node or a bus termination node.
 
-The module provides solder pads for bus connection which can be used
+The relay module's switchbank instance number is configured during
+installation using a DIL switch and four LED indicators are used to
+give a clear indication of the state of each relay.
+
+The module PCB provides solder pads for bus connection which can be used
 directly or for the installation of a user selected PCB terminal block
 or off-board connector.
 
-A PCB nounted DIL switch allows the installer to connect a 120 Ohm
-resistor across the host data bus permitting the module to be installed
-as either a drop node or a bus termination node.
-
-In an NMEA application, the module can be powered from the NMEA bus and
-has an LEN of 1.0.
-
-The switchbank's instance number is configured during installation
-using a DIL switch.
-
 __ROM104__ accepts instructions for relay operation over the NMEA 2000
-bus by responding to
+bus, responding to
 [PGN 127502 Binary Status Update]()
 messages addressed to its defined switchbank instance. 
 
@@ -42,10 +37,11 @@ output for all electronic components.
 NMEA/CAN interfacing is provided by an
 [MCP2551 High-speed CAN Transceiver](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf).
 
-Each output channel drives a latching relay with zero-volt NO, COM and
-NC connections.
-The state of switchbank channels (as detected by the microcontroller)
-is reported visually by four LEDs.
+Each output channel drives a single coil, latching, relay with
+zero-volt NO, CO and NC connections presented at an externally
+accessible terminal block.
+Relay coil polarity switching is implemented by two dual H-bridge
+controller ICs.
 
 ## PCB
 
