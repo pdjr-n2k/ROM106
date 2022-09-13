@@ -17,7 +17,7 @@
  * 
  * Once started the firmware issues a PGN127501 Binary Status Report
  * every four seconds or immediately upon a relay state change. This
- * message broadcasts the current state of the module's relays.
+ * broadcast reports the current status of the module's relays.
  * 
  * The firmware listens on the NMEA 2000 bus for PGN127502 Binary
  * Status Update messages addressed to its configured instance number.
@@ -195,10 +195,10 @@ Scheduler SCHEDULER (SCHEDULER_TICK);
 
 /**********************************************************************
  * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
- * specifies a relay (1 through 4) and an operation: SET is the opcode
+ * specifies a relay (1 through 4) and an operation: SET if the opcode
  * is positive; reset if the opcode is negative. Relay operations are
  * queued for sequential processing in order to smooth out the uneven
- * and possibly damagingly high power demands that could result from
+ * and possibly unsupportable power demands that could result from
  * parallel or overlapping operation of multiple relays.
  */
 ArduinoQueue<int> RELAY_OPERATION_QUEUE(RELAY_OPERATION_QUEUE_SIZE);
@@ -312,15 +312,14 @@ void processRelayOperationQueueMaybe() {
   int opcode;
 
   if (now > deadline) {
-    if (RELAY_OPERATION_QUEUE.isEmpty()) {
-      if (operating) {
-        digitalWrite(GPIO_CH0_RELAY_ENABLE, 0);
-        digitalWrite(GPIO_CH1_RELAY_ENABLE, 0);
-        digitalWrite(GPIO_CH2_RELAY_ENABLE, 0);
-        digitalWrite(GPIO_CH3_RELAY_ENABLE, 0);
-        operating = false;
-      }
-    } else {
+    if (operating) {
+      digitalWrite(GPIO_CH0_RELAY_ENABLE, 0);
+      digitalWrite(GPIO_CH1_RELAY_ENABLE, 0);
+      digitalWrite(GPIO_CH2_RELAY_ENABLE, 0);
+      digitalWrite(GPIO_CH3_RELAY_ENABLE, 0);
+      operating = false;
+    }
+    if (!RELAY_OPERATION_QUEUE.isEmpty()) {
       opcode = RELAY_OPERATION_QUEUE.dequeue();
       if (opcode > 0) {
         digitalWrite(GPIO_RELAY_SET, 1); digitalWrite(GPIO_RELAY_RST, 0);
@@ -332,6 +331,7 @@ void processRelayOperationQueueMaybe() {
         case 2: case -2: digitalWrite(GPIO_CH1_RELAY_ENABLE, 1); break;
         case 3: case -3: digitalWrite(GPIO_CH2_RELAY_ENABLE, 1); break;
         case 4: case -4: digitalWrite(GPIO_CH3_RELAY_ENABLE, 1); break;
+        default: break;
       }
       operating = true;
     }
