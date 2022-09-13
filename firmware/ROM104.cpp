@@ -8,7 +8,7 @@
  * built around a Teensy 3.2 microcontroller.
  * 
  * This firmware implements an NMEA 2000 interface for ROM104 that
- * supports supports the fopl0ing message types.
+ * supports supports the following message types.
  * 
  * PGN127501 Binary Status Report. These messages report the state of
  * the ROM104 relay outputs and are transmitted once every four seconds
@@ -22,7 +22,12 @@
  * communication.
  * 
  * Local feedback on relay states is presented by modulating the ROM104
- * indicator LEDs. 
+ * indicator LEDs.
+ * 
+ * This firmware assumes that the connected relays are single-coil,
+ * bistable, latching devices that are SET or RESET by a polarised
+ * pulse across the relay coil. The assumption is that the relays
+ * are operated by a simple H-bridge.
  */
 
 #include <Arduino.h>
@@ -181,8 +186,15 @@ DilSwitch DIL_SWITCH (ENCODER_PINS, ELEMENTCOUNT(ENCODER_PINS));
  */
 Scheduler SCHEDULER (SCHEDULER_TICK);
 
-typedef struct { int channel; bool op; } RelayOperation;
-ArduinoQueue<RelayOperation> RELAY_OPERATION_QUEUE(RELAY_OPERATION_QUEUE_SIZE);
+/**********************************************************************
+ * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
+ * specifies a relay (1 through 4) and an operation: SET is the opcode
+ * is positive; reset if the opcode is negative. Relay operations are
+ * queued for sequential processing in order to smooth out the uneven
+ * and possibly damagingly high power demands that could result from
+ * parallel or overlapping operation of multiple relays.
+ */
+ArduinoQueue<int> RELAY_OPERATION_QUEUE(RELAY_OPERATION_QUEUE_SIZE);
 
 /**********************************************************************
  * SWITCHBANK_INSTANCE - working storage for the switchbank module
@@ -281,16 +293,20 @@ void loop() {
 /**********************************************************************
  * processRelayOperationQueueMaybe() should be called directly from
  * loop. The function is triggered each RELAY_OPERATION_QUEUE_INTERVAL
- * and it is important that this value matches the actuating signal
- * hold period of physical relays installed on the host PCB. the queue is checked for
- * the presence of a relay operation request
+ * to terminate any previously triggered relay operating signal and to
+ * process any queued request for relay operation.  It is important that
+ * the function's operating interval is at least as long as the minimum
+ * operating signal hold period of physical relays installed on the host
+ * PCB.
+ * 
+ * The function operates an H-bridge interface, setting output polarity
+ * and then enabling a signal on the selected relay. 
  */
 void processRelayOperationQueueMaybe() {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
   static bool operating = false;
   int opcode;
-  int action;
 
   if (now > deadline) {
     if (RELAY_OPERATION_QUEUE.isEmpty()) {
@@ -390,8 +406,11 @@ bool tN2kOnOff2bool(tN2kOnOff state) {
 
 /**********************************************************************
  * Process a received PGN 127502 Switch Bank Control message by
- * decoding the switchbank status and using the channel status data to
- * appropriately set or reset the attached relays.
+ * decoding the switchbank status message and comparing the requested
+ * channel state(s) with the current SWITCHBANK_STATUS. Any mismatch 
+ * results in an opcode representing an appropriate set or reset
+ * operation being added to the RELAY_OPERATION_QUEUE for subsequent
+ * operation of the nonconformant relay(s).
  */
 void handlePGN127502(const tN2kMsg n2kMsg) {
   unsigned char instance;
