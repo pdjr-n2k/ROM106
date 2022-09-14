@@ -290,28 +290,30 @@ void loop() {
  * to terminate any previously triggered relay operating signal and to
  * process any queued request for relay operation.  It is important that
  * the function's operating interval is at least as long as the minimum
- * operating signal hold period of physical relays installed on the host
- * PCB.
+ * operating signal hold period of the physical relays installed on the
+ * host PCB.
  * 
  * The function operates an H-bridge interface, setting output polarity
- * and then enabling a signal on the selected relay. 
+ * and then issuing an enable signal on the selected relay. 
  */
 void processRelayOperationQueueMaybe() {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
-  static bool operating = false;
+  static bool operating = true;
   int opcode;
 
+
   if (now > deadline) {
-    if (RELAY_OPERATION_QUEUE.isEmpty()) {
-      if (operating) {
-        digitalWrite(GPIO_CH0_RELAY_ENABLE, 0);
-        digitalWrite(GPIO_CH1_RELAY_ENABLE, 0);
-        digitalWrite(GPIO_CH2_RELAY_ENABLE, 0);
-        digitalWrite(GPIO_CH3_RELAY_ENABLE, 0);
-        operating = false;
-      }
-    } else {
+
+    if (operating) {
+      digitalWrite(GPIO_CH0_RELAY_ENABLE, 0);
+      digitalWrite(GPIO_CH1_RELAY_ENABLE, 0);
+      digitalWrite(GPIO_CH2_RELAY_ENABLE, 0);
+      digitalWrite(GPIO_CH3_RELAY_ENABLE, 0);
+      operating = false;
+    }
+
+    if (!RELAY_OPERATION_QUEUE.isEmpty()) {
       opcode = RELAY_OPERATION_QUEUE.dequeue();
       if (opcode > 0) {
         digitalWrite(GPIO_RELAY_SET, 1); digitalWrite(GPIO_RELAY_RST, 0);
@@ -326,6 +328,7 @@ void processRelayOperationQueueMaybe() {
       }
       operating = true;
     }
+    
     deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
   }
 }
