@@ -2,41 +2,34 @@
 
 SB120
 
-__ROM104__ is an NMEA 2000 relay output module (switchbank)
-with support four relay output channels.
+__ROM104__ is an NMEA 2000 relay output module (switchbank) with
+support four relay output channels.
 
-Each relay output channel consists of a latching SPDT relay which
-presents CO, NC and NO connections through a zero-volt terminal
-block.
-The real-time state of each relay is indicated by LED.
+Each output channel operates a latching SPDT relay which presents
+CO, NC and NO connections through a zero-volt terminal block.
+The real-time state of each channel is indicated by LED.
 
-__ROM104__ connects to its host NMEA bus by either a screw
-terminal block or M12 5-pin circular connector.
-An internal DIL switch allows the installer to connect a 120 Ohm
-resistor across the host data bus permitting the module to be
-used as either a drop node or a bus termination node.
+__ROM104__ provides an NMEA bus connection which can be implemented
+as a screw terminal block or M12 5-pin circular connector.
+An internal DIL switch allows a 120 Ohm resistor to be connected
+across the host data bus permitting the module to be installed as
+either a drop node or a bus termination node.
 The module is powered from the NMEA bus and has an LEN of 1.0.
 
 The module's switchbank instance number is configured during
-installation using an 8-position DIL switch.
-Multiple modules may be installed on a single NMEA network.
+installation using an 8-position DIL switch allowing multiple
+uniquely addressable modules to be installed on a single NMEA
+network.
 
-switchbank protocol implemented by PGN 127501 Binary Switch Status
-and PGN 127502 Binary Switch Control.
-See
-[SIM108](https://github.com/preeve9534/SIM108)
-for a project implementing a complentary switch input module. 
+## NMEA 2000 PGN interface
 
+__ROM104__ transmits(T) and receives(R) the following NMEA 2000
+message types.
 
-__ROM104__ accepts instructions for relay operation over the NMEA 2000
-bus, responding to
-[PGN 127502 Binary Status Update]()
-messages addressed to its defined switchbank instance. 
-
-The module reports relay state information over NMEA 2000 using 
-[PGN 127501 Binary Status Report]().
-Switchbank status messages are transmitted once every four seconds or
-immediately on a relay state change.
+| PGN | Mode | Description |
+|-----|-------------|
+| 127501 Binary Switch Status  | T | Issued every four seconds or immediately on the state change of any output channel. |
+| 127502 Binary Switch Control | R | Use to set relay channel state.  
 
 ## Hardware design
 
