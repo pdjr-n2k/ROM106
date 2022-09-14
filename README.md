@@ -29,7 +29,7 @@ message types.
 | PGN | Mode   | Description |
 | --- | :----: | ----------- |
 | 127501 (Binary Switch Status)  | T | Issued every four seconds or immediately on the state change of any output channel. |
-| 127502 (Binary Switch Control) | R | Use to set relay channel state.  
+| 127502 (Binary Switch Control) | R | Used to set relay channel state.  
 
 ## Hardware design
 
