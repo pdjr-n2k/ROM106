@@ -1,5 +1,7 @@
 # ROM104 - NMEA 2000 relay output module
 
+SB120
+
 __ROM104__ is a relay output module compatible with the NMEA 2000
 switchbank protocol implemented by PGN 127501 Binary Switch Status
 and PGN 127502 Binary Switch Control.
