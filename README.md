@@ -3,7 +3,7 @@
 SB120
 
 __ROM104__ is an NMEA 2000 relay output module (switchbank)
-implementing four zero-volt SPDT output cha
+with support four four zero-volt SPDT output channels.
 switchbank protocol implemented by PGN 127501 Binary Switch Status
 and PGN 127502 Binary Switch Control.
 See
