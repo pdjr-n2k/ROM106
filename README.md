@@ -8,7 +8,7 @@ CO, NC and NO connections through a zero-volt terminal block.
 The real-time state of each channel is indicated by LED.
 
 __ROM104__ provides an NMEA bus connection which can be implemented
-as a screw terminal block or M12 5-pin circular connector.
+as a either a screw terminal block or M12 5-pin circular connector.
 An internal DIL switch allows a 120 Ohm resistor to be connected
 across the host data bus permitting the module to be installed as
 either a drop node or a bus termination node.
