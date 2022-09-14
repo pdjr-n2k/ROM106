@@ -5,18 +5,21 @@ SB120
 __ROM104__ is a relay output module compatible with the NMEA 2000
 switchbank protocol implemented by PGN 127501 Binary Switch Status
 and PGN 127502 Binary Switch Control.
+See
+[SIM108](https://github.com/preeve9534/SIM108)
+for a project implementing a complentary switch input module. 
 
-The module can be installed on its host NMEA bus as either a drop
+__ROM104__ can be installed on its host NMEA bus as either a drop
 node or a termination node and is powered from the NMEA with an LEN
 of 1.0.
+Each module is identified by a user-configurable switchbank instance
+number and multiple modules may be installed on a single NMEA
+network.
 
 Each relay output channel consists of a latching SPDT relay which
 presents CO, NC and NO connections through a zero-volt terminal
 block.
-
-The relay module's switchbank instance number is configured during
-installation using a DIL switch. Four LED outputs are used to give a
-clear indication of the state of each relay.
+The real-time state of each relay is indicated by LED.
 
 __ROM104__ accepts instructions for relay operation over the NMEA 2000
 bus, responding to
@@ -39,15 +42,17 @@ output for all electronic components.
 NMEA/CAN interfacing is provided by an
 [MCP2551 High-speed CAN Transceiver](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf).
 
-The module PCB provides solder pads for NMEA bus connection which can
-be used for wire-to-board or for the installation of a terminal block
-or chassis-mounted connector. 
-
+Relay operation (coil voltage polarity switching) is implement using
+twin
+[L2983 Quadruple Half-H Driver]()
+ICs.
 Each output channel drives a single coil, latching, relay with
 zero-volt NO, CO and NC connections presented at an externally
 accessible terminal block.
-Relay coil polarity switching is implemented by two dual H-bridge
-controller ICs.
+
+The module PCB provides solder pads for NMEA bus connection which can
+be used for the installation of a terminal block or chassis-mounted
+connector. 
 
 ## PCB
 
