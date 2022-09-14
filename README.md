@@ -1,7 +1,5 @@
 # ROM104 - NMEA 2000 relay output module
 
-SB120
-
 __ROM104__ is an NMEA 2000 relay output module (switchbank) with
 support four relay output channels.
 
