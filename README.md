@@ -21,7 +21,7 @@ installation using an 8-position DIL switch allowing multiple
 uniquely addressable modules to be installed on a single NMEA
 network.
 
-## NMEA 2000 PGN interface
+## PGN interface
 
 __ROM104__ transmits(T) and receives(R) the following NMEA 2000
 message types.
