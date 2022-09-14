@@ -472,17 +472,6 @@ F 3 "~" H 1000 5100 50  0001 C CNN
 	1    1000 5100
 	-1   0    0    -1  
 $EndComp
-$Comp
-L power:+5V #PWR0102
-U 1 1 6328D23C
-P 3250 2800
-F 0 "#PWR0102" H 3250 2650 50  0001 C CNN
-F 1 "+5V" H 3250 2950 50  0000 C CNN
-F 2 "" H 3250 2800 50  0001 C CNN
-F 3 "" H 3250 2800 50  0001 C CNN
-	1    3250 2800
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	10650 1250 10750 1250
 Wire Wire Line
@@ -772,172 +761,15 @@ Wire Wire Line
 Wire Wire Line
 	2450 3100 2450 3000
 Wire Wire Line
-	2450 3000 2750 3000
-Wire Wire Line
 	2450 4700 2450 4800
 Wire Wire Line
-	2450 4800 2750 4800
-Wire Wire Line
 	3450 4800 3450 4300
-$Comp
-L Device:D D6
-U 1 1 6343553D
-P 3000 3100
-F 0 "D6" H 3000 3317 50  0000 C CNN
-F 1 "D" H 3000 3226 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 3100 50  0001 C CNN
-F 3 "~" H 3000 3100 50  0001 C CNN
-	1    3000 3100
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:D D8
-U 1 1 6343E421
-P 3000 3800
-F 0 "D8" H 3000 4017 50  0000 C CNN
-F 1 "D" H 3000 3926 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 3800 50  0001 C CNN
-F 3 "~" H 3000 3800 50  0001 C CNN
-	1    3000 3800
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:D D5
-U 1 1 6343ED46
-P 3000 2900
-F 0 "D5" H 3000 2683 50  0000 C CNN
-F 1 "D" H 3000 2774 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 2900 50  0001 C CNN
-F 3 "~" H 3000 2900 50  0001 C CNN
-	1    3000 2900
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:D D7
-U 1 1 6343F6D9
-P 3000 3600
-F 0 "D7" H 3000 3383 50  0000 C CNN
-F 1 "D" H 3000 3474 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 3600 50  0001 C CNN
-F 3 "~" H 3000 3600 50  0001 C CNN
-	1    3000 3600
-	-1   0    0    1   
-$EndComp
-Connection ~ 2750 3000
-Wire Wire Line
-	2750 3000 2750 2900
-Wire Wire Line
-	2750 2900 2850 2900
-Wire Wire Line
-	2850 3100 2750 3100
-Wire Wire Line
-	2750 3100 2750 3000
-Wire Wire Line
-	2750 3000 3450 3000
-Wire Wire Line
-	2450 3700 2750 3700
-Wire Wire Line
-	2850 3600 2750 3600
-Wire Wire Line
-	2750 3600 2750 3700
-Connection ~ 2750 3700
-Wire Wire Line
-	2750 3700 2750 3800
-Wire Wire Line
-	2750 3800 2850 3800
-Wire Wire Line
-	3150 2900 3250 2900
-Wire Wire Line
-	3250 2900 3250 2800
-Wire Wire Line
-	3150 3600 3250 3600
-Wire Wire Line
-	3250 3600 3250 2900
-Connection ~ 3250 2900
 Wire Wire Line
 	3450 3000 3450 3500
 Wire Wire Line
 	3450 3500 3800 3500
 Wire Wire Line
-	2750 3700 3800 3700
-Wire Wire Line
-	2450 4100 2750 4100
-Wire Wire Line
 	3450 4300 3800 4300
-$Comp
-L Device:D D9
-U 1 1 63200125
-P 3000 4000
-F 0 "D9" H 3000 3783 50  0000 C CNN
-F 1 "D" H 3000 3874 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 4000 50  0001 C CNN
-F 3 "~" H 3000 4000 50  0001 C CNN
-	1    3000 4000
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:D D10
-U 1 1 632008C7
-P 3000 4200
-F 0 "D10" H 3000 4417 50  0000 C CNN
-F 1 "D" H 3000 4326 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 4200 50  0001 C CNN
-F 3 "~" H 3000 4200 50  0001 C CNN
-	1    3000 4200
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:D D11
-U 1 1 63201287
-P 3000 4700
-F 0 "D11" H 3000 4483 50  0000 C CNN
-F 1 "D" H 3000 4574 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 4700 50  0001 C CNN
-F 3 "~" H 3000 4700 50  0001 C CNN
-	1    3000 4700
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:D D12
-U 1 1 63201A05
-P 3000 4900
-F 0 "D12" H 3000 5117 50  0000 C CNN
-F 1 "D" H 3000 5026 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 4900 50  0001 C CNN
-F 3 "~" H 3000 4900 50  0001 C CNN
-	1    3000 4900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3250 3600 3250 4000
-Wire Wire Line
-	3250 4000 3150 4000
-Connection ~ 3250 3600
-Wire Wire Line
-	3250 4000 3250 4700
-Wire Wire Line
-	3250 4700 3150 4700
-Connection ~ 3250 4000
-Wire Wire Line
-	3150 3100 3350 3100
-Wire Wire Line
-	3350 3100 3350 3800
-Wire Wire Line
-	3350 3800 3150 3800
-Wire Wire Line
-	3350 3800 3350 4200
-Wire Wire Line
-	3350 4200 3150 4200
-Connection ~ 3350 3800
-Wire Wire Line
-	3350 4200 3350 4900
-Wire Wire Line
-	3350 4900 3150 4900
-Connection ~ 3350 4200
-Wire Wire Line
-	2450 5900 2750 5900
-Wire Wire Line
-	2450 6300 2750 6300
 $Comp
 L Driver_Motor:L293D U1
 U 1 1 6324970B
@@ -952,216 +784,15 @@ $EndComp
 Wire Wire Line
 	2450 6900 2450 7000
 Wire Wire Line
-	2450 7000 2750 7000
-Wire Wire Line
 	3450 7000 3450 6500
 Wire Wire Line
 	3450 6500 3750 6500
-Wire Wire Line
-	2850 4000 2750 4000
-Wire Wire Line
-	2750 4000 2750 4100
-Connection ~ 2750 4100
-Wire Wire Line
-	2750 4100 3800 4100
-Wire Wire Line
-	2750 4100 2750 4200
-Wire Wire Line
-	2750 4200 2850 4200
-Wire Wire Line
-	2850 4700 2750 4700
-Wire Wire Line
-	2750 4700 2750 4800
-Connection ~ 2750 4800
-Wire Wire Line
-	2750 4800 3450 4800
-Wire Wire Line
-	2750 4800 2750 4900
-Wire Wire Line
-	2750 4900 2850 4900
 Wire Wire Line
 	3450 5700 3750 5700
 Wire Wire Line
 	2450 5300 2450 5200
 Wire Wire Line
-	2450 5200 2750 5200
-Wire Wire Line
 	3450 5200 3450 5700
-$Comp
-L Device:D D13
-U 1 1 63229F2E
-P 3000 5100
-F 0 "D13" H 3000 4883 50  0000 C CNN
-F 1 "D" H 3000 4974 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 5100 50  0001 C CNN
-F 3 "~" H 3000 5100 50  0001 C CNN
-	1    3000 5100
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:D D14
-U 1 1 6322ABA2
-P 3000 5300
-F 0 "D14" H 3000 5517 50  0000 C CNN
-F 1 "D" H 3000 5426 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 5300 50  0001 C CNN
-F 3 "~" H 3000 5300 50  0001 C CNN
-	1    3000 5300
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:D D15
-U 1 1 6322B525
-P 3000 5800
-F 0 "D15" H 3000 5583 50  0000 C CNN
-F 1 "D" H 3000 5674 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 5800 50  0001 C CNN
-F 3 "~" H 3000 5800 50  0001 C CNN
-	1    3000 5800
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:D D16
-U 1 1 6322BE78
-P 3000 6000
-F 0 "D16" H 3000 6217 50  0000 C CNN
-F 1 "D" H 3000 6126 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 6000 50  0001 C CNN
-F 3 "~" H 3000 6000 50  0001 C CNN
-	1    3000 6000
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:D D17
-U 1 1 6322C75F
-P 3000 6200
-F 0 "D17" H 3000 5983 50  0000 C CNN
-F 1 "D" H 3000 6074 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 6200 50  0001 C CNN
-F 3 "~" H 3000 6200 50  0001 C CNN
-	1    3000 6200
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:D D18
-U 1 1 6322D138
-P 3000 6400
-F 0 "D18" H 3000 6617 50  0000 C CNN
-F 1 "D" H 3000 6526 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 6400 50  0001 C CNN
-F 3 "~" H 3000 6400 50  0001 C CNN
-	1    3000 6400
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:D D19
-U 1 1 6322DC0D
-P 3000 6900
-F 0 "D19" H 3000 6683 50  0000 C CNN
-F 1 "D" H 3000 6774 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 6900 50  0001 C CNN
-F 3 "~" H 3000 6900 50  0001 C CNN
-	1    3000 6900
-	-1   0    0    1   
-$EndComp
-$Comp
-L Device:D D20
-U 1 1 6322E630
-P 3000 7100
-F 0 "D20" H 3000 7317 50  0000 C CNN
-F 1 "D" H 3000 7226 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P2.54mm_Vertical_AnodeUp" H 3000 7100 50  0001 C CNN
-F 3 "~" H 3000 7100 50  0001 C CNN
-	1    3000 7100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2850 5100 2750 5100
-Wire Wire Line
-	2750 5100 2750 5200
-Connection ~ 2750 5200
-Wire Wire Line
-	2750 5200 3450 5200
-Wire Wire Line
-	2750 5200 2750 5300
-Wire Wire Line
-	2750 5300 2850 5300
-Wire Wire Line
-	2850 5800 2750 5800
-Wire Wire Line
-	2750 5800 2750 5900
-Connection ~ 2750 5900
-Wire Wire Line
-	2750 5900 3750 5900
-Wire Wire Line
-	2750 5900 2750 6000
-Wire Wire Line
-	2750 6000 2850 6000
-Wire Wire Line
-	2850 6200 2750 6200
-Wire Wire Line
-	2750 6200 2750 6300
-Connection ~ 2750 6300
-Wire Wire Line
-	2750 6300 3750 6300
-Wire Wire Line
-	2750 6300 2750 6400
-Wire Wire Line
-	2750 6400 2850 6400
-Wire Wire Line
-	2850 6900 2750 6900
-Wire Wire Line
-	2750 6900 2750 7000
-Connection ~ 2750 7000
-Wire Wire Line
-	2750 7000 3450 7000
-Wire Wire Line
-	2750 7000 2750 7100
-Wire Wire Line
-	2750 7100 2850 7100
-Wire Wire Line
-	3250 4700 3250 5100
-Wire Wire Line
-	3250 5100 3150 5100
-Connection ~ 3250 4700
-Wire Wire Line
-	3250 5100 3250 5800
-Wire Wire Line
-	3250 5800 3150 5800
-Connection ~ 3250 5100
-Wire Wire Line
-	3250 5800 3250 6200
-Wire Wire Line
-	3250 6200 3150 6200
-Connection ~ 3250 5800
-Wire Wire Line
-	3250 6200 3250 6900
-Wire Wire Line
-	3250 6900 3150 6900
-Connection ~ 3250 6200
-Wire Wire Line
-	3350 4900 3350 5300
-Wire Wire Line
-	3350 5300 3150 5300
-Connection ~ 3350 4900
-Wire Wire Line
-	3350 5300 3350 6000
-Wire Wire Line
-	3350 6000 3150 6000
-Connection ~ 3350 5300
-Wire Wire Line
-	3350 6000 3350 6400
-Wire Wire Line
-	3350 6400 3150 6400
-Connection ~ 3350 6000
-Wire Wire Line
-	3350 6400 3350 7100
-Wire Wire Line
-	3350 7100 3150 7100
-Connection ~ 3350 6400
-Wire Wire Line
-	3350 7100 3350 7200
-Connection ~ 3350 7100
 Wire Wire Line
 	4200 4800 4200 4700
 Wire Wire Line
@@ -1359,15 +990,20 @@ NoConn ~ 9950 3700
 NoConn ~ 9550 4750
 NoConn ~ 9550 4850
 NoConn ~ 8450 5050
-$Comp
-L power:GND #PWR?
-U 1 1 6331836B
-P 3350 7200
-F 0 "#PWR?" H 3350 6950 50  0001 C CNN
-F 1 "GND" H 3355 7027 50  0000 C CNN
-F 2 "" H 3350 7200 50  0001 C CNN
-F 3 "" H 3350 7200 50  0001 C CNN
-	1    3350 7200
-	1    0    0    -1  
-$EndComp
+Wire Wire Line
+	2450 3000 3450 3000
+Wire Wire Line
+	2450 3700 3800 3700
+Wire Wire Line
+	2450 4100 3800 4100
+Wire Wire Line
+	2450 4800 3450 4800
+Wire Wire Line
+	2450 5200 3450 5200
+Wire Wire Line
+	2450 5900 3750 5900
+Wire Wire Line
+	2450 6300 3750 6300
+Wire Wire Line
+	2450 7000 3450 7000
 $EndSCHEMATC
