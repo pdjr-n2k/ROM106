@@ -1,20 +1,21 @@
 # ROM104 - NMEA 2000 relay output module
 
-__ROM104__ is an NMEA 2000 relay output module with four zero-volt
-SPDT latching relay output channels rated at 220VAC/5A, 30VDC/5A.
+__ROM104__ is a relay output module compatible with the NMEA 2000
+switchbank protocol implemented by PGN 127501 Binary Switch Status
+and PGN 127502 Binary Switch Control.
 
-The module is powered from the NMEA bus and has an LEN of 1.0.
-A PCB nounted DIL switch allows the installer to connect a 120 Ohm
-resistor across host NMEA data bus permitting the module to be installed
-as either a drop node or a bus termination node.
+The module can be installed on its host NMEA bus as either a drop
+node or a termination node and is powered from the NMEA with an LEN
+of 1.0.
+
+Each relay output channel consists of a latching SPDT relay which
+presents CO, NC and NO connections through a zero-volt terminal
+block.
 
 The relay module's switchbank instance number is configured during
 installation using a DIL switch and four LED indicators are used to
 give a clear indication of the state of each relay.
 
-The module PCB provides solder pads for bus connection which can be used
-directly or for the installation of a user selected PCB terminal block
-or off-board connector.
 
 __ROM104__ accepts instructions for relay operation over the NMEA 2000
 bus, responding to
@@ -36,6 +37,10 @@ output for all electronic components.
 
 NMEA/CAN interfacing is provided by an
 [MCP2551 High-speed CAN Transceiver](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf).
+
+The module PCB provides solder pads for NMEA bus connection which can
+be used for wire-to-board or for the installation of a terminal block
+or chassis-mounted connector. 
 
 Each output channel drives a single coil, latching, relay with
 zero-volt NO, CO and NC connections presented at an externally
