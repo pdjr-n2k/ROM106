@@ -1,35 +1,36 @@
 # ROM104 - NMEA 2000 relay output module
 
-__ROM104__ is a 4-channel relay output module with an integrated CAN
-interface. The module was designed for use in an NMEA 2000 network.
+SB120
 
-Each output channel is implemented using a zero-volt latching relay
-rated at 220VAC/5A, 30VDC/5A maximum and LED indicators are used to
-give clear information on current relay state.
+__ROM104__ is an NMEA 2000 relay output module (switchbank)
+with support four four zero-volt SPDT output channels.
+switchbank protocol implemented by PGN 127501 Binary Switch Status
+and PGN 127502 Binary Switch Control.
+See
+[SIM108](https://github.com/preeve9534/SIM108)
+for a project implementing a complentary switch input module. 
 
-The module provides solder pads for bus connection which can be used
-directly or for the installation of a user selected PCB terminal block
-or off-board connector.
+__ROM104__ can be installed on its host NMEA bus as either a drop
+node or a termination node and is powered from the NMEA with an LEN
+of 1.0.
+Each module is identified by a user-configurable switchbank instance
+number and multiple modules may be installed on a single NMEA
+network.
 
-A PCB nounted DIL switch allows the installer to connect a 120 Ohm
-resistor across the host data bus permitting the module to be installed
-as either a drop node or a bus termination node.
-
-In an NMEA application, the module can be powered from the NMEA bus and
-has an LEN of 1.0.
-
-The switchbank's instance number is configured during installation
-using a DIL switch.
+Each relay output channel consists of a latching SPDT relay which
+presents CO, NC and NO connections through a zero-volt terminal
+block.
+The real-time state of each relay is indicated by LED.
 
 __ROM104__ accepts instructions for relay operation over the NMEA 2000
-bus by responding to
+bus, responding to
 [PGN 127502 Binary Status Update]()
 messages addressed to its defined switchbank instance. 
 
 The module reports relay state information over NMEA 2000 using 
 [PGN 127501 Binary Status Report]().
 Switchbank status messages are transmitted once every four seconds or
-immediately a state change is executed on an output channel.
+immediately on a relay state change.
 
 ## Hardware design
 
@@ -42,10 +43,17 @@ output for all electronic components.
 NMEA/CAN interfacing is provided by an
 [MCP2551 High-speed CAN Transceiver](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf).
 
-Each output channel drives a latching relay with zero-volt NO, COM and
-NC connections.
-The state of switchbank channels (as detected by the microcontroller)
-is reported visually by four LEDs.
+Relay operation (coil voltage polarity switching) is implement using
+twin
+[L2983 Quadruple Half-H Driver]()
+ICs.
+Each output channel drives a single coil, latching, relay with
+zero-volt NO, CO and NC connections presented at an externally
+accessible terminal block.
+
+The module PCB provides solder pads for NMEA bus connection which can
+be used for the installation of a terminal block or chassis-mounted
+connector. 
 
 ## PCB
 
