@@ -3,24 +3,30 @@
 SB120
 
 __ROM104__ is an NMEA 2000 relay output module (switchbank)
-with support four four zero-volt SPDT output channels.
+with support four relay output channels.
+
+Each relay output channel consists of a latching SPDT relay which
+presents CO, NC and NO connections through a zero-volt terminal
+block.
+The real-time state of each relay is indicated by LED.
+
+__ROM104__ connects to its host NMEA bus by either a screw
+terminal block or M12 5-pin circular connector.
+An internal DIL switch allows the installer to connect a 120 Ohm
+resistor across the host data bus permitting the module to be
+used as either a drop node or a bus termination node.
+The module is powered from the NMEA bus and has an LEN of 1.0.
+
+The module's switchbank instance number is configured during
+installation using an 8-position DIL switch.
+Multiple modules may be installed on a single NMEA network.
+
 switchbank protocol implemented by PGN 127501 Binary Switch Status
 and PGN 127502 Binary Switch Control.
 See
 [SIM108](https://github.com/preeve9534/SIM108)
 for a project implementing a complentary switch input module. 
 
-__ROM104__ can be installed on its host NMEA bus as either a drop
-node or a termination node and is powered from the NMEA with an LEN
-of 1.0.
-Each module is identified by a user-configurable switchbank instance
-number and multiple modules may be installed on a single NMEA
-network.
-
-Each relay output channel consists of a latching SPDT relay which
-presents CO, NC and NO connections through a zero-volt terminal
-block.
-The real-time state of each relay is indicated by LED.
 
 __ROM104__ accepts instructions for relay operation over the NMEA 2000
 bus, responding to
