@@ -13,9 +13,8 @@ presents CO, NC and NO connections through a zero-volt terminal
 block.
 
 The relay module's switchbank instance number is configured during
-installation using a DIL switch and four LED indicators are used to
-give a clear indication of the state of each relay.
-
+installation using a DIL switch. Four LED outputs are used to give a
+clear indication of the state of each relay.
 
 __ROM104__ accepts instructions for relay operation over the NMEA 2000
 bus, responding to
@@ -25,7 +24,7 @@ messages addressed to its defined switchbank instance.
 The module reports relay state information over NMEA 2000 using 
 [PGN 127501 Binary Status Report]().
 Switchbank status messages are transmitted once every four seconds or
-immediately a state change is executed on an output channel.
+immediately on a relay state change.
 
 ## Hardware design
 

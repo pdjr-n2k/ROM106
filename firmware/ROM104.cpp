@@ -148,12 +148,12 @@
  */
 #include "build.h"
 
-#define DEFAULT_SOURCE_ADDRESS 22         // Seed value for source address claim
-#define INSTANCE_UNDEFINED 255            // Flag value
-#define SCHEDULER_TICK 20                 // The frequency of scheduler management
-#define PGN127501_TRANSMIT_INTERVAL 4000UL
-#define RELAY_OPERATION_QUEUE_SIZE 10
-#define RELAY_OPERATION_QUEUE_INTERVAL 20UL
+#define DEFAULT_SOURCE_ADDRESS 22           // Seed value for source address claim
+#define INSTANCE_UNDEFINED 255              // Flag value
+#define SCHEDULER_TICK 20UL                   // The frequency of scheduler management
+#define PGN127501_TRANSMIT_INTERVAL 4000UL  // Normal transmission rate
+#define RELAY_OPERATION_QUEUE_SIZE 10       // Max number of entries
+#define RELAY_OPERATION_QUEUE_INTERVAL 20UL // Frequency of relay queue processing
 
 /**********************************************************************
  * Declarations of local functions.
