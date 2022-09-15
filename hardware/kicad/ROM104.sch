@@ -794,15 +794,7 @@ Wire Wire Line
 Wire Wire Line
 	3450 5200 3450 5700
 Wire Wire Line
-	4200 4800 4200 4700
-Wire Wire Line
-	4400 4800 4400 4700
-Wire Wire Line
-	4150 6900 4150 7000
-Wire Wire Line
 	4150 7000 4350 7000
-Wire Wire Line
-	4350 7000 4350 6900
 Wire Wire Line
 	3550 4800 3550 7000
 Wire Wire Line
@@ -845,8 +837,6 @@ Wire Wire Line
 Connection ~ 4200 2800
 Wire Wire Line
 	4100 2800 3650 2800
-Wire Wire Line
-	3650 2800 3650 5000
 Connection ~ 4100 2800
 $Comp
 L power:GND #PWR011
@@ -879,8 +869,6 @@ Wire Wire Line
 	4050 5000 3650 5000
 Connection ~ 4050 5000
 Connection ~ 3650 5000
-Wire Wire Line
-	3650 5000 3650 7200
 Text Label 5600 6100 0    50   ~ 0
 CH3_EN
 Text Label 5600 5500 0    50   ~ 0
@@ -1006,4 +994,16 @@ Wire Wire Line
 	2450 6300 3750 6300
 Wire Wire Line
 	2450 7000 3450 7000
+Wire Wire Line
+	4200 4700 4200 4800
+Wire Wire Line
+	4400 4700 4400 4800
+Wire Wire Line
+	3650 2800 3650 5000
+Wire Wire Line
+	4350 6900 4350 7000
+Wire Wire Line
+	4150 6900 4150 7000
+Wire Wire Line
+	3650 5000 3650 7200
 $EndSCHEMATC
