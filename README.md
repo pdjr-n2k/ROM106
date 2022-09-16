@@ -6,10 +6,10 @@ A complementary project,
 [SIM108](https://github.com/preeve9534/SIM108/),
 implements an eight-channel NMEA 2000 switch input module.
 
-__ROM104__ consists of a hardware design for a CAN-bus compatible
-relay module based around a Teensy 3.2 microcontroller and
-firmware which implements an NMEA 2000 switchbank interface
-by transmitting
+__ROM104__ consists of a microcontroller-base hardware design
+for a CAN-bus compatible relay module and compatible firmware
+which implements an NMEA 2000 switchbank interface by
+transmitting
 [PGN 127501 Binary Switch Status]() messages
 and responding to received
 [PGN 127502 Binary Switch Control]() messages.
@@ -22,9 +22,10 @@ block.
 The relays are rated for switching 220VAC/5A, 30VDC5A.
 The real-time state of each output channel is indicated by LED.
 
-The CAN/NMEA bus connection can be implemented in any way that suits
-the module builder: typically as either a screw terminal block or
-M12 5-pin circular connector.
+The CAN/NMEA bus connection is designed around aN NMEA 2000
+compatible M12 5-pin nale circular connector, but a simple screw
+terminal block could also be used.
+.
 A DIL switch allows a 120 Ohm resistor to be connected across the
 host data bus permitting the module to be installed as either a
 drop node or a bus termination node.
