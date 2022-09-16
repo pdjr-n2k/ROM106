@@ -1,25 +1,48 @@
 # ROM104 - NMEA 2000 relay output module
 
-__ROM104__ is an NMEA 2000 relay output module (switchbank) with
-support four relay output channels.
+This project implements an NMEA 2000 relay output module with
+support for four relay output channels.
+A complementary project,
+[SIM108](https://github.com/preeve9534/SIM108/),
+implements an eight-channel NMEA 2000 switch input module.
 
-Each output channel consists of a latching SPDT relay which
+__ROM104__ consists of a hardware design for a CAN-bus compatible
+relay module based around a Teensy 3.2 microcontroller and
+firmware which implements an NMEA 2000 switchbank interface
+by transmitting
+[PGN 127501 Binary Switch Status]() messages
+and responding to received
+[PGN 127502 Binary Switch Control]() messages.
+
+## Hardware design
+
+Output channels each consist of a latching SPDT relay which
 presents CO, NC and NO connections through a zero-volt terminal
 block.
-The relays installed in the module are rated for switching
-220VAC/5A, 30VDC5A.
+The relays are rated for switching 220VAC/5A, 30VDC5A.
 The real-time state of each output channel is indicated by LED.
 
-The NMEA bus connection can be implemented in any way that suits
+The CAN/NMEA bus connection can be implemented in any way that suits
 the module builder: typically as either a screw terminal block or
 M12 5-pin circular connector.
-An DIL switch allows a 120 Ohm resistor to be connected across the
+A DIL switch allows a 120 Ohm resistor to be connected across the
 host data bus permitting the module to be installed as either a
 drop node or a bus termination node.
 The module is powered from the NMEA bus and has an LEN of 1.0.
 
 The module's switchbank instance number is configured using an
 8-position DIL switch.
+
+Critical hardware functions rely upon the following active
+components.
+
+| Component | Description |
+| :--- | :--- |
+| [Teensy 3.2 microcontroller](https://www.pjrc.com/store/teensy32.html) | |
+|          | 5VDC 1A DC-DC power supply.
+
+
+
 
 ## Firmware
 
@@ -40,7 +63,8 @@ A 1A DC-DC power supply connects to the CAN power bus and provides 5VDC
 output for all electronic components.
 
 NMEA/CAN interfacing is provided by an
-[MCP2551 High-speed CAN Transceiver](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf).
+A 1A DC-DC power supply connects to the CAN power bus and provides 5VDC
+output for all electronic components.
 
 Relay operation (coil voltage polarity switching) is implement using
 twin
