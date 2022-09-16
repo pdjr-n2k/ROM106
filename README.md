@@ -94,9 +94,9 @@ is a 75mm x 75mm square.
 Components must be placed and soldered with care taken to ensure
 correct orientation and polarity.
 
-The host NMEA bus can be wired directly to J1 or (and preferably)
-ENCLOSURE can be drilled to accommodate J3 and J3's flying leads
-connected to J1.
+The host NMEA bus can be wired directly to J2 or (and preferably)
+J2 can be omitted, the ENCLOSURE drilled to accommodate J3 and
+J3's flying leads soldered directly to the pads intended for J1.
 
 D9 through D17 can be soldered with long leads and holes drilled in
 ENCLOSURE to expose the LED or (and preferably), they can each be
