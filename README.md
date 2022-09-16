@@ -39,10 +39,9 @@ components.
 | Component | Description |
 | :--- | :--- |
 | [Teensy 3.2 microcontroller](https://www.pjrc.com/store/teensy32.html) | |
-|          | 5VDC 1A DC-DC power supply.
-
-
-
+| [TMR-1-1211 DC-DC converter]() | 5VDC 1A DC-DC power supply. |
+| [MCP2551-I/P CAN transceiver]() | |
+| [L2983 Quadruple Half-H Driver]() | |
 
 ## Firmware
 
@@ -53,30 +52,6 @@ the following NMEA 2000 message types.
 | --- | :----: | ----------- |
 | 127501 (Binary Switch Status)  | T | Issued every four seconds or immediately on the state change of any output channel. |
 | 127502 (Binary Switch Control) | R | Used to set relay channel state.  
-
-## Hardware design
-
-[__ROM104__](./ROM104.sch.pdf) is designed around a
-[Teensy 3.2 microcontroller](https://www.pjrc.com/store/teensy32.html).
-
-A 1A DC-DC power supply connects to the CAN power bus and provides 5VDC
-output for all electronic components.
-
-NMEA/CAN interfacing is provided by an
-A 1A DC-DC power supply connects to the CAN power bus and provides 5VDC
-output for all electronic components.
-
-Relay operation (coil voltage polarity switching) is implement using
-twin
-[L2983 Quadruple Half-H Driver]()
-ICs.
-Each output channel drives a single coil, latching, relay with
-zero-volt NO, CO and NC connections presented at an externally
-accessible terminal block.
-
-The module PCB provides solder pads for NMEA bus connection which can
-be used for the installation of a terminal block or chassis-mounted
-connector. 
 
 ## PCB
 
