@@ -6,8 +6,8 @@ A complementary project,
 [SIM108](https://github.com/preeve9534/SIM108/),
 implements an eight-channel NMEA 2000 switch input module.
 
-The project consists of a microcontroller-base hardware design
-and associated firmware which together implements an NMEA 2000
+The project consists of a microcontroller-based hardware design
+and associated firmware which together implement an NMEA 2000
 compliant switchbank interface that transmits
 [PGN 127501 Binary Switch Status]() messages
 and responds to
@@ -16,13 +16,13 @@ and responds to
 ## Hardware design
 
 Each output channel drives a latching SPDT relay which presents
-zero-volt CO, NC and NO connections through an externally
-accessible terminal block.
+zero-volt CO, NC and NO connections through a PCB mounted terminal
+block.
 Each relay is rated for switching 220VAC/5A, 30VDC5A.
 The real-time state of each output channel is indicated by LED.
 
-The CAN/NMEA bus connection is designed to support an NMEA 2000
-compatible M12 5-pin nale circular connector, but other
+The module's CAN/NMEA bus connection is designed to support an
+NMEA 2000 compatible M12 5-pin nale circular connector, but other
 connector types can be substituted.
 
 A DIL switch allows a 120 Ohm resistor to be connected across the
@@ -39,9 +39,9 @@ components.
 | Component | Description |
 | :--- | :--- |
 | [Teensy 3.2 microcontroller](https://www.pjrc.com/store/teensy32.html) | |
-| [TMR-1-1211 DC-DC converter]() | 5VDC 1A DC-DC power supply. |
+| [TMR-1-1211 DC-DC converter]() | 12VDC to 5VDC 1A power supply. |
 | [MCP2551-I/P CAN transceiver]() | |
-| [L2983 Quadruple Half-H Driver]() | |
+| [L2983 Quadruple Half-H Driver]() | Relay coil polarity reversal.|
 
 ## Firmware
 
