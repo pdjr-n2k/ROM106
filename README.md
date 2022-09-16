@@ -10,11 +10,12 @@ The relays installed in the module are rated for switching
 220VAC/5A, 30VDC5A.
 The real-time state of each output channel is indicated by LED.
 
-The NMEA bus connection can be implemented as either a screw
-terminal block or M12 5-pin circular connector.
-An internal DIL switch allows a 120 Ohm resistor to be connected
-across the host data bus permitting the module to be installed as
-either a drop node or a bus termination node.
+The NMEA bus connection can be implemented in any way that suits
+the module builder: typically as either a screw terminal block or
+M12 5-pin circular connector.
+An DIL switch allows a 120 Ohm resistor to be connected across the
+host data bus permitting the module to be installed as either a
+drop node or a bus termination node.
 The module is powered from the NMEA bus and has an LEN of 1.0.
 
 The module's switchbank instance number is configured using an
