@@ -7,13 +7,20 @@ A complementary project,
 implements an eight-channel NMEA 2000 switch input module.
 
 The project consists of a microcontroller-based hardware design
-and associated firmware which together implement an NMEA 2000
-compliant switchbank interface that transmits
+and associated firmware.
+The stock firmware realizes an NMEA 2000 compliant switchbank
+interface that transmits
 [PGN 127501 Binary Switch Status]() messages
 and responds to
 [PGN 127502 Binary Switch Control]() messages.
 
 ## Hardware design
+
+The general design seeks to minimise module power consumption by
+using bistable relays with a low coil current of 200mA and duty
+cycle of 20ms.
+The firmware queues relay operations so that concurrent switching
+loads cannot occur.
 
 Each output channel drives a latching SPDT relay which presents
 zero-volt CO, NC and NO connections through a PCB mounted terminal
