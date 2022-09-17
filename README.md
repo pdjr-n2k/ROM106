@@ -22,7 +22,7 @@ Each relay is rated for switching 220VAC/5A, 30VDC5A.
 The real-time state of each output channel is indicated by LED.
 
 The module's CAN/NMEA bus connection is designed to support an
-NMEA 2000 compatible M12 5-pin nale circular connector, but other
+NMEA 2000 compatible M12 5-pin male circular connector, but other
 connector types can be substituted.
 
 A DIL switch allows a 120 Ohm resistor to be connected across the
@@ -45,8 +45,8 @@ components.
 
 ## Firmware
 
-The stock firmware for __ROM104__  transmits(T) and receives(R)
-the following NMEA 2000 message types.
+__ROM104__'s stock firmware transmits(T) and receives(R) the following
+NMEA 2000 message types.
 
 | PGN | Mode   | Description |
 | --- | :----: | ----------- |
