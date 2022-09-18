@@ -60,13 +60,30 @@ following NMEA 2000 message types.
 | 127501 (Binary Status Report)  | T | Issued every four seconds or immediately on the state change of any output channel. |
 | 127502 (Switch Bank Control) | R | Used to set relay channel state.  
 
-## PCB
+## Hardware Implementation
 
-The
-[module PCB](./ROM104.brd.pdf)
-is a 75mm x 75mm square. 
+### PCB
 
-### Electronic components
+The [module PCB](./ROM104.brd.pdf) is a 75mm x 75mm square. 
+
+### Components
+
+#### Microcontroller
+
+* [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html)
+
+#### Power supply
+
+* [TracoPower TMR-2411 DC-DC converter](https://uk.rs-online.com/web/p/dc-dc-converters/7813190)
+* [1000uF aluminium capacitor](https://uk.rs-online.com/web/p/aluminium-capacitors/7111148)
+* [ECE BU135 1.35A polymer fuse](https://www.ece.com.tw/images/cgcustom/file020170930043926.pdf)
+| 
+#### CAN interface
+
+* [MCP2551-I/P CAN transceiver](https://uk.rs-online.com/web/p/can-interface-ics/0402920)
+* [2-way SPST DIP switch](https://uk.rs-online.com/web/p/dip-sip-switches/1774261)
+* 
+
 
 | Component   | Description                                     | Further information
 |------------ |------------------------------------------------ |--------------------- |
