@@ -8,8 +8,8 @@ implements an eight-channel NMEA 2000 switch input module.
 
 The project consists of a microcontroller-based hardware design
 and associated firmware.
-The stock firmware realizes an NMEA 2000 compliant switchbank
-interface that transmits
+The stock firmware realizes an NMEA 2000 switchbank interface
+that transmits
 [PGN 127501 Binary Switch Status]() messages
 and responds to
 [PGN 127502 Binary Switch Control]() messages.
@@ -18,20 +18,19 @@ The module is powered from the NMEA bus and has an LEN of 1.0.
 
 ## Hardware design
 
-Output channels drive bistable relays: this has the dual
-benefit of preserving relay states from bus failure and also
-minimising the power consumed by relay operation.
+Each output channel drives a bistable SPDT relay: this has the
+dual benefit of preserving relay states in the event of bus
+failure and of minimising the power consumed by relay operation.
 
-Each output channel drives a latching SPDT relay which presents
-zero-volt CO, NC and NO connections through a PCB mounted
-terminal block.
-Each relay is rated for switching 220VAC/5A, 30VDC5A.
-The real-time state of each output channel is indicated by LED.
+Each relay presents zero-volt CO, NC and NO connections through
+a PCB mounted terminal block rated for switching 5A at 220VAC or
+30VDC.
+
+A bank of four LEDs indicates the state of each output channel.
 
 The module's CAN/NMEA bus connection is designed to support an
 NMEA 2000 compatible M12 5-pin male circular connector, but
 other connector types can be substituted.
-
 A DIL switch allows a 120 Ohm resistor to be connected across
 the host data bus permitting the module to be installed as
 either a drop node or a bus termination node.
@@ -39,15 +38,14 @@ either a drop node or a bus termination node.
 The module's switchbank instance number is configured using an
 8-position DIL switch.
 
-Critical hardware functions rely upon the following active
-components.
+The design exploits the following active components.
 
 | Component | Description |
 | :--- | :--- |
-| [Teensy 3.2 microcontroller](https://www.pjrc.com/store/teensy32.html) | |
-| [TMR-1-1211 DC-DC converter]() | 12VDC to 5VDC 1A power supply. |
-| [MCP2551-I/P CAN transceiver](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf) | |
-| [L2983 Quadruple Half-H Driver]() | Relay coil polarity reversal.|
+| [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) | Microcontroller. |
+| [TMR-1-1211]() | 12VDC to 5VDC 1A power supply (DC-DC converter). |
+| [MCP2551-I/P](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf) | CAN transceiver. |
+| [L2983]() |  Quadruple Half-H Driver for relay coil polarity reversal.|
 
 ## Firmware
 
