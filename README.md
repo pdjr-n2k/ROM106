@@ -40,7 +40,6 @@ The module's switchbank instance number is configured using an
 
 The design exploits the following active components.
 
-| Component | Description |
 | :--- | :--- |
 | [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) | Microcontroller. |
 | [TMR-1-1211]() | 12VDC to 5VDC 1A power supply (DC-DC converter). |
