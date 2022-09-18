@@ -43,9 +43,9 @@ The design exploits the following active components.
 | Component | Function |
 | :--- | :--- |
 | [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) | Microcontroller. |
-| [TMR-1-1211]() | 12VDC to 5VDC 1A power supply (DC-DC converter). |
-| [MCP2551-I/P](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf) | CAN transceiver. |
-| [L2983]() |  Quadruple Half-H Driver for relay coil polarity reversal.|
+| [TMR2411](https://docs.rs-online.com/566e/0900766b8172f5c5.pdf) | 12VDC to 5VDC 2A power supply (DC-DC converter). |
+| [MCP2551-I/P](https://docs.rs-online.com/209a/0900766b814f3bfd.pdf) | CAN transceiver. |
+| [L293D](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) |  Quadruple Half-H Driver for relay coil polarity reversal.|
 
 ## Firmware
 
