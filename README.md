@@ -14,28 +14,27 @@ interface that transmits
 and responds to
 [PGN 127502 Binary Switch Control]() messages.
 
+The module is powered from the NMEA bus and has an LEN of 1.0.
+
 ## Hardware design
 
-The general design seeks to minimise module power consumption by
-using bistable relays with a low coil current of 200mA and duty
-cycle of 20ms.
-The firmware queues relay operations so that concurrent switching
-loads cannot occur.
+Output channels drive bistable relays: this has the dual
+benefit of preserving relay states from bus failure and also
+minimising the power consumed by relay operation.
 
 Each output channel drives a latching SPDT relay which presents
-zero-volt CO, NC and NO connections through a PCB mounted terminal
-block.
+zero-volt CO, NC and NO connections through a PCB mounted
+terminal block.
 Each relay is rated for switching 220VAC/5A, 30VDC5A.
 The real-time state of each output channel is indicated by LED.
 
 The module's CAN/NMEA bus connection is designed to support an
-NMEA 2000 compatible M12 5-pin male circular connector, but other
-connector types can be substituted.
+NMEA 2000 compatible M12 5-pin male circular connector, but
+other connector types can be substituted.
 
-A DIL switch allows a 120 Ohm resistor to be connected across the
-host data bus permitting the module to be installed as either a
-drop node or a bus termination node.
-The module is powered from the NMEA bus and has an LEN of 1.0.
+A DIL switch allows a 120 Ohm resistor to be connected across
+the host data bus permitting the module to be installed as
+either a drop node or a bus termination node.
 
 The module's switchbank instance number is configured using an
 8-position DIL switch.
@@ -47,13 +46,16 @@ components.
 | :--- | :--- |
 | [Teensy 3.2 microcontroller](https://www.pjrc.com/store/teensy32.html) | |
 | [TMR-1-1211 DC-DC converter]() | 12VDC to 5VDC 1A power supply. |
-| [MCP2551-I/P CAN transceiver]() | |
+| [MCP2551-I/P CAN transceiver](http://ww1.microchip.com/downloads/en/devicedoc/20001667g.pdf) | |
 | [L2983 Quadruple Half-H Driver]() | Relay coil polarity reversal.|
 
 ## Firmware
 
-__ROM104__'s stock firmware transmits(T) and receives(R) the following
-NMEA 2000 message types.
+Relay operations are queued so that concurrent relay switching
+loads cannot occur.
+
+__ROM104__'s stock firmware transmits(T) and receives(R) the
+following NMEA 2000 message types.
 
 | PGN | Mode   | Description |
 | --- | :----: | ----------- |
