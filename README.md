@@ -8,7 +8,7 @@ implements an eight-channel NMEA 2000 switch input module.
 
 The project consists of a microcontroller-based hardware design
 and associated firmware.
-The stock firmware realizes an NMEA 2000 switchbank interface
+The stock firmware realises an NMEA 2000 switchbank interface
 that transmits
 [PGN 127501 Binary Status Report]() messages
 and responds to
