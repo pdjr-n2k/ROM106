@@ -13,7 +13,7 @@
  * modules) are identified by an 8-bit instance address which is set by
  * the network engineer when the module is installed. ROM104 includes a
  * DIL switch which is used to configure the module's instance address
- * and this is read by firmware ononfigure when the module boots.
+ * and this is read by firmware when the module boots.
  * 
  * Once started the firmware issues a PGN127501 Binary Status Report
  * every four seconds or immediately upon a relay state change. This
@@ -22,7 +22,7 @@
  * The firmware listens on the NMEA 2000 bus for PGN127502 Binary
  * Status Update messages addressed to its configured instance number.
  * These messages operate the ROM104 relay outputs whilst attempting to
- * minimise the module's overall power consumption. The relay's used
+ * minimise the module's overall power consumption. The relays used
  * in the ROM104 module are single-coil, bistable, latching devices.
  * 
  * The use of latching relays reduces power consumption because the

@@ -672,7 +672,7 @@ U 1 1 632F5385
 P 2250 4400
 F 0 "K2" H 1820 4354 50  0000 R CNN
 F 1 "DIPxx-1Cxx-51x" H 1820 4445 50  0000 R CNN
-F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 2700 4350 50  0001 L CNN
+F 2 "PDJR-connectors:PE014F05" H 2700 4350 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 4400 50  0001 C CNN
 	1    2250 4400
 	-1   0    0    1   
@@ -689,7 +689,7 @@ U 1 1 63338136
 P 2250 5600
 F 0 "K3" H 1820 5554 50  0000 R CNN
 F 1 "DIPxx-1Cxx-51x" H 1820 5645 50  0000 R CNN
-F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 2700 5550 50  0001 L CNN
+F 2 "PDJR-connectors:PE014F05" H 2700 5550 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 5600 50  0001 C CNN
 	1    2250 5600
 	-1   0    0    1   
@@ -712,7 +712,7 @@ U 1 1 63388BFA
 P 2250 3400
 F 0 "K1" H 1820 3354 50  0000 R CNN
 F 1 "DIPxx-1Cxx-51x" H 1820 3445 50  0000 R CNN
-F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 2700 3350 50  0001 L CNN
+F 2 "PDJR-connectors:PE014F05" H 2700 3350 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 3400 50  0001 C CNN
 	1    2250 3400
 	-1   0    0    1   
@@ -735,7 +735,7 @@ U 1 1 633A9E65
 P 2250 6600
 F 0 "K4" H 1820 6554 50  0000 R CNN
 F 1 "DIPxx-1Cxx-51x" H 1820 6645 50  0000 R CNN
-F 2 "Relay_THT:Relay_StandexMeder_DIP_LowProfile" H 2700 6550 50  0001 L CNN
+F 2 "PDJR-connectors:PE014F05" H 2700 6550 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 6600 50  0001 C CNN
 	1    2250 6600
 	-1   0    0    1   
