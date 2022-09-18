@@ -10,9 +10,9 @@ The project consists of a microcontroller-based hardware design
 and associated firmware.
 The stock firmware realizes an NMEA 2000 switchbank interface
 that transmits
-[PGN 127501 Binary Switch Status]() messages
+[PGN 127501 Binary Status Report]() messages
 and responds to
-[PGN 127502 Binary Switch Control]() messages.
+[PGN 127502 Switch Bank Control]() messages.
 
 The module is powered from the NMEA bus and has an LEN of 1.0.
 
@@ -57,8 +57,8 @@ following NMEA 2000 message types.
 
 | PGN | Mode   | Description |
 | --- | :----: | ----------- |
-| 127501 (Binary Switch Status)  | T | Issued every four seconds or immediately on the state change of any output channel. |
-| 127502 (Binary Switch Control) | R | Used to set relay channel state.  
+| 127501 (Binary Status Report)  | T | Issued every four seconds or immediately on the state change of any output channel. |
+| 127502 (Switch Bank Control) | R | Used to set relay channel state.  
 
 ## PCB
 
