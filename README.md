@@ -67,7 +67,7 @@ following NMEA 2000 message types.
 | C2    | Power supply    | [1000uF aluminium capacitor](https://docs.rs-online.com/0d4a/0900766b815816c4.pdf) | [711-1149](https://uk.rs-online.com/web/p/aluminium-capacitors/7111148) |
 | U3    | CAN interface   | [MCP2551-I/P CAN transceiver](https://docs.rs-online.com/f763/0900766b8140ba57.pdf) | [876-7259](https://uk.rs-online.com/web/p/can-interface-ics/8767259) | 
 | C1    | CAN interface   | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
-| R5    | CAN interface   | [4K7 0.25W resistor]() | []() |
+| R5    | CAN interface   | [4K7 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7260](https://uk.rs-online.com/web/p/through-hole-resistors/7077726) |
 | SW2   | CAN interface   | [2-way SPST DIP switch](https://docs.rs-online.com/a014/0900766b81670159.pdf) | [177-4261](https://uk.rs-online.com/web/p/dip-sip-switches/1774261) |
 | R6    | CAN interface   | [120R 0.5W resistor](https://docs.rs-online.com/1e48/0900766b8157ae0f.pdf) | [707-8154](https://uk.rs-online.com/web/p/through-hole-resistors/7078154) |
 | J2    | CAN interface   | [Terminal block 1x5 2.54"](https://docs.rs-online.com/85fb/0900766b816edda7.pdf) | [220-4298](https://uk.rs-online.com/web/p/pcb-terminal-blocks/2204298) |
