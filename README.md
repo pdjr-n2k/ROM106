@@ -68,21 +68,17 @@ The [module PCB](./ROM104.brd.pdf) is a 75mm x 75mm square.
 
 ### Components
 
-#### Microcontroller
-
-* [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html)
-
-#### Power supply
-
-* [TracoPower TMR-2411 DC-DC converter](https://uk.rs-online.com/web/p/dc-dc-converters/7813190)
-* [1000uF aluminium capacitor](https://uk.rs-online.com/web/p/aluminium-capacitors/7111148)
-* [ECE BU135 1.35A polymer fuse](https://www.ece.com.tw/images/cgcustom/file020170930043926.pdf)
-| 
-#### CAN interface
-
-* [MCP2551-I/P CAN transceiver](https://uk.rs-online.com/web/p/can-interface-ics/0402920)
-* [2-way SPST DIP switch](https://uk.rs-online.com/web/p/dip-sip-switches/1774261)
-* 
+| REF   | Subsystem       | Component               | 
+| :---: | :---            | :---                    |
+| U1    | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
+| C?    | Microcontroller | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
+| U2    | Power supply    | [TracoPower TMR-2411 DC-DC converter](https://docs.rs-online.com/1b79/0900766b8172f5cb.pdf) | [433-8258]https://uk.rs-online.com/web/p/dc-dc-converters/4338258) |
+| F1    | Power supply    | [ECE BU135 1.35A polymer fuse](https://www.ece.com.tw/images/cgcustom/file020170930043926.pdf) | |
+| C?    | Power supply    | [1000uF aluminium capacitor](https://docs.rs-online.com/0d4a/0900766b815816c4.pdf) | [711-1149](https://uk.rs-online.com/web/p/aluminium-capacitors/7111148) |
+| U3    | CAN interface   | [MCP2551-I/P CAN transceiver](https://docs.rs-online.com/f763/0900766b8140ba57.pdf) | [876-7259](https://uk.rs-online.com/web/p/can-interface-ics/8767259) | 
+| C?    | Microcontroller | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
+| J?    | CAN interface   | [2-way SPST DIP switch](https://docs.rs-online.com/a014/0900766b81670159.pdf) | [177-4261](https://uk.rs-online.com/web/p/dip-sip-switches/1774261) |
+ 
 
 
 | Component   | Description                                     | Further information
