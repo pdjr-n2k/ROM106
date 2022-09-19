@@ -61,7 +61,7 @@ following NMEA 2000 message types.
 ## Hardware implementation
 
 | REF   | Subsystem       | Component               | Part |
-| :---: | :---            | :---                    | :--- |
+| :---  | :---            | :---                    | :--- |
 | --    | ENC             | [Plastic flanged enclosure](https://docs.rs-online.com/1460/0900766b814af994.pdf) | [919-0357](https://uk.rs-online.com/web/p/general-purpose-enclosures/9190357) |
 | --    | PCB             | [PCB](./ROM104.brd.pdf) | |
 | U5    | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
