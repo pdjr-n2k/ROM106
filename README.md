@@ -68,8 +68,8 @@ The [module PCB](./ROM104.brd.pdf) is a 75mm x 75mm square.
 
 ### Components
 
-| REF   | Subsystem       | Component               | 
-| :---: | :---            | :---                    |
+| REF   | Subsystem       | Component               | Part |
+| :---: | :---            | :---                    | :--- |
 | U1    | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
 | C?    | Microcontroller | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
 | U2    | Power supply    | [TracoPower TMR-2411 DC-DC converter](https://docs.rs-online.com/1b79/0900766b8172f5cb.pdf) | [433-8258]https://uk.rs-online.com/web/p/dc-dc-converters/4338258) |
