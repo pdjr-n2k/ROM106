@@ -40,13 +40,6 @@ either a drop node or a bus termination node.
 The module's switchbank instance number is configured using an
 8-position DIL switch.
 
-The design exploits the following active components.
-
-| Component | Function |
-| :--- | :--- |
-| [MCP2551-I/P](https://docs.rs-online.com/209a/0900766b814f3bfd.pdf) | CAN transceiver. |
-| [L293D](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) |  Quadruple Half-H Driver for relay coil polarity reversal.|
-
 ### Firmware
 
 Relay operations are queued so that concurrent relay switching
@@ -55,10 +48,10 @@ loads cannot occur.
 __ROM104__'s stock firmware transmits(T) and receives(R) the
 following NMEA 2000 message types.
 
-| PGN | Mode   | Description |
-| --- | :----: | ----------- |
-| 127501 (Binary Status Report)  | T | Issued every four seconds or immediately on the state change of any output channel. |
-| 127502 (Switch Bank Control) | R | Used to set relay channel state.  
+| PGN                           | Mode   | Description |
+| :---                          | :----: | :---------- |
+| 127501 (Binary Status Report) | T      | Issued every four seconds or immediately on the state change of any output channel. |
+| 127502 (Switch Bank Control)  | R      | Used to set relay channel state. |  
 
 ## Implementation
 
