@@ -68,7 +68,7 @@ following NMEA 2000 message types.
 | --    | PCB             | [PCB](./ROM104.brd.pdf) | |
 | U5    | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
 | C3    | Microcontroller | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
-| SW1   | Microcontroller | [8-way SPST DIP switch]() | []() |
+| SW1   | Microcontroller | [8-way SPST DIP switch](https://docs.rs-online.com/c3e8/A700000008823222.pdf) | [877-2148](https://uk.rs-online.com/web/p/dip-sip-switches/8772148/) |
 | U4    | Power supply    | [TracoPower TMR-2411 DC-DC converter](https://docs.rs-online.com/1b79/0900766b8172f5cb.pdf) | [433-8258](https://uk.rs-online.com/web/p/dc-dc-converters/4338258) |
 | F1    | Power supply    | [1A resettable fuse](https://docs.rs-online.com/ec39/0900766b80bc9043.pdf) | [657-1772](https://uk.rs-online.com/web/p/resettable-fuses/6571772) |
 | C2    | Power supply    | [1000uF aluminium capacitor](https://docs.rs-online.com/0d4a/0900766b815816c4.pdf) | [711-1149](https://uk.rs-online.com/web/p/aluminium-capacitors/7111148) |
@@ -82,7 +82,7 @@ following NMEA 2000 message types.
 | U1,U2 | Relay output    | [L293D quadruple half-H driver](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) | [714-0622](https://uk.rs-online.com/web/p/motor-driver-ics/7140622) |
 | K1,K2,K3,K4 | Relay output | [TE Connectivity 5A latching relay](https://docs.rs-online.com/39e5/0900766b81397a52.pdf) | [616-8584](https://uk.rs-online.com/web/p/power-relays/6168584) |
 | D1,D2,D3,D4 | Relay output | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
-| R1,R2,R3,R4 | Relay output | [470R 0.25W resistor]() | []() |
+| R1,R2,R3,R4 | Relay output | [470R 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7726](https://uk.rs-online.com/web/p/through-hole-resistors/7077726/) |
 | J1 | Relay output | [Wurth 401B terminal block](https://docs.rs-online.com/238a/0900766b8173e753.pdf) | [191-7518](https://uk.rs-online.com/web/p/pcb-terminal-blocks/1917518) |
 
 ## Assembly
