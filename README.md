@@ -2,13 +2,14 @@
 
 This project implements an NMEA 2000 relay output module with
 support for four relay output channels.
-A complementary project,
+See
 [SIM108](https://github.com/preeve9534/SIM108/),
-implements an eight-channel NMEA 2000 switch input module.
+a complementary project that implements an eight-channel NMEA
+2000 switch input module.
 
-The project consists of a microcontroller-based hardware design
+__ROM104__ consists of a microcontroller-based hardware design
 and associated firmware.
-The stock firmware realises an NMEA 2000 switchbank interface
+The stock firmware realises an NMEA 2000 switch bank interface
 that transmits
 [PGN 127501 Binary Status Report]() messages
 and responds to
