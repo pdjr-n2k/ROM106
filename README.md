@@ -58,13 +58,7 @@ following NMEA 2000 message types.
 | 127501 (Binary Status Report)  | T | Issued every four seconds or immediately on the state change of any output channel. |
 | 127502 (Switch Bank Control) | R | Used to set relay channel state.  
 
-## Hardware Implementation
-
-### PCB
-
-The  is a 75mm x 75mm square. 
-
-### Components
+## Hardware implementation
 
 | REF   | Subsystem       | Component               | Part |
 | :---: | :---            | :---                    | :--- |
@@ -85,7 +79,6 @@ The  is a 75mm x 75mm square.
 | K1,K2,K3,K4 | Relay output | [TE Connectivity 5A latching relay](https://docs.rs-online.com/39e5/0900766b81397a52.pdf) | [616-8584](https://uk.rs-online.com/web/p/power-relays/6168584) |
 | D1,D2,D3,D4 | Relay output | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
 | J1 | Relay output | [Wurth 401B terminal block](https://docs.rs-online.com/238a/0900766b8173e753.pdf) | [191-7518](https://uk.rs-online.com/web/p/pcb-terminal-blocks/1917518) |
-
 
 ### Assembly
 
