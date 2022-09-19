@@ -74,8 +74,8 @@ following NMEA 2000 message types.
 | J2*   | CAN interface   | [M12 5-pin male connector ](https://docs.rs-online.com/6e45/A700000007926144.pdf) | [877-1154](https://uk.rs-online.com/web/p/industrial-circular-connectors/8771154) |
 | U1,U2 | Relay output    | [L293D quadruple half-H driver](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) | [714-0622](https://uk.rs-online.com/web/p/motor-driver-ics/7140622) |
 | K1,K2,K3,K4 | Relay output | [TE Connectivity 5A latching relay](https://docs.rs-online.com/39e5/0900766b81397a52.pdf) | [616-8584](https://uk.rs-online.com/web/p/power-relays/6168584) |
-| D1,D2,D3,D4 | Relay output | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
-| R1,R2,R3,R4 | Relay output | [470R 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7726](https://uk.rs-online.com/web/p/through-hole-resistors/7077726/) |
+| D1,D2,D3,D4 | User interface | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
+| R1,R2,R3,R4 | User interface | [470R 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7726](https://uk.rs-online.com/web/p/through-hole-resistors/7077726/) |
 | J1 | Relay output | [Wurth 401B terminal block](https://docs.rs-online.com/238a/0900766b8173e753.pdf) | [191-7518](https://uk.rs-online.com/web/p/pcb-terminal-blocks/1917518) |
 
 ## Assembly
