@@ -68,6 +68,7 @@ The  is a 75mm x 75mm square.
 
 | REF   | Subsystem       | Component               | Part |
 | :---: | :---            | :---                    | :--- |
+| --    | ENC             | [Plastic flanged enclosure](https://docs.rs-online.com/1460/0900766b814af994.pdf) | [919-0357](https://uk.rs-online.com/web/p/general-purpose-enclosures/9190357) |
 | --    | PCB             | [PCB](./ROM104.brd.pdf) | |
 | U1    | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
 | C?    | Microcontroller | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
@@ -80,6 +81,10 @@ The  is a 75mm x 75mm square.
 | C?    | CAN interface   | [120R 0.5W resistor](https://docs.rs-online.com/1e48/0900766b8157ae0f.pdf) | [707-8154](https://uk.rs-online.com/web/p/through-hole-resistors/7078154) |
 | J3    | CAN interface   | [Terminal block 1x5 2.54"](https://docs.rs-online.com/85fb/0900766b816edda7.pdf) | [220-4298](https://uk.rs-online.com/web/p/pcb-terminal-blocks/2204298) |
 | J3*   | CAN interface   | [M12 5-pin male connector ](https://docs.rs-online.com/6e45/A700000007926144.pdf) | [877-1154](https://uk.rs-online.com/web/p/industrial-circular-connectors/8771154) |
+| U4,U5 | Relay output    | [L293D quadruple half-H driver](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) | [714-0622](https://uk.rs-online.com/web/p/motor-driver-ics/7140622) |
+| K1,K2,K3,K4 | Relay output | [5A latching relay]() | []() |
+| D1,D2,D3,D4 | Relay output | [1.8mm rectangular LED]() | []() |
+| J1 | Relay output | [2.5mm2 terminal block]() | []() |
 
  
 
