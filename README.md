@@ -84,13 +84,13 @@ Components must be placed and soldered with care taken to ensure
 correct orientation and polarity.
 
 The host NMEA bus can be wired directly to J2 or (and preferably)
-J2 can be omitted, the ENCLOSURE drilled to accommodate J3 and
-J3's flying leads soldered directly to the pads intended for J1.
+J2 can be omitted, the ENCLOSURE drilled to accommodate J2* and
+J2*'s flying leads soldered directly to the pads intended for J2.
 
-D9 through D17 can be soldered with long leads and holes drilled in
+D1 through D4 can be soldered with long leads and holes drilled in
 ENCLOSURE to expose the LED or (and preferably), they can each be
-mounted with CLIP to ENCLOSURE and trailing leads used to connect
-back to the PCB mounting location.
+mounted to the enclosure and trailing leads used to connect back
+to the PCB mounting location.
 The latter approach means exact positioning of the holes which
 expose the PCB mounted LEDs is not required.
 
@@ -113,21 +113,15 @@ expose the PCB mounted LEDs is not required.
    Usually it is appropriate to set SW2[G] to OFF(0).
 
 5. Configure switchbank instance address.
-   Set SW1[1..8] to a binary representation of your chosen, unique, instance
+   SW1[1] sets bit 0 of the address; SW1[8] sets bit 7 of the addresss.
+   Set SW1 to a binary representation of your chosen, unique, instance
    address in the range 0 through 252.
    Setting an address outside this range will disable the module.
-   SW1[1] sets address bit 0; SW1[8] sets address bit 7.
    
 ## Installation
 
 1. Each relay output channel supports CO (COmmon), NO (Normally Open) and NC
-   (Normally Closed) connections. a reference switch input ground to J2[9].
+   (Normally Closed) connections.
    CO is connected to NO and disconnected from NC when the associated switchbank
    channel is ON and is connected to NC and disconnected from NO when the
    channel is OFF.
-
-2. Connect up to a maximum of eight switch inputs to J2[1..8].
-   Each input must supply an ON voltage in the range 5VDC through 50VDC
-   relative to J2[9].
-   Each input must be able to source around 10mA necessary to drive the
-   opto-isolation input circuitry.
