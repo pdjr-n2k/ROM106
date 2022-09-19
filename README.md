@@ -16,7 +16,9 @@ and responds to
 
 The module is powered from the NMEA bus and has an LEN of 1.0.
 
-## Hardware design
+## Design
+
+### Hardware
 
 Each output channel drives a bistable SPDT relay: this has the
 dual benefit of preserving relay states in the event of bus
@@ -45,7 +47,7 @@ The design exploits the following active components.
 | [MCP2551-I/P](https://docs.rs-online.com/209a/0900766b814f3bfd.pdf) | CAN transceiver. |
 | [L293D](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) |  Quadruple Half-H Driver for relay coil polarity reversal.|
 
-## Firmware
+### Firmware
 
 Relay operations are queued so that concurrent relay switching
 loads cannot occur.
@@ -58,7 +60,7 @@ following NMEA 2000 message types.
 | 127501 (Binary Status Report)  | T | Issued every four seconds or immediately on the state change of any output channel. |
 | 127502 (Switch Bank Control) | R | Used to set relay channel state.  
 
-## Hardware implementation
+## Implementation
 
 | REF   | Subsystem       | Component               | Part |
 | :---  | :---            | :---                    | :--- |
@@ -83,7 +85,7 @@ following NMEA 2000 message types.
 | R1,R2,R3,R4 | Relay output | [470R 0.25W resistor]() | []() |
 | J1 | Relay output | [Wurth 401B terminal block](https://docs.rs-online.com/238a/0900766b8173e753.pdf) | [191-7518](https://uk.rs-online.com/web/p/pcb-terminal-blocks/1917518) |
 
-### Assembly
+## Assembly
 
 Components must be placed and soldered with care taken to ensure
 correct orientation and polarity.
@@ -99,7 +101,7 @@ back to the PCB mounting location.
 The latter approach means exact positioning of the holes which
 expose the PCB mounted LEDs is not required.
 
-## Module configuration
+## Configuration
 
 1. It will almost always be simpler to configure the module on the bench
    and then install it in its normal operating location.
@@ -123,7 +125,7 @@ expose the PCB mounted LEDs is not required.
    Setting an address outside this range will disable the module.
    SW1[1] sets address bit 0; SW1[8] sets address bit 7.
    
-### Connecting relay outputs
+## Installation
 
 1. Each relay output channel supports CO (COmmon), NO (Normally Open) and NC
    (Normally Closed) connections. a reference switch input ground to J2[9].
