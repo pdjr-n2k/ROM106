@@ -71,7 +71,7 @@ The  is a 75mm x 75mm square.
 | --    | PCB             | [PCB](./ROM104.brd.pdf) | |
 | U1    | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
 | C?    | Microcontroller | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
-| U2    | Power supply    | [TracoPower TMR-2411 DC-DC converter](https://docs.rs-online.com/1b79/0900766b8172f5cb.pdf) | [433-8258]{https://uk.rs-online.com/web/p/dc-dc-converters/4338258) |
+| U2    | Power supply    | [TracoPower TMR-2411 DC-DC converter](https://docs.rs-online.com/1b79/0900766b8172f5cb.pdf) | [433-8258](https://uk.rs-online.com/web/p/dc-dc-converters/4338258) |
 | F1    | Power supply    | [1A resettable fuse](https://docs.rs-online.com/ec39/0900766b80bc9043.pdf) | [657-1772](https://uk.rs-online.com/web/p/resettable-fuses/6571772) |
 | C?    | Power supply    | [1000uF aluminium capacitor](https://docs.rs-online.com/0d4a/0900766b815816c4.pdf) | [711-1149](https://uk.rs-online.com/web/p/aluminium-capacitors/7111148) |
 | U3    | CAN interface   | [MCP2551-I/P CAN transceiver](https://docs.rs-online.com/f763/0900766b8140ba57.pdf) | [876-7259](https://uk.rs-online.com/web/p/can-interface-ics/8767259) | 
