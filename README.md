@@ -82,39 +82,10 @@ The  is a 75mm x 75mm square.
 | J3    | CAN interface   | [Terminal block 1x5 2.54"](https://docs.rs-online.com/85fb/0900766b816edda7.pdf) | [220-4298](https://uk.rs-online.com/web/p/pcb-terminal-blocks/2204298) |
 | J3*   | CAN interface   | [M12 5-pin male connector ](https://docs.rs-online.com/6e45/A700000007926144.pdf) | [877-1154](https://uk.rs-online.com/web/p/industrial-circular-connectors/8771154) |
 | U4,U5 | Relay output    | [L293D quadruple half-H driver](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) | [714-0622](https://uk.rs-online.com/web/p/motor-driver-ics/7140622) |
-| K1,K2,K3,K4 | Relay output | [5A latching relay]() | []() |
-| D1,D2,D3,D4 | Relay output | [1.8mm rectangular LED]() | []() |
-| J1 | Relay output | [2.5mm2 terminal block]() | []() |
+| K1,K2,K3,K4 | Relay output | [TE Connectivity 5A latching relay](https://docs.rs-online.com/39e5/0900766b81397a52.pdf) | [616-8584](https://uk.rs-online.com/web/p/power-relays/6168584) |
+| D1,D2,D3,D4 | Relay output | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
+| J1 | Relay output | [Wurth 401B terminal block](https://docs.rs-online.com/238a/0900766b8173e753.pdf) | [191-7518](https://uk.rs-online.com/web/p/pcb-terminal-blocks/1917518) |
 
- 
-
-
-| Component   | Description                                     | Further information
-|------------ |------------------------------------------------ |--------------------- |
-| C1,C3       | 100nF ceramic capacitor]                        | [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427)
-| C2          | 1000uF aluminium capacitor                      | [711-1148](https://uk.rs-online.com/web/p/aluminium-capacitors/7111148)
-| D1,D2,D3,D4 | 2V 1.8mm rectangular LED                        | [229-2425](https://uk.rs-online.com/web/p/leds/2292425)
-| F1          | ECE BU135 1.35A polymer fuse                    | [ECE](https://www.ece.com.tw/images/cgcustom/file020170930043926.pdf)
-| J1,J2       | Phoenix Contact FK-MPT terminal block 1x8 3.5mm | [229-2425](https://uk.rs-online.com/web/p/pcb-terminal-blocks/8020169)
-| J3          | Phoenix Contact MPT terminal block 1x5 2.54"    | [220-4298](https://uk.rs-online.com/web/p/pcb-terminal-blocks/2204298)
-| R1,R10-R13  | 390R 0.25W resistor                             | [707-7634](https://uk.rs-online.com/web/p/through-hole-resistors/7077634)
-| R3-R9       | 2K2 0.25W resistor                              | [707-7690](https://uk.rs-online.com/web/p/through-hole-resistors/7077690)
-| R14         | 120R 0.25W resistor                             | [707-7599](https://uk.rs-online.com/web/p/through-hole-resistors/7077599)
-| SW1         | 6mm momentary push button                       | Sourced from eBay
-| SW2         | 2-way SPST DIP switch                           | [177-4261](https://uk.rs-online.com/web/p/dip-sip-switches/1774261)
-| SW3         | 8-way SPST DIP switch                           | [756-1347](https://uk.rs-online.com/web/p/dip-sip-switches/7561347)
-| U1          | PJRC Teensy 3.2 MCU                             | [PJRC](https://www.pjrc.com/store/teensy32.html)
-| U2          | TracoPower TMR-1-1211 DC-DC converter           | [781-3190](https://uk.rs-online.com/web/p/dc-dc-converters/7813190)
-| U3          | MCP2551-I/P CAN transceiver                     | [040-2920](https://uk.rs-online.com/web/p/can-interface-ics/0402920)
-| SENSORS     | LM335Z - if you choose to make your own sensors | [159-4685](https://uk.rs-online.com/web/p/temperature-humidity-sensor-ics/1594685)
-
-### Suggested hardware
-
-| Component   | Description                                     | Further information
-|------------ |------------------------------------------------ |--------------------- |
-| ENCLOSURE   | Plastic, general purpose, flange mount box      | [919-0391](https://uk.rs-online.com/web/p/general-purpose-enclosures/9190391)
-| J4          | M12 5-pin male NMEA bus connector               | [877-1154](https://uk.rs-online.com/web/p/industrial-circular-connectors/8771154)
-| CLIP        | 3mm LED panel clip                              | Sourced from eBay
 
 ### Assembly
 
