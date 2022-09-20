@@ -494,140 +494,73 @@ Wire Wire Line
 	10750 1150 10450 1150
 Wire Wire Line
 	10450 1150 10450 2150
-Text Label 9550 5250 0    50   ~ 0
-CH0_LED
 Text Label 9550 5350 0    50   ~ 0
+CH0_LED
+Text Label 9550 5250 0    50   ~ 0
 CH1_LED
 Text Label 9550 5150 0    50   ~ 0
 CH2_LED
 Text Label 8450 5150 2    50   ~ 0
 CH3_LED
 $Comp
-L Device:R R1
-U 1 1 631C1A0C
-P 4400 800
-F 0 "R1" V 4450 1000 50  0000 R CNN
-F 1 "470R" V 4400 800 39  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 800 50  0001 C CNN
-F 3 "~" H 4400 800 50  0001 C CNN
-	1    4400 800 
-	0    -1   -1   0   
-$EndComp
-$Comp
 L Device:LED D1
 U 1 1 631C329D
-P 4800 800
-F 0 "D1" H 4900 750 50  0000 C CNN
-F 1 "LED" H 4793 636 50  0001 C CNN
-F 2 "LED_THT:LED_D1.8mm_W3.3mm_H2.4mm" H 4800 800 50  0001 C CNN
-F 3 "~" H 4800 800 50  0001 C CNN
-	1    4800 800 
+P 4400 800
+F 0 "D1" H 4500 750 50  0000 C CNN
+F 1 "LED" H 4393 636 50  0001 C CNN
+F 2 "LED_THT:LED_D1.8mm_W3.3mm_H2.4mm" H 4400 800 50  0001 C CNN
+F 3 "~" H 4400 800 50  0001 C CNN
+	1    4400 800 
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	4550 800  4650 800 
-Wire Wire Line
 	4050 800  4250 800 
-Wire Wire Line
-	4950 800  5450 800 
-Wire Wire Line
-	5450 800  5450 1000
-$Comp
-L Device:R R2
-U 1 1 631D6F98
-P 4400 1000
-F 0 "R2" V 4450 1250 50  0000 R CNN
-F 1 "470R" V 4400 1000 39  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 1000 50  0001 C CNN
-F 3 "~" H 4400 1000 50  0001 C CNN
-	1    4400 1000
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R R3
-U 1 1 631D739B
-P 4400 1200
-F 0 "R3" V 4450 1450 50  0000 R CNN
-F 1 "470R" V 4400 1200 39  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 1200 50  0001 C CNN
-F 3 "~" H 4400 1200 50  0001 C CNN
-	1    4400 1200
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R R4
-U 1 1 631D7696
-P 4400 1400
-F 0 "R4" V 4450 1650 50  0000 R CNN
-F 1 "470R" V 4400 1400 39  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 4330 1400 50  0001 C CNN
-F 3 "~" H 4400 1400 50  0001 C CNN
-	1    4400 1400
-	0    -1   -1   0   
-$EndComp
 $Comp
 L Device:LED D2
 U 1 1 631D7AEF
-P 4800 1000
-F 0 "D2" H 4900 950 50  0000 C CNN
-F 1 "LED" H 4793 836 50  0001 C CNN
-F 2 "LED_THT:LED_D1.8mm_W3.3mm_H2.4mm" H 4800 1000 50  0001 C CNN
-F 3 "~" H 4800 1000 50  0001 C CNN
-	1    4800 1000
+P 4400 1000
+F 0 "D2" H 4500 950 50  0000 C CNN
+F 1 "LED" H 4393 836 50  0001 C CNN
+F 2 "LED_THT:LED_D1.8mm_W3.3mm_H2.4mm" H 4400 1000 50  0001 C CNN
+F 3 "~" H 4400 1000 50  0001 C CNN
+	1    4400 1000
 	-1   0    0    1   
 $EndComp
 $Comp
 L Device:LED D3
 U 1 1 631D7EE7
-P 4800 1200
-F 0 "D3" H 4900 1150 50  0000 C CNN
-F 1 "LED" H 4793 1036 50  0001 C CNN
-F 2 "LED_THT:LED_D1.8mm_W3.3mm_H2.4mm" H 4800 1200 50  0001 C CNN
-F 3 "~" H 4800 1200 50  0001 C CNN
-	1    4800 1200
+P 4400 1200
+F 0 "D3" H 4500 1150 50  0000 C CNN
+F 1 "LED" H 4393 1036 50  0001 C CNN
+F 2 "LED_THT:LED_D1.8mm_W3.3mm_H2.4mm" H 4400 1200 50  0001 C CNN
+F 3 "~" H 4400 1200 50  0001 C CNN
+	1    4400 1200
 	-1   0    0    1   
 $EndComp
 $Comp
 L Device:LED D4
 U 1 1 631D8355
-P 4800 1400
-F 0 "D4" H 4900 1350 50  0000 C CNN
-F 1 "LED" H 4793 1236 50  0001 C CNN
-F 2 "LED_THT:LED_D1.8mm_W3.3mm_H2.4mm" H 4800 1400 50  0001 C CNN
-F 3 "~" H 4800 1400 50  0001 C CNN
-	1    4800 1400
+P 4400 1400
+F 0 "D4" H 4500 1350 50  0000 C CNN
+F 1 "LED" H 4393 1236 50  0001 C CNN
+F 2 "LED_THT:LED_D1.8mm_W3.3mm_H2.4mm" H 4400 1400 50  0001 C CNN
+F 3 "~" H 4400 1400 50  0001 C CNN
+	1    4400 1400
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	4550 1000 4650 1000
 Wire Wire Line
 	4550 1200 4650 1200
-Wire Wire Line
-	4550 1400 4650 1400
-Wire Wire Line
-	4950 1000 5450 1000
-Connection ~ 5450 1000
-Wire Wire Line
-	5450 1000 5450 1200
-Wire Wire Line
-	4950 1200 5450 1200
-Connection ~ 5450 1200
-Wire Wire Line
-	5450 1200 5450 1400
-Wire Wire Line
-	4950 1400 5450 1400
-Connection ~ 5450 1400
-Wire Wire Line
-	5450 1400 5450 1500
 $Comp
 L power:GND #PWR04
 U 1 1 632040BF
-P 5450 1500
-F 0 "#PWR04" H 5450 1250 50  0001 C CNN
-F 1 "GND" H 5455 1327 50  0000 C CNN
-F 2 "" H 5450 1500 50  0001 C CNN
-F 3 "" H 5450 1500 50  0001 C CNN
-	1    5450 1500
+P 5250 1350
+F 0 "#PWR04" H 5250 1100 50  0001 C CNN
+F 1 "GND" H 5255 1177 50  0000 C CNN
+F 2 "" H 5250 1350 50  0001 C CNN
+F 3 "" H 5250 1350 50  0001 C CNN
+	1    5250 1350
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -655,34 +588,12 @@ F 3 "http://www.ti.com/lit/ds/symlink/l293.pdf" H 4000 4400 50  0001 C CNN
 	1    4300 3700
 	-1   0    0    1   
 $EndComp
-$Comp
-L Relay:DIPxx-1Cxx-51x K2
-U 1 1 632F5385
-P 2250 4400
-F 0 "K2" H 1820 4354 50  0000 R CNN
-F 1 "DIPxx-1Cxx-51x" H 1820 4445 50  0000 R CNN
-F 2 "PDJR-connectors:PE014F05" H 2700 4350 50  0001 L CNN
-F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 4400 50  0001 C CNN
-	1    2250 4400
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	2150 4700 2150 5100
 Wire Wire Line
 	1700 4000 2050 4000
 Wire Wire Line
 	2050 4000 2050 4100
-$Comp
-L Relay:DIPxx-1Cxx-51x K3
-U 1 1 63338136
-P 2250 5600
-F 0 "K3" H 1820 5554 50  0000 R CNN
-F 1 "DIPxx-1Cxx-51x" H 1820 5645 50  0000 R CNN
-F 2 "PDJR-connectors:PE014F05" H 2700 5550 50  0001 L CNN
-F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 5600 50  0001 C CNN
-	1    2250 5600
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	1950 5900 1950 6000
 Wire Wire Line
@@ -695,17 +606,6 @@ Wire Wire Line
 	1200 5400 1650 5400
 Wire Wire Line
 	1650 5400 1650 6100
-$Comp
-L Relay:DIPxx-1Cxx-51x K1
-U 1 1 63388BFA
-P 2250 3400
-F 0 "K1" H 1820 3354 50  0000 R CNN
-F 1 "DIPxx-1Cxx-51x" H 1820 3445 50  0000 R CNN
-F 2 "PDJR-connectors:PE014F05" H 2700 3350 50  0001 L CNN
-F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 3400 50  0001 C CNN
-	1    2250 3400
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	1600 3900 2150 3900
 Wire Wire Line
@@ -718,17 +618,6 @@ Wire Wire Line
 	2050 3100 2050 3000
 Wire Wire Line
 	2050 3000 1400 3000
-$Comp
-L Relay:DIPxx-1Cxx-51x K4
-U 1 1 633A9E65
-P 2250 6600
-F 0 "K4" H 1820 6554 50  0000 R CNN
-F 1 "DIPxx-1Cxx-51x" H 1820 6645 50  0000 R CNN
-F 2 "PDJR-connectors:PE014F05" H 2700 6550 50  0001 L CNN
-F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 6600 50  0001 C CNN
-	1    2250 6600
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	1200 5500 1450 5500
 Wire Wire Line
@@ -1006,4 +895,81 @@ F 3 "" H 8950 550 50  0001 C CNN
 	1    8950 1050
 	-1   0    0    -1  
 $EndComp
+$Comp
+L pdjr:SPDT_RELAY K1
+U 1 1 632C2C12
+P 2250 3400
+F 0 "K1" H 1820 3354 50  0000 R CNN
+F 1 "SPDT_RELAY" H 1820 3445 50  0000 R CNN
+F 2 "PDJR-connectors:PE014F05" H 2700 3350 50  0001 L CNN
+F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 3400 50  0001 C CNN
+	1    2250 3400
+	-1   0    0    1   
+$EndComp
+$Comp
+L pdjr:SPDT_RELAY K2
+U 1 1 632D0338
+P 2250 4400
+F 0 "K2" H 1820 4354 50  0000 R CNN
+F 1 "SPDT_RELAY" H 1820 4445 50  0000 R CNN
+F 2 "PDJR-connectors:PE014F05" H 2700 4350 50  0001 L CNN
+F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 4400 50  0001 C CNN
+	1    2250 4400
+	-1   0    0    1   
+$EndComp
+$Comp
+L pdjr:SPDT_RELAY K3
+U 1 1 632D258A
+P 2250 5600
+F 0 "K3" H 1820 5554 50  0000 R CNN
+F 1 "SPDT_RELAY" H 1820 5645 50  0000 R CNN
+F 2 "PDJR-connectors:PE014F05" H 2700 5550 50  0001 L CNN
+F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 5600 50  0001 C CNN
+	1    2250 5600
+	-1   0    0    1   
+$EndComp
+$Comp
+L pdjr:SPDT_RELAY K4
+U 1 1 632D3E33
+P 2250 6600
+F 0 "K4" H 1820 6554 50  0000 R CNN
+F 1 "SPDT_RELAY" H 1820 6645 50  0000 R CNN
+F 2 "PDJR-connectors:PE014F05" H 2700 6550 50  0001 L CNN
+F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2250 6600 50  0001 C CNN
+	1    2250 6600
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R_Network04 RN1
+U 1 1 632DFEEA
+P 5050 1050
+F 0 "RN1" V 5375 1050 50  0000 C CNN
+F 1 "470R" V 5284 1050 50  0000 C CNN
+F 2 "Resistor_THT:R_Array_SIP5" V 5325 1050 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5050 1050 50  0001 C CNN
+	1    5050 1050
+	0    1    -1   0   
+$EndComp
+Wire Wire Line
+	4750 800  4750 950 
+Wire Wire Line
+	4750 950  4850 950 
+Wire Wire Line
+	4550 800  4750 800 
+Wire Wire Line
+	4750 1400 4750 1250
+Wire Wire Line
+	4750 1250 4850 1250
+Wire Wire Line
+	4550 1400 4750 1400
+Wire Wire Line
+	4650 1200 4650 1150
+Wire Wire Line
+	4650 1150 4850 1150
+Wire Wire Line
+	4650 1000 4650 1050
+Wire Wire Line
+	4650 1050 4850 1050
+Wire Wire Line
+	5250 1250 5250 1350
 $EndSCHEMATC
