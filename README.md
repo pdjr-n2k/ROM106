@@ -56,7 +56,9 @@ following NMEA 2000 message types.
 
 ## Implementation
 
-| REF   | Subsystem       | Component               | Part |
+### Parts list
+
+| REF   | Subsystem       | Component               | RS Part#|
 | :---  | :---            | :---                    | :--- |
 | --    | ENC             | [Plastic flanged enclosure](https://docs.rs-online.com/1460/0900766b814af994.pdf) | [919-0357](https://uk.rs-online.com/web/p/general-purpose-enclosures/9190357) |
 | --    | PCB             | [PCB](./ROM104.brd.pdf) | |
@@ -79,7 +81,7 @@ following NMEA 2000 message types.
 | D1,D2,D3,D4 | User interface | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
 | R1,R2,R3,R4 | User interface | [470R 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7726](https://uk.rs-online.com/web/p/through-hole-resistors/7077726/) |
 
-## Assembly
+### Assembly
 
 Components must be placed and soldered with care taken to ensure
 correct orientation and polarity.
@@ -95,7 +97,9 @@ to the PCB mounting location.
 The latter approach means exact positioning of the holes which
 expose the PCB mounted LEDs is not required.
 
-## Configuration
+## Use
+
+### Configuration
 
 1. It will almost always be simpler to configure the module on the bench
    and then install it in its normal operating location.
@@ -119,7 +123,7 @@ expose the PCB mounted LEDs is not required.
    address in the range 0 through 252.
    Setting an address outside this range will disable the module.
    
-## Installation
+### Installation
 
 1. Each relay output channel supports CO (COmmon), NO (Normally Open) and NC
    (Normally Closed) connections.
