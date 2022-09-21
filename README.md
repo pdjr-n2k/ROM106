@@ -43,16 +43,17 @@ The module's switchbank instance number is configured using an
 
 ### Firmware
 
-Relay operations are queued so that concurrent relay switching
-loads cannot occur.
+__ROM104__'s stock firmware receives switchbank status instructions
+over NMEA and queues any requested relay state change operations so
+that concurrent relay switching loads cannot occur.
 
-__ROM104__'s stock firmware transmits(T) and receives(R) the
-following NMEA 2000 message types.
+The firmware transmits(T) and receives(R) the following NMEA 2000
+message types.
 
 | PGN                           | Mode   | Description |
 | :---                          | :----: | :---------- |
 | 127501 (Binary Status Report) | T      | Issued every four seconds or immediately on the state change of any output channel. |
-| 127502 (Switch Bank Control)  | R      | Used to set relay channel state. |  
+| 127502 (Switch Bank Control)  | R      | Used to set one or more relay channel states. |  
 
 ## Implementation
 
@@ -87,8 +88,8 @@ Components must be placed and soldered with care taken to ensure
 correct orientation and polarity.
 
 The host NMEA bus can be wired directly to J2 or (and preferably)
-J2 can be omitted, the ENCLOSURE drilled to accommodate J2* and
-J2*'s flying leads soldered directly to the pads intended for J2.
+the ENCLOSURE drilled to accommodate J2* and J2*'s flying leads
+connected to J2.
 
 D1 through D4 can be soldered with long leads and holes drilled in
 ENCLOSURE to expose the LED or (and preferably), they can each be
