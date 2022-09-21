@@ -21,9 +21,10 @@ The module is powered from the NMEA bus and has an LEN of 1.0.
 
 ### Hardware
 
-Each output channel drives a bistable SPDT relay: this has the
-dual benefit of preserving relay states in the event of bus
-failure and of minimising the power consumed by relay operation.
+Each output channel drives a bistable SPDT relay: the use of a
+latching relay has the dual benefit of preserving relay states
+in the event of bus failure and of minimising the power consumed
+by relay operation.
 
 Each relay presents zero-volt CO, NC and NO connections through
 a PCB mounted terminal block rated for switching 5A at 220VAC or
