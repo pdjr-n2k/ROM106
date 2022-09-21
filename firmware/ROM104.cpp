@@ -78,8 +78,8 @@
  * GPIO pin definitions for the Teensy 3.2 MCU and some collections
  * that can be used as array initialisers
  */
-#define GPIO_CH1_LED 0
-#define GPIO_CH0_LED 1
+#define GPIO_CH0_LED 0
+#define GPIO_CH1_LED 1
 #define GPIO_CH2_LED 2
 #define GPIO_RELAY_RST 7
 #define GPIO_RELAY_SET 8
