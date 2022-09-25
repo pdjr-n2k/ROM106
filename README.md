@@ -9,6 +9,7 @@ a complementary project that implements an eight-channel NMEA
 
 __ROM104__ consists of a microcontroller-based hardware design
 and associated firmware.
+
 The stock firmware realises an NMEA 2000 switch bank interface
 that transmits
 [PGN 127501 Binary Status Report]() messages
@@ -20,6 +21,12 @@ The module is powered from the NMEA bus and has an LEN of 1.0.
 ## Design
 
 ### Hardware
+
+__ROM104__ supports a maximum of six output channels.
+The PCB can be populated with between one and six output relays
+and associated driver ICs and terminal blocks.
+Additional channels can be added to a module at any time by
+simply installing the necessary components.
 
 Each output channel drives a bistable SPDT relay: the use of a
 latching relay has the dual benefit of preserving relay states
