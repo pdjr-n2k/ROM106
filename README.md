@@ -1,7 +1,7 @@
 # ROM104 - NMEA 2000 relay output module
 
 This project implements an NMEA 2000 relay output module with
-support for four relay output channels.
+support for up to six relay output channels.
 See
 [SIM108](https://github.com/preeve9534/SIM108/),
 a complementary project that implements an eight-channel NMEA
@@ -30,7 +30,7 @@ Each relay presents zero-volt CO, NC and NO connections through
 a PCB mounted terminal block rated for switching 5A at 220VAC or
 30VDC.
 
-A bank of four LEDs indicates the state of each output channel.
+A bank of LEDs indicates the state of each output channel.
 
 The module's CAN/NMEA bus connection is designed to support an
 NMEA 2000 compatible M12 5-pin male circular connector, but
