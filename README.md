@@ -8,7 +8,7 @@ a complementary project that implements an eight-channel NMEA
 2000 switch input module.
 
 __ROM104__ consists of a microcontroller-based hardware design
-and associated firmware.
+and an associated firmware.
 
 The stock firmware realises an NMEA 2000 switch bank interface
 that transmits
@@ -46,8 +46,8 @@ A DIL switch allows a 120 Ohm resistor to be connected across
 the host data bus permitting the module to be installed as
 either a drop node or a bus termination node.
 
-The module's switchbank instance number is configured using an
-8-position DIL switch.
+The module's switchbank instance number is configured using
+two rotary hex switches.
 
 ### Firmware
 
