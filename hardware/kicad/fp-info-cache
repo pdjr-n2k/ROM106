@@ -1,4 +1,4 @@
-19430541531657107
+19435533600492107
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -59703,6 +59703,13 @@ DIL DIP PDIP 2.54mm 7.62mm 300mil
 4
 4
 PDJR-connectors
+879-1272_TERMINAL_HEADER_6-POLE
+
+
+0
+6
+6
+PDJR-connectors
 DIP-10_200_ELL
 
 
@@ -59716,6 +59723,13 @@ DIP-16_296_ELL
 0
 16
 16
+PDJR-connectors
+FR01-SR16P-ST
+
+
+0
+5
+5
 PDJR-connectors
 HONGFA-176-2823
 
@@ -59786,6 +59800,13 @@ WAGO_806_209
 0
 9
 9
+PDJR-connectors
+WURTH-401B-6PIN
+
+
+0
+12
+6
 PDJR-connectors
 WURTH-401B-12PIN
 
