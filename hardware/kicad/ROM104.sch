@@ -194,12 +194,12 @@ Wire Wire Line
 $Comp
 L power:GND #PWR02
 U 1 1 6084E21C
-P 1100 2450
-F 0 "#PWR02" H 1100 2200 50  0001 C CNN
-F 1 "GND" H 1105 2277 50  0000 C CNN
-F 2 "" H 1100 2450 50  0001 C CNN
-F 3 "" H 1100 2450 50  0001 C CNN
-	1    1100 2450
+P 750 2750
+F 0 "#PWR02" H 750 2500 50  0001 C CNN
+F 1 "GND" H 755 2577 50  0000 C CNN
+F 2 "" H 750 2750 50  0001 C CNN
+F 3 "" H 750 2750 50  0001 C CNN
+	1    750  2750
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -349,9 +349,9 @@ Wire Wire Line
 	9300 2350 10550 2350
 Wire Wire Line
 	8900 2350 9300 2350
-Text Label 1100 2250 2    50   ~ 0
+Text Label 1100 1950 2    50   ~ 0
 TERM_A
-Text Label 1700 2250 0    50   ~ 0
+Text Label 1700 1950 0    50   ~ 0
 TERM_B
 $Comp
 L Connector:Screw_Terminal_01x05 J4
@@ -526,17 +526,17 @@ F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.
 	1    1350 5850
 	0    1    1    0   
 $EndComp
-Text Label 1700 2350 0    50   ~ 0
+Text Label 1700 2050 0    50   ~ 0
 CAN_SCR
 $Comp
 L Switch:SW_DIP_x02 SW2
 U 1 1 62A67242
-P 1400 2250
-F 0 "SW2" H 1400 2500 50  0000 C CNN
-F 1 "BUS" H 1400 2100 50  0000 C CNN
-F 2 "Package_DIP:DIP-4_W7.62mm_LongPads" H 1400 2250 50  0001 C CNN
-F 3 "~" H 1400 2250 50  0001 C CNN
-	1    1400 2250
+P 1400 1950
+F 0 "SW2" H 1400 2200 50  0000 C CNN
+F 1 "BUS" H 1400 1800 50  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm_LongPads" H 1400 1950 50  0001 C CNN
+F 3 "~" H 1400 1950 50  0001 C CNN
+	1    1400 1950
 	1    0    0    1   
 $EndComp
 Wire Wire Line
@@ -1087,8 +1087,6 @@ Wire Wire Line
 	6700 5650 6750 5650
 Wire Wire Line
 	6750 5650 6750 5350
-Wire Wire Line
-	1100 2350 1100 2450
 $Comp
 L Device:LED D3
 U 1 1 63F004DD
@@ -1243,21 +1241,35 @@ Wire Wire Line
 $Comp
 L Switch:SW_DIP_x08 SW1
 U 1 1 633236F9
-P 1400 1500
-F 0 "SW1" H 1400 1050 50  0000 C CNN
-F 1 "INSTANCE" H 1400 2076 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm" H 1400 1500 50  0001 C CNN
-F 3 "~" H 1400 1500 50  0001 C CNN
-	1    1400 1500
+P 1400 1200
+F 0 "SW1" H 1400 750 50  0000 C CNN
+F 1 "INSTANCE" H 1400 1776 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 1400 1200 50  0001 C CNN
+F 3 "~" H 1400 1200 50  0001 C CNN
+	1    1400 1200
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
+	1100 800  750  800 
+Wire Wire Line
+	750  800  750  900 
+Wire Wire Line
+	750  2050 1100 2050
+Wire Wire Line
+	1100 900  750  900 
+Connection ~ 750  900 
+Wire Wire Line
+	750  900  750  1000
+Wire Wire Line
+	1100 1000 750  1000
+Connection ~ 750  1000
+Wire Wire Line
+	750  1000 750  1100
+Wire Wire Line
 	1100 1100 750  1100
+Connection ~ 750  1100
 Wire Wire Line
 	750  1100 750  1200
-Wire Wire Line
-	750  2350 1100 2350
-Connection ~ 1100 2350
 Wire Wire Line
 	1100 1200 750  1200
 Connection ~ 750  1200
@@ -1275,38 +1287,23 @@ Wire Wire Line
 	750  1400 750  1500
 Wire Wire Line
 	1100 1500 750  1500
-Connection ~ 750  1500
 Wire Wire Line
-	750  1500 750  1600
-Wire Wire Line
-	1100 1600 750  1600
-Connection ~ 750  1600
-Wire Wire Line
-	750  1600 750  1700
-Wire Wire Line
-	1100 1700 750  1700
-Connection ~ 750  1700
-Wire Wire Line
-	750  1700 750  1800
-Wire Wire Line
-	1100 1800 750  1800
-Wire Wire Line
-	750  1800 750  2350
-Text Label 1700 1100 0    50   ~ 0
+	750  1500 750  2050
+Text Label 1700 800  0    50   ~ 0
 ADDR_0
-Text Label 1700 1200 0    50   ~ 0
+Text Label 1700 900  0    50   ~ 0
 ADDR_1
-Text Label 1700 1300 0    50   ~ 0
+Text Label 1700 1000 0    50   ~ 0
 ADDR_2
-Text Label 1700 1400 0    50   ~ 0
+Text Label 1700 1100 0    50   ~ 0
 ADDR_3
-Text Label 1700 1500 0    50   ~ 0
+Text Label 1700 1200 0    50   ~ 0
 ADDR_4
-Text Label 1700 1600 0    50   ~ 0
+Text Label 1700 1300 0    50   ~ 0
 ADDR_5
-Text Label 1700 1700 0    50   ~ 0
+Text Label 1700 1400 0    50   ~ 0
 ADDR_6
-Text Label 1700 1800 0    50   ~ 0
+Text Label 1700 1500 0    50   ~ 0
 ADDR_7
 $Comp
 L pdjr:Teensy_3.2 U7
@@ -1335,7 +1332,7 @@ Text Label 9550 4750 0    50   ~ 0
 ADDR_6
 Text Label 9550 4850 0    50   ~ 0
 ADDR_7
-Connection ~ 750  1800
+Connection ~ 750  1500
 $Comp
 L Device:C C1
 U 1 1 633FC878
@@ -1355,6 +1352,28 @@ Wire Wire Line
 Wire Wire Line
 	5750 800  5750 1100
 Connection ~ 5750 1100
-NoConn ~ 8450 4250
 NoConn ~ 8450 4350
+$Comp
+L Switch:SW_Push SW3
+U 1 1 633332C8
+P 1400 2650
+F 0 "SW3" H 1400 2550 50  0000 C CNN
+F 1 "PRG" H 1400 2844 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm" H 1400 2850 50  0001 C CNN
+F 3 "~" H 1400 2850 50  0001 C CNN
+	1    1400 2650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	750  2050 750  2650
+Wire Wire Line
+	750  2650 1200 2650
+Connection ~ 750  2050
+Wire Wire Line
+	750  2650 750  2750
+Connection ~ 750  2650
+Text Label 1600 2650 0    50   ~ 0
+PRG
+Text Label 8450 4250 2    50   ~ 0
+PRG
 $EndSCHEMATC
