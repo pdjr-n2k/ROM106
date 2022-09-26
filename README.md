@@ -123,21 +123,24 @@ expose the PCB mounted LEDs is not required.
 2. Begin configuration by exposing the module PCB.
 
 3. Configure bus termination.
-   Set SW2[T] to ON(1) if the module will be connected as a terminating node
+   Locate the BUS dip switch on the PCB.
+   Set BUS[T] to ON(1) if the module will be connected as a terminating node
    at the end of its host NMEA bus backbone; or
-   set SW2[T] to OFF(0) if the module will be connected to its host NMEA bus
+   set BUS[T] to OFF(0) if the module will be connected to its host NMEA bus
    via a T-connector and drop cable.
 
 4. Configure bus ground.
-   Set SW2[G] to ON(1) to connect the NMEA bus shield to the module GND.
-   Set SW2[G] to OFF(0) to isolate the NMEA bus shield from the module GND.
-   Usually it is appropriate to set SW2[G] to OFF(0).
+   Locate the BUS dip switch on the PCB.
+   Set BUS[G] to ON(1) to connect the NMEA bus shield to the module GND.
+   Set BUS[G] to OFF(0) to isolate the NMEA bus shield from the module GND.
+   Usually it is appropriate to set BUS[G] to OFF(0).
 
 5. Configure switchbank instance address.
-   SW1[1] sets bit 0 of the address; SW1[8] sets bit 7 of the addresss.
-   Set SW1 to a binary representation of your chosen, unique, instance
-   address in the range 0 through 252.
-   Setting an address outside this range will disable the module.
+   Locate the INSTANCE switch and PRG buttons on the PCB.
+   Set INSTANCE[0..7] to a binary representation of your chosen, unique,
+   instance address in the range 0 through 252.
+   Press the PRG button to store the address in the module's
+   persistent storage.
    
 ### Installation
 
