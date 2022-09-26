@@ -22,7 +22,16 @@ The module is powered from the NMEA bus and has an LEN of 1.0.
 
 ### Hardware
 
-__ROM104__ supports up to six output channels: the PCB can be
+__ROM104__ has a modular design consisting of a microcontroller
+elaborated for use in an NMEA 2000 module by the addition of
+a DIL switch for setting NMEA instance address and a shift-register
+based array of LED indicators used for status display.
+
+PCB can be populated with up to six output relays.
+
+Relays are operated by H-bridge driver ICs, each of which can
+operate two relay outputs.
+Each relay he PCB can be
 populated with between one and six output relays and associated
 driver ICs and terminal blocks.
 Additional channels can be added to a module at any time by
