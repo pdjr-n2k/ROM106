@@ -1,4 +1,4 @@
-# ROM104 - NMEA 2000 relay output module
+# ROM106 - NMEA 2000 relay output module
 
 This project implements an NMEA 2000 relay output module with
 support for up to six relay output channels.
@@ -7,7 +7,7 @@ See
 a complementary project that implements an eight-channel NMEA
 2000 switch input module.
 
-__ROM104__ consists of a microcontroller-based hardware design
+__ROM106__ consists of a microcontroller-based hardware design
 and an associated firmware.
 
 The stock firmware realises an NMEA 2000 switch bank interface
@@ -22,12 +22,10 @@ The module is powered from the NMEA bus and has an LEN of 1.0.
 
 ### Hardware
 
-__ROM104__ has a modular design consisting of a microcontroller
+__ROM106__ has a modular design consisting of a microcontroller
 elaborated for use in an NMEA 2000 module by the addition of
 a DIL switch for setting NMEA instance address and a shift-register
 based array of LED indicators used for status display.
-
-PCB can be populated with up to six output relays.
 
 Relays are operated by H-bridge driver ICs, each of which can
 operate two relay outputs.
