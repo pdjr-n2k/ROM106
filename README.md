@@ -22,7 +22,10 @@ The module is powered from the NMEA bus and has an LEN of 1.0.
 
 ### Hardware
 
-__ROM106__ has a modular design consisting of a microcontroller
+__ROM106__ consists of a generic NMEA 2000 implementation with a simple
+relay output interface.
+
+ 
 elaborated for use in an NMEA 2000 module by the addition of
 a DIL switch for setting NMEA instance address and a shift-register
 based array of LED indicators used for status display.
