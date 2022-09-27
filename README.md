@@ -2,8 +2,8 @@
 
 This project implements an NMEA 2000 relay output module with
 support for up to six relay output channels.
-See
-[SIM108](https://github.com/preeve9534/SIM108/),
+You may want to check out
+[SIM108](https://github.com/preeve9534/SIM108/); 
 a complementary project that implements an eight-channel NMEA
 2000 switch input module.
 
@@ -21,34 +21,33 @@ The module is powered from the NMEA bus and has an LEN of 1.0.
 ## Design overview
 
 __ROM106__ uses a Teensy 3.2 microcontroller supported by
-power supply, CAN interface, switch-based configuration, LED
-display and relay output sub-systems.
+power supply, CAN interface, configuration, display and
+relay output sub-systems.
 
-The module power supply consists of a solid-state DC-DC converter
-which adapts the voltage of the NMEA host NMEA bus to the 5VDC
-required by all module electronics.
-The power supply is rated at 2W and the bus connection is fused
+The power supply sub-system consists of a solid-state DC-DC
+converter which adapts the voltage of the NMEA host NMEA bus to
+the 5VDC required by the module's electronics.
+The power supply is rated at 2W and its bus connection is fused
 and reverse polarity protected.
 
-The CAN interface is implemented by an industry standard IC which
-manages NMEA bus I/O.
+The CAN interface sub-system is implemented by an industry standard
+IC which manages all NMEA bus I/O.
 The data bus connection can be switched to include a 120 Ohm bus
 termination resistor allowing the module to be installed as either
-a bus drop node or a bus termination node.
+a bus termination node or a drop node.
 
-The configuration interface consists of an 8-position DIL switch
+The configuration sub-system consists of an 8-position DIL switch
 and push-button which allow installer configuration of the module's
 NMEA instance number.
 
-A collection of LEDs is used to give configuration feedback and
-indicate operating status.
-
-A bank of LEDs indicates the state of each output channel.
+The display sub-system provides a collection of LEDs which are used
+to give configuration feedback and indicate the module operating
+status.
 
 The relay output sub-system consists of up to three H-bridge driver
 ICs, each of which supports two output channels by providing a
 polarity reversing drive for two bistable SPDT relays.
-The use of latching relays has the dual benefit of preserving relay
+The use of bistable relays has the dual benefit of persisting relay
 states in the event of bus failure and of minimising the bus power
 consumed by relay operation.
 Each relay presents zero-volt CO, NC and NO connections through
@@ -102,50 +101,54 @@ message types.
 Components must be placed and soldered with care taken to ensure
 correct orientation and polarity.
 
-The host NMEA bus can be wired directly to J2 or (and preferably)
-the ENCLOSURE drilled to accommodate J2* and J2*'s flying leads
-connected to J2.
+The host NMEA bus can be wired directly to J3 or (and preferably)
+the ENCLOSURE drilled to accommodate J3* and J3*'s flying leads
+connected to the J3 header.
 
-D1 through D4 can be soldered with long leads and holes drilled in
-ENCLOSURE to expose the LED or (and preferably), they can each be
-mounted to the enclosure and trailing leads used to connect back
-to the PCB mounting location.
-The latter approach means exact positioning of the holes which
-expose the PCB mounted LEDs is not required.
+D1 through D8 can be soldered with long leads and holes drilled in
+ENCLOSURE to expose the LED lenses or (and preferably), each LED can
+be elaborated with a light pipe mounted to the enclosure.
 
 ## Use
 
 ### Configuration
 
-1. It will almost always be simpler to configure the module on the bench
-   and then install it in its normal operating location.
+It will almost always be simpler to configure the module on the bench
+and then install it in its normal operating location.
 
-2. Begin configuration by exposing the module PCB.
+1. Begin configuration by exposing the module PCB.
 
-3. Configure bus termination.
+2. Configure bus termination.
    Locate the BUS dip switch on the PCB.
    Set BUS[T] to ON(1) if the module will be connected as a terminating node
    at the end of its host NMEA bus backbone; or
    set BUS[T] to OFF(0) if the module will be connected to its host NMEA bus
    via a T-connector and drop cable.
 
-4. Configure bus ground.
+3. Configure bus ground.
    Locate the BUS dip switch on the PCB.
    Set BUS[G] to ON(1) to connect the NMEA bus shield to the module GND.
    Set BUS[G] to OFF(0) to isolate the NMEA bus shield from the module GND.
    Usually it is appropriate to set BUS[G] to OFF(0).
 
-5. Configure switchbank instance address.
+4. Configure switchbank instance address.
    Locate the INSTANCE switch and PRG buttons on the PCB.
    Set INSTANCE[0..7] to a binary representation of your chosen, unique,
    instance address in the range 0 through 252.
    Press the PRG button to store the address in the module's
    persistent storage.
    
-### Installation
+### Relay connections
 
 1. Each relay output channel supports CO (COmmon), NO (Normally Open) and NC
    (Normally Closed) connections.
-   CO is connected to NO and disconnected from NC when the associated switchbank
-   channel is ON and is connected to NC and disconnected from NO when the
-   channel is OFF.
+
+2. Connected a terminal plug to the external circuits which you wish to operate
+   and plug the terminal into the appropriate module relay output header.
+
+### Operation
+
+The module will enter operation immediately upon connection to the NMEA bus.
+All eight status LEDs will illuminate briefly to indicate the module's
+configured instance number and will then revert to displaying the state of
+each relay output channel. 
