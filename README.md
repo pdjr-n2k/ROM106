@@ -18,48 +18,40 @@ and responds to
 
 The module is powered from the NMEA bus and has an LEN of 1.0.
 
-## Design
+## Design overview
 
-### Hardware
+__ROM106__ has a microcontroller based design incorporating
+power-supply, CAN interface, configuration, display and relay
+output sub-systems.
 
-__ROM106__ consists of a generic NMEA 2000 implementation with a simple
-relay output interface.
+The module power supply consists of a solid-state DC-DC converter
+which adapts NMEA bus power to the 5VDC required by all module
+electronics.
+The supply is rated at 2W and bus connection is fused and reverse
+polarity protected.
 
- 
-elaborated for use in an NMEA 2000 module by the addition of
-a DIL switch for setting NMEA instance address and a shift-register
-based array of LED indicators used for status display.
+An industry standard CAN interface manages NMEA bus I/O and is
+allows the module to be installer configured as either a bus drop
+node or a bus termination node.
 
-Relays are operated by H-bridge driver ICs, each of which can
-operate two relay outputs.
-Each relay he PCB can be
-populated with between one and six output relays and associated
-driver ICs and terminal blocks.
-Additional channels can be added to a module at any time by
-simply installing the necessary components.
+The configuration interface consists of an 8-position DIL switch
+and push-button which allow installer configuration of the module's
+NMEA instance number.
 
-Each output channel drives a bistable SPDT relay: the use of a
-latching relay has the dual benefit of preserving relay states
-in the event of bus failure and of minimising the power consumed
-by relay operation.
-
-Each relay presents zero-volt CO, NC and NO connections through
-a PCB mounted terminal block rated for switching 5A at 220VAC or
-30VDC.
+A collection of LEDs is used to give configuration feedback and
+indicate operating status.
 
 A bank of LEDs indicates the state of each output channel.
 
-The module's CAN/NMEA bus connection is designed to support an
-NMEA 2000 compatible M12 5-pin male circular connector, but
-other connector types can be substituted.
-A DIL switch allows a 120 Ohm resistor to be connected across
-the host data bus permitting the module to be installed as
-either a drop node or a bus termination node.
-
-The module's switchbank instance number is configured using
-two rotary hex switches.
-
-### Firmware
+The relay output sub-system consists of up to three H-bridge driver
+ICs, each of which supports two output channels by providing a
+polarity reversing drive for two bistable SPDT relays.
+The use of latching relays has the dual benefit of preserving relay
+states in the event of bus failure and of minimising the power consumed
+by relay operation.
+Each relay presents zero-volt CO, NC and NO connections through
+a pluggable terminal block rated for switching 5A at 220VAC or
+30VDC.
 
 __ROM104__'s stock firmware receives switchbank status instructions
 over NMEA and queues any requested relay state change operations so
