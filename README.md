@@ -94,7 +94,7 @@ message types.
 | U1,U4,U5 | Relay output | [L293D quadruple half-H driver](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) | [714-0622](https://uk.rs-online.com/web/p/motor-driver-ics/7140622) |
 | K1-K6    | Relay output | [TE Connectivity 5A latching relay](https://docs.rs-online.com/39e5/0900766b81397a52.pdf) | [616-8584](https://uk.rs-online.com/web/p/power-relays/6168584) |
 | J1,J2,J4 | Relay output | [Terminal block header](https://docs.rs-online.com/0a3e/0900766b8157d660.pdf) | [897-1272](https://uk.rs-online.com/web/p/pcb-headers/8971272) |
-| C2-C7    | CAN interface | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
+| C2-C7    | Relay output | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
 
 ### Assembly
 
