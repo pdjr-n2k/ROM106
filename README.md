@@ -3,7 +3,7 @@
 This project implements an NMEA 2000 relay output module with
 support for up to six relay output channels.
 You may want to check out
-[SIM108](https://github.com/preeve9534/SIM108/); 
+[SIM108](https://github.com/preeve9534/SIM108/),
 a complementary project that implements an eight-channel NMEA
 2000 switch input module.
 
