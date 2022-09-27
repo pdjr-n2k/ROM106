@@ -48,6 +48,7 @@
 #include <DilSwitch.h>
 #include <arraymacros.h>
 #include <Scheduler.h>
+#include <Debouncer.h>
 
 /**********************************************************************
  * SERIAL DEBUG
@@ -78,28 +79,32 @@
  * GPIO pin definitions for the Teensy 3.2 MCU and some collections
  * that can be used as array initialisers
  */
-#define GPIO_CH0_LED 0
-#define GPIO_CH1_LED 1
-#define GPIO_CH2_LED 2
-#define GPIO_RELAY_RST 7
-#define GPIO_RELAY_SET 8
-#define GPIO_CH3_RELAY_ENABLE 9
-#define GPIO_CH2_RELAY_ENABLE 10
-#define GPIO_CH1_RELAY_ENABLE 11
-#define GPIO_CH0_RELAY_ENABLE 12
+#define GPIO_MPX_CLOCK 0                   GPIO_CH0_LED 0
+#define GPIO_MPX_LATCH 1
+#define GPIO_MPX_DATA 2
+#define GPIO_CAN_TX 3
+#define GPIO_CAN_RX 4
+#define GPIO_INSTANCE_BIT0 5
+#define GPIO_INSTANCE_BIT1 6
+#define GPIO_INSTANCE_BIT2 7
+#define GPIO_INSTANCE_BIT3 8
+#define GPIO_INSTANCE_BIT4 9
+#define GPIO_INSTANCE_BIT5 10
+#define GPIO_INSTANCE_BIT6 11
+#define GPIO_INSTANCE_BIT7 12
 #define GPIO_POWER_LED 13
-#define GPIO_ENCODER_BIT0 14
-#define GPIO_ENCODER_BIT1 15
-#define GPIO_ENCODER_BIT2 16
-#define GPIO_ENCODER_BIT3 17
-#define GPIO_ENCODER_BIT4 18
-#define GPIO_ENCODER_BIT5 19
-#define GPIO_ENCODER_BIT6 20
-#define GPIO_ENCODER_BIT7 21
-#define GPIO_CH3_LED 23
-#define GPIO_ENCODER_PINS { GPIO_ENCODER_BIT0, GPIO_ENCODER_BIT1, GPIO_ENCODER_BIT2, GPIO_ENCODER_BIT3, GPIO_ENCODER_BIT4, GPIO_ENCODER_BIT5, GPIO_ENCODER_BIT6, GPIO_ENCODER_BIT7 }
-#define GPIO_INPUT_PINS { GPIO_ENCODER_BIT0, GPIO_ENCODER_BIT1, GPIO_ENCODER_BIT2, GPIO_ENCODER_BIT3, GPIO_ENCODER_BIT4, GPIO_ENCODER_BIT5, GPIO_ENCODER_BIT6, GPIO_ENCODER_BIT7 }
-#define GPIO_OUTPUT_PINS { GPIO_POWER_LED, GPIO_CH0_RELAY_ENABLE, GPIO_CH0_LED, GPIO_CH1_RELAY_ENABLE, GPIO_CH1_LED, GPIO_CH2_RELAY_ENABLE, GPIO_CH2_LED, GPIO_CH3_RELAY_ENABLE, GPIO_CH3_LED, GPIO_RELAY_SET, GPIO_RELAY_RST }
+#define GPIO_PRG 14
+#define GPIO_RELAY5_ENABLE 16
+#define GPIO_RELAY4_ENABLE 17
+#define GPIO_RELAY3_ENABLE 18
+#define GPIO_RELAY2_ENABLE 19
+#define GPIO_RELAY1_ENABLE 20
+#define GPIO_RELAY0_ENABLE 21
+#define GPIO_RELAY_SET 22
+#define GPIO_RELAY_RST 23
+#define GPIO_INSTANCE_PINS { GPIO_INSTANCE_BIT0, GPIO_INSTANCE_BIT1, GPIO_INSTANCE_BIT2, GPIO_INSTANCE_BIT3, GPIO_INSTANCE_BIT4, GPIO_INSTANCE_BIT5, GPIO_INSTANCE_BIT6, GPIO_INSTANCE_BIT7 }
+#define GPIO_INPUT_PINS { GPIO_PRG, GPIO_INSTANCE_BIT0, GPIO_INSTANCE_BIT1, GPIO_INSTANCE_BIT2, GPIO_INSTANCE_BIT3, GPIO_INSTANCE_BIT4, GPIO_INSTANCE_BIT5, GPIO_INSTANCE_BIT6, GPIO_INSTANCE_BIT7 }
+#define GPIO_OUTPUT_PINS { GPIO_POWER_LED, GPIO_MPX_CLOCK, GPIO_MPX_LATCH, GPIO_MPX_DATA, GPIO_RELAY0_ENABLE, GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
 
 /**********************************************************************
  * DEVICE INFORMATION
@@ -139,7 +144,7 @@
 #define PRODUCT_LEN 1
 #define PRODUCT_N2K_VERSION 2101
 #define PRODUCT_SERIAL_CODE "002-849" // PRODUCT_CODE + DEVICE_UNIQUE_NUMBER
-#define PRODUCT_TYPE "ROM104"
+#define PRODUCT_TYPE "ROM106"
 #define PRODUCT_VERSION "1.0 (Mar 2022)"
 
 /**********************************************************************
@@ -183,10 +188,10 @@ typedef struct { unsigned long PGN; void (*Handler)(const tN2kMsg &N2kMsg); } tN
 tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0L, 0 } };
 
 /**********************************************************************
- * DIL_SWITCH switch decoder.
+ * DIL_SWITCH switch decoder for module instance address.
  */
-int ENCODER_PINS[] = GPIO_ENCODER_PINS;
-DilSwitch DIL_SWITCH (ENCODER_PINS, ELEMENTCOUNT(ENCODER_PINS));
+int INSTANCE_PINS[] = GPIO_INSTANCE_PINS;
+DilSwitch DIL_SWITCH (INSTANCE_PINS, ELEMENTCOUNT(INSTANCE_PINS));
 
 /**********************************************************************
  * SCHEDULER callback scheduler.
@@ -214,7 +219,7 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
  * SWITCHBANK_STATUS - working storage for holding the most recently
  * read state of the Teensy switch inputs.
  */
-bool SWITCHBANK_STATUS[] = { false, false, false, false };
+bool SWITCHBANK_STATUS[] = { false, false, false, false, false, false };
 
 /**********************************************************************
  * MAIN PROGRAM - setup()
@@ -311,14 +316,15 @@ void processRelayOperationQueueMaybe() {
   static bool operating = true;
   int opcode;
 
-
   if (now > deadline) {
 
     if (operating) {
-      digitalWrite(GPIO_CH0_RELAY_ENABLE, 0);
-      digitalWrite(GPIO_CH1_RELAY_ENABLE, 0);
-      digitalWrite(GPIO_CH2_RELAY_ENABLE, 0);
-      digitalWrite(GPIO_CH3_RELAY_ENABLE, 0);
+      digitalWrite(GPIO_RELAY0_ENABLE, 0);
+      digitalWrite(GPIO_RELAY1_ENABLE, 0);
+      digitalWrite(GPIO_RELAY2_ENABLE, 0);
+      digitalWrite(GPIO_RELAY3_ENABLE, 0);
+      digitalWrite(GPIO_RELAY4_ENABLE, 0);
+      digitalWrite(GPIO_RELAY5_ENABLE, 0);
       operating = false;
     }
     if (!RELAY_OPERATION_QUEUE.isEmpty()) {
@@ -329,10 +335,12 @@ void processRelayOperationQueueMaybe() {
         digitalWrite(GPIO_RELAY_SET, 0); digitalWrite(GPIO_RELAY_RST, 1);
       }
       switch (opcode) {
-        case 1: case -1: digitalWrite(GPIO_CH0_RELAY_ENABLE, 1); break;
-        case 2: case -2: digitalWrite(GPIO_CH1_RELAY_ENABLE, 1); break;
-        case 3: case -3: digitalWrite(GPIO_CH2_RELAY_ENABLE, 1); break;
-        case 4: case -4: digitalWrite(GPIO_CH3_RELAY_ENABLE, 1); break;
+        case 1: case -1: digitalWrite(GPIO_RELAY0_ENABLE, 1); break;
+        case 2: case -2: digitalWrite(GPIO_RELAY1_ENABLE, 1); break;
+        case 3: case -3: digitalWrite(GPIO_RELAY2_ENABLE, 1); break;
+        case 4: case -4: digitalWrite(GPIO_RELAY3_ENABLE, 1); break;
+        case 5: case -5: digitalWrite(GPIO_RELAY4_ENABLE, 1); break;
+        case 6: case -6: digitalWrite(GPIO_RELAY5_ENABLE, 1); break;
         default: break;
       }
       operating = true;
@@ -358,6 +366,8 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
     Serial.print(" "); Serial.print((status[1])?"1":"0"); 
     Serial.print(" "); Serial.print((status[2])?"1":"0"); 
     Serial.print(" "); Serial.println((status[3])?"1":"0"); 
+    Serial.print(" "); Serial.println((status[4])?"1":"0"); 
+    Serial.print(" "); Serial.println((status[5])?"1":"0"); 
     #endif
 
     transmitPGN127501(instance, status);
@@ -373,10 +383,10 @@ void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool fo
  * of <status>.
  */ 
 void updateLeds(bool *status) {
-  digitalWrite(GPIO_CH0_LED, (status[0])?1:0);
-  digitalWrite(GPIO_CH1_LED, (status[1])?1:0);
-  digitalWrite(GPIO_CH2_LED, (status[2])?1:0);
-  digitalWrite(GPIO_CH3_LED, (status[3])?1:0);
+  int out = (status[0]?1:0) & (status[1]?2:0) & (status[2]?4:0) & (status[3]?8:0) & (status[4]?16:0) & (status[5]?32:0);
+  digitalWrite(GPIO_MPX_LATCH, 0);
+  shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, out);
+  digitalWrite(GPIO_MPX_LATCH, 1);
 }
 
 /**********************************************************************
@@ -393,6 +403,8 @@ void transmitPGN127501(unsigned char instance, bool *status) {
   N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[1]), 2);
   N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[2]), 3);
   N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[3]), 4);
+  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[4]), 5);
+  N2kSetStatusBinaryOnStatus(N2kBinaryStatus, bool2tN2kOnOff(status[5]), 6);
 
   SetN2kPGN127501(N2kMsg, instance, N2kBinaryStatus);
   NMEA2000.SendMsg(N2kMsg);
