@@ -71,28 +71,31 @@ message types.
 
 ### Parts list
 
-| REF   | Subsystem       | Component               | RS Part#|
-| :---  | :---            | :---                    | :--- |
-| --    | ENC             | [Plastic flanged enclosure](https://docs.rs-online.com/1460/0900766b814af994.pdf) | [919-0357](https://uk.rs-online.com/web/p/general-purpose-enclosures/9190357) |
-| --    | PCB             | [PCB](./ROM104.brd.pdf) | |
-| U5    | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
-| C3    | Microcontroller | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
-| SW1   | Microcontroller | [8-way SPST DIP switch](https://docs.rs-online.com/c98b/0900766b810b550f.pdf) | [756-1347](https://uk.rs-online.com/web/p/dip-sip-switches/7561347/) |
-| U4    | Power supply    | [TracoPower TMR-2411 DC-DC converter](https://docs.rs-online.com/1b79/0900766b8172f5cb.pdf) | [433-8258](https://uk.rs-online.com/web/p/dc-dc-converters/4338258) |
-| F1    | Power supply    | [1A resettable fuse](https://docs.rs-online.com/ec39/0900766b80bc9043.pdf) | [657-1772](https://uk.rs-online.com/web/p/resettable-fuses/6571772) |
-| C2    | Power supply    | [1000uF aluminium capacitor](https://docs.rs-online.com/0d4a/0900766b815816c4.pdf) | [711-1149](https://uk.rs-online.com/web/p/aluminium-capacitors/7111148) |
-| U3    | CAN interface   | [MCP2551-I/P CAN transceiver](https://docs.rs-online.com/f763/0900766b8140ba57.pdf) | [876-7259](https://uk.rs-online.com/web/p/can-interface-ics/8767259) | 
-| C1    | CAN interface   | [100nF ceramic capacitor](https://docs.rs-online.com/554d/0900766b817069f5.pdf)| [538-1427](https://uk.rs-online.com/web/p/mlccs-multilayer-ceramic-capacitors/5381427) |
-| R5    | CAN interface   | [4K7 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7260](https://uk.rs-online.com/web/p/through-hole-resistors/7077726) |
-| SW2   | CAN interface   | [2-way SPST DIP switch](https://docs.rs-online.com/a014/0900766b81670159.pdf) | [177-4261](https://uk.rs-online.com/web/p/dip-sip-switches/1774261) |
-| R6    | CAN interface   | [120R 0.5W resistor](https://docs.rs-online.com/1e48/0900766b8157ae0f.pdf) | [707-8154](https://uk.rs-online.com/web/p/through-hole-resistors/7078154) |
-| J2    | CAN interface   | [Terminal block 1x5 2.54"](https://docs.rs-online.com/85fb/0900766b816edda7.pdf) | [220-4298](https://uk.rs-online.com/web/p/pcb-terminal-blocks/2204298) |
-| J2*   | CAN interface   | [M12 5-pin male connector ](https://docs.rs-online.com/6e45/A700000007926144.pdf) | [877-1154](https://uk.rs-online.com/web/p/industrial-circular-connectors/8771154) |
-| U1,U2 | Relay output    | [L293D quadruple half-H driver](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) | [714-0622](https://uk.rs-online.com/web/p/motor-driver-ics/7140622) |
-| K1,K2,K3,K4 | Relay output | [TE Connectivity 5A latching relay](https://docs.rs-online.com/39e5/0900766b81397a52.pdf) | [616-8584](https://uk.rs-online.com/web/p/power-relays/6168584) |
-| J1 | Relay output | [Wurth 401B terminal block](https://docs.rs-online.com/238a/0900766b8173e753.pdf) | [191-7518](https://uk.rs-online.com/web/p/pcb-terminal-blocks/1917518) |
-| D1,D2,D3,D4 | User interface | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
-| R1,R2,R3,R4 | User interface | [470R 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7726](https://uk.rs-online.com/web/p/through-hole-resistors/7077726/) |
+| REF      | Subsystem       | Component               | RS Part#|
+| :---     | :---            | :---                    | :--- |
+| --       | ENC             | [Plastic flanged enclosure](https://docs.rs-online.com/1460/0900766b814af994.pdf) | [919-0357](https://uk.rs-online.com/web/p/general-purpose-enclosures/9190357) |
+| --       | PCB             | [PCB](./ROM104.brd.pdf) | |
+| U7       | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
+| C8       | Microcontroller | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
+| SW1      | Configuration   | [8-way SPST DIP switch](https://docs.rs-online.com/c98b/0900766b810b550f.pdf) | [756-1347](https://uk.rs-online.com/web/p/dip-sip-switches/7561347/) |
+| SW2      | Configuration   | [2-way SPST DIP switch](https://docs.rs-online.com/a014/0900766b81670159.pdf) | [177-4261](https://uk.rs-online.com/web/p/dip-sip-switches/1774261) |
+| SW3      | Configuration   | [Push button](https://docs.rs-online.com/9eaa/0900766b81403991.pdf) | [010-2327](https://uk.rs-online.com/web/p/keyboard-switches/0102327) |
+| U6       | Display         | [74HC595 shift register](https://uk.rs-online.com/web/p/counter-ics/7091971) | [709-1971](https://uk.rs-online.com/web/p/counter-ics/7091971) |
+| C9       | Display         | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
+| D1-D8    | Display         | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
+| RN1      | Display         | [470R 8x resistor array](https://docs.rs-online.com/d532/0900766b8069ccfd.pdf) | [522-4273](https://uk.rs-online.com/web/p/resistor-arrays/5224273) |
+| U3       | Power supply    | [TracoPower TMR-2411 DC-DC converter](https://docs.rs-online.com/1b79/0900766b8172f5cb.pdf) | [433-8258](https://uk.rs-online.com/web/p/dc-dc-converters/4338258) |
+| F1       | Power supply    | [1A resettable fuse](https://docs.rs-online.com/ec39/0900766b80bc9043.pdf) | [657-1772](https://uk.rs-online.com/web/p/resettable-fuses/6571772) |
+| U2       | CAN interface   | [MCP2551-I/P CAN transceiver](https://docs.rs-online.com/f763/0900766b8140ba57.pdf) | [876-7259](https://uk.rs-online.com/web/p/can-interface-ics/8767259) | 
+| C1       | CAN interface | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
+| R1       | CAN interface   | [4K7 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7260](https://uk.rs-online.com/web/p/through-hole-resistors/7077726) |
+| R2       | CAN interface   | [120R 0.5W resistor](https://docs.rs-online.com/1e48/0900766b8157ae0f.pdf) | [707-8154](https://uk.rs-online.com/web/p/through-hole-resistors/7078154) |
+| J3       | CAN interface   | [Terminal block 1x5 2.54"](https://docs.rs-online.com/85fb/0900766b816edda7.pdf) | [220-4298](https://uk.rs-online.com/web/p/pcb-terminal-blocks/2204298) |
+| J3*      | CAN interface   | [M12 5-pin male connector ](https://docs.rs-online.com/6e45/A700000007926144.pdf) | [877-1154](https://uk.rs-online.com/web/p/industrial-circular-connectors/8771154) |
+| U1,U4,U5 | Relay output | [L293D quadruple half-H driver](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) | [714-0622](https://uk.rs-online.com/web/p/motor-driver-ics/7140622) |
+| K1-K6    | Relay output | [TE Connectivity 5A latching relay](https://docs.rs-online.com/39e5/0900766b81397a52.pdf) | [616-8584](https://uk.rs-online.com/web/p/power-relays/6168584) |
+| J1,J2,J4 | Relay output | [Terminal block header](https://docs.rs-online.com/0a3e/0900766b8157d660.pdf) | [897-1272](https://uk.rs-online.com/web/p/pcb-headers/8971272) |
+| C2-C7    | CAN interface | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
 
 ### Assembly
 
