@@ -20,19 +20,21 @@ The module is powered from the NMEA bus and has an LEN of 1.0.
 
 ## Design overview
 
-__ROM106__ has a microcontroller based design incorporating
-power-supply, CAN interface, configuration, display and relay
-output sub-systems.
+__ROM106__ uses a Teensy 3.2 microcontroller supported by
+power supply, CAN interface, switch-based configuration, LED
+display and relay output sub-systems.
 
 The module power supply consists of a solid-state DC-DC converter
-which adapts NMEA bus power to the 5VDC required by all module
-electronics.
-The supply is rated at 2W and bus connection is fused and reverse
-polarity protected.
+which adapts the voltage of the NMEA host NMEA bus to the 5VDC
+required by all module electronics.
+The power supply is rated at 2W and the bus connection is fused
+and reverse polarity protected.
 
-An industry standard CAN interface manages NMEA bus I/O and is
-allows the module to be installer configured as either a bus drop
-node or a bus termination node.
+The CAN interface is implemented by an industry standard IC which
+manages NMEA bus I/O.
+The data bus connection can be switched to include a 120 Ohm bus
+termination resistor allowing the module to be installed as either
+a bus drop node or a bus termination node.
 
 The configuration interface consists of an 8-position DIL switch
 and push-button which allow installer configuration of the module's
@@ -47,11 +49,11 @@ The relay output sub-system consists of up to three H-bridge driver
 ICs, each of which supports two output channels by providing a
 polarity reversing drive for two bistable SPDT relays.
 The use of latching relays has the dual benefit of preserving relay
-states in the event of bus failure and of minimising the power consumed
-by relay operation.
+states in the event of bus failure and of minimising the bus power
+consumed by relay operation.
 Each relay presents zero-volt CO, NC and NO connections through
-a pluggable terminal block rated for switching 5A at 220VAC or
-30VDC.
+a pluggable terminal block and the relay and connections are rated
+for 5A at up to 220VAC/30VDC.
 
 __ROM104__'s stock firmware receives switchbank status instructions
 over NMEA and queues any requested relay state change operations so
