@@ -79,6 +79,7 @@ message types.
 | SW1      | Configuration   | [8-way SPST DIP switch](https://docs.rs-online.com/c98b/0900766b810b550f.pdf) | [756-1347](https://uk.rs-online.com/web/p/dip-sip-switches/7561347/) |
 | SW2      | Configuration   | [2-way SPST DIP switch](https://docs.rs-online.com/a014/0900766b81670159.pdf) | [177-4261](https://uk.rs-online.com/web/p/dip-sip-switches/1774261) |
 | SW3      | Configuration   | [Push button](https://docs.rs-online.com/9eaa/0900766b81403991.pdf) | [010-2327](https://uk.rs-online.com/web/p/keyboard-switches/0102327) |
+| ??       | Configuration   | [MAX6816 debouncer](https://docs.rs-online.com/617e/0900766b81729403.pdf) | [189-9248](https://uk.rs-online.com/web/p/bounce-eliminator-ics/1899248) |
 | U6       | Display         | [74HC595 shift register](https://uk.rs-online.com/web/p/counter-ics/7091971) | [709-1971](https://uk.rs-online.com/web/p/counter-ics/7091971) |
 | C9       | Display         | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
 | D1-D8    | Display         | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
