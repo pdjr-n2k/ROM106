@@ -171,6 +171,7 @@ void updateLeds(unsigned char status);
 void processRelayOperationQueueMaybe();
 tN2kOnOff bool2tN2kOnOff(bool state);
 bool tN2kOnOff2bool(tN2kOnOff state);
+void isr();
 
 /**********************************************************************
  * PGNs of messages transmitted by this program.
@@ -262,6 +263,9 @@ void setup() {
   NMEA2000.ExtendTransmitMessages(TransmitMessages); // Tell library which PGNs we transmit
   NMEA2000.SetMsgHandler(messageHandler);
   NMEA2000.Open();
+
+  // Attach interrupt service routine to PRG button
+  attachInterrupt(digitalPinToInterrupt(GPIO_PRG), isr, RISING);
 }
 
 /**********************************************************************
@@ -296,6 +300,14 @@ void loop() {
 
   // Process deferred callbacks.
   SCHEDULER.loop();
+}
+
+/**********************************************************************
+ * MAIN PROGRAM - interrupt service routine
+ */
+void isr() {
+  DIL_SWITCH.sample();
+  SWITCHBANK_INSTANCE = DIL_SWITCH.value();
 }
 
 /**********************************************************************
