@@ -136,8 +136,10 @@ and then install it in its normal operating location.
    Locate the INSTANCE switch and PRG buttons on the PCB.
    Set INSTANCE[0..7] to a binary representation of your chosen, unique,
    instance address in the range 0 through 252.
-   Press the PRG button to store the address in the module's
-   persistent storage.
+   The module reads the INSTANCE value on boot; if you need to make a
+   change whilst the module is operating, then set the DIL switch to the
+   required value and press the PRG button to immediately activate the new
+   instance number.
    
 ### Relay connections
 
