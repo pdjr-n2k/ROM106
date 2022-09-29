@@ -303,7 +303,7 @@ void loop() {
 }
 
 /**********************************************************************
- * MAIN PROGRAM - interrupt service routine
+ * MAIN PROGRAM - isr()
  */
 void isr() {
   DIL_SWITCH.sample();
