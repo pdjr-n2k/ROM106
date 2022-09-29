@@ -30,11 +30,10 @@ the 5VDC required by the module's electronics.
 The power supply is rated at 2W and its bus connection is fused
 and reverse polarity protected.
 
-The CAN interface sub-system is implemented by an industry standard
-IC which manages all NMEA bus I/O.
-The data bus connection can be switched to include a 120 Ohm bus
-termination resistor allowing the module to be installed as either
-a bus termination node or a drop node.
+The CAN interface sub-system manages all NMEA data bus I/O.
+The data bus connection can be switched by the installer to
+include a 120 Ohm bus termination resistor allowing the module
+to be installed as either a bus termination node or a drop node.
 
 The configuration sub-system consists of an 8-position DIL switch
 and push-button which allow installer configuration of the module's
@@ -44,7 +43,7 @@ The display sub-system provides a collection of LEDs which are used
 to give configuration feedback and indicate the module operating
 status.
 
-The relay output sub-system consists of up to three H-bridge driver
+The relay output sub-system consists of three H-bridge driver
 ICs, each of which supports two output channels by providing a
 polarity reversing drive for two bistable SPDT relays.
 The use of bistable relays has the dual benefit of persisting relay
@@ -108,7 +107,8 @@ connected to the J3 header.
 
 D1 through D8 can be soldered with long leads and holes drilled in
 ENCLOSURE to expose the LED lenses or (and preferably), each LED can
-be elaborated with a light pipe mounted to the enclosure.
+be mounted normally on the PCB and elaborated with a light pipe
+mounted to the enclosure.
 
 ## Use
 
@@ -146,12 +146,27 @@ and then install it in its normal operating location.
 1. Each relay output channel supports CO (COmmon), NO (Normally Open) and NC
    (Normally Closed) connections.
 
-2. Connected a terminal plug to the external circuits which you wish to operate
+2. Connect a terminal plug to each external circuits you wish to operate
    and plug the terminal into the appropriate module relay output header.
+   Make sure to fuse the switched load at or below the 5A relay limit.
+   If the switched load is inductive, then use of a flyback diode may be
+   a prudent way of protecting the relay output.
 
 ### Operation
 
 The module will enter operation immediately upon connection to the NMEA bus.
-All eight status LEDs will illuminate briefly to indicate the module's
-configured instance number and will then revert to displaying the state of
-each relay output channel. 
+
+Immediately power is applied to the module the eight display LEDs are set
+to indicate the module's configured instance number.
+After a few seconds the display LED's will be used in the following way.
+
+| LED   | State | Meaning |
+| :---: | :---: | :--- |
+| 1     | ON    | The module has started (and by implication is receiving power from the NMEA bus). |
+| 2     | FLASH | The module is transmitting a status report. |
+| 3     | ON    | Output channel 1 is ON |
+| 4     | ON    | Output channel 2 is ON |
+| 5     | ON    | Output channel 3 is ON |
+| 6     | ON    | Output channel 4 is ON |
+| 7     | ON    | Output channel 5 is ON |
+| 8     | ON    | Output channel 6 is ON |
