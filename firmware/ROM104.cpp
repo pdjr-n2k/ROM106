@@ -94,17 +94,17 @@
 #define GPIO_INSTANCE_BIT7 12
 #define GPIO_POWER_LED 13
 #define GPIO_PRG 14
-#define GPIO_RELAY5_ENABLE 16
-#define GPIO_RELAY4_ENABLE 17
-#define GPIO_RELAY3_ENABLE 18
-#define GPIO_RELAY2_ENABLE 19
-#define GPIO_RELAY1_ENABLE 20
-#define GPIO_RELAY0_ENABLE 21
+#define GPIO_RELAY6_ENABLE 16
+#define GPIO_RELAY5_ENABLE 17
+#define GPIO_RELAY4_ENABLE 18
+#define GPIO_RELAY3_ENABLE 19
+#define GPIO_RELAY2_ENABLE 20
+#define GPIO_RELAY1_ENABLE 21
 #define GPIO_RELAY_SET 22
 #define GPIO_RELAY_RST 23
 #define GPIO_INSTANCE_PINS { GPIO_INSTANCE_BIT0, GPIO_INSTANCE_BIT1, GPIO_INSTANCE_BIT2, GPIO_INSTANCE_BIT3, GPIO_INSTANCE_BIT4, GPIO_INSTANCE_BIT5, GPIO_INSTANCE_BIT6, GPIO_INSTANCE_BIT7 }
 #define GPIO_INPUT_PINS { GPIO_PRG, GPIO_INSTANCE_BIT0, GPIO_INSTANCE_BIT1, GPIO_INSTANCE_BIT2, GPIO_INSTANCE_BIT3, GPIO_INSTANCE_BIT4, GPIO_INSTANCE_BIT5, GPIO_INSTANCE_BIT6, GPIO_INSTANCE_BIT7 }
-#define GPIO_OUTPUT_PINS { GPIO_POWER_LED, GPIO_MPX_CLOCK, GPIO_MPX_LATCH, GPIO_MPX_DATA, GPIO_RELAY0_ENABLE, GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
+#define GPIO_OUTPUT_PINS { GPIO_POWER_LED, GPIO_MPX_CLOCK, GPIO_MPX_LATCH, GPIO_MPX_DATA, GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY6_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
 
 /**********************************************************************
  * DEVICE INFORMATION
@@ -165,12 +165,10 @@
  */
 void messageHandler(const tN2kMsg&);
 void handlePGN127502(const tN2kMsg n2kMsg);
-void transmitSwitchbankStatusMaybe(unsigned char instance, bool *status, bool force = false);
-void transmitPGN127501(unsigned char instance, bool *status);
-void updateLeds(unsigned char status);
+void transmitSwitchbankStatusMaybe(bool force = false);
+void transmitPGN127501();
+void updateLeds(bool transmit);
 void processRelayOperationQueueMaybe();
-tN2kOnOff bool2tN2kOnOff(bool state);
-bool tN2kOnOff2bool(tN2kOnOff state);
 void isr();
 
 /**********************************************************************
@@ -334,12 +332,12 @@ void processRelayOperationQueueMaybe() {
   if (now > deadline) {
 
     if (operating) {
-      digitalWrite(GPIO_RELAY0_ENABLE, 0);
       digitalWrite(GPIO_RELAY1_ENABLE, 0);
       digitalWrite(GPIO_RELAY2_ENABLE, 0);
       digitalWrite(GPIO_RELAY3_ENABLE, 0);
       digitalWrite(GPIO_RELAY4_ENABLE, 0);
       digitalWrite(GPIO_RELAY5_ENABLE, 0);
+      digitalWrite(GPIO_RELAY6_ENABLE, 0);
       operating = false;
     }
     if (!RELAY_OPERATION_QUEUE.isEmpty()) {
@@ -350,12 +348,12 @@ void processRelayOperationQueueMaybe() {
         digitalWrite(GPIO_RELAY_SET, 0); digitalWrite(GPIO_RELAY_RST, 1);
       }
       switch (opcode) {
-        case 1: case -1: digitalWrite(GPIO_RELAY0_ENABLE, 1); break;
-        case 2: case -2: digitalWrite(GPIO_RELAY1_ENABLE, 1); break;
-        case 3: case -3: digitalWrite(GPIO_RELAY2_ENABLE, 1); break;
-        case 4: case -4: digitalWrite(GPIO_RELAY3_ENABLE, 1); break;
-        case 5: case -5: digitalWrite(GPIO_RELAY4_ENABLE, 1); break;
-        case 6: case -6: digitalWrite(GPIO_RELAY5_ENABLE, 1); break;
+        case 1: case -1: digitalWrite(GPIO_RELAY1_ENABLE, 1); break;
+        case 2: case -2: digitalWrite(GPIO_RELAY2_ENABLE, 1); break;
+        case 3: case -3: digitalWrite(GPIO_RELAY3_ENABLE, 1); break;
+        case 4: case -4: digitalWrite(GPIO_RELAY4_ENABLE, 1); break;
+        case 5: case -5: digitalWrite(GPIO_RELAY5_ENABLE, 1); break;
+        case 6: case -6: digitalWrite(GPIO_RELAY6_ENABLE, 1); break;
         default: break;
       }
       operating = true;
@@ -388,9 +386,8 @@ void transmitSwitchbankStatusMaybe(bool force) {
 
     transmitPGN127501();
     
-    SWITCHBANK_STATUS.states.transmitting = 1;
     updateLeds(true);
-    SCHEDULER.schedule([](){ SWITCHBANK_STATUS.states.transmitting = 0; updateLeds(false); }, 50);
+    SCHEDULER.schedule([](){ updateLeds(false); }, 50);
 
     deadline = (now + PGN127501_TRANSMIT_INTERVAL);
   }
