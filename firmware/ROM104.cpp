@@ -305,6 +305,9 @@ void loop() {
 
 /**********************************************************************
  * MAIN PROGRAM - isr()
+ * 
+ * Invoked by a press of the PRG button. Updates SWITCHBANK_INSTANCE
+ * from the DIL switch setting.
  */
 void isr() {
   DIL_SWITCH.sample();
@@ -313,15 +316,28 @@ void isr() {
 
 /**********************************************************************
  * processRelayOperationQueueMaybe() should be called directly from
- * loop. The function is triggered each RELAY_OPERATION_QUEUE_INTERVAL
- * to terminate any previously triggered relay operating signal and to
- * process any queued request for relay operation.  It is important that
- * the function's operating interval is at least as long as the minimum
- * operating signal hold period of the physical relays installed on the
- * host PCB.
+ * loop.
  * 
- * The function operates an H-bridge interface, setting output polarity
- * and then issuing an enable signal on the selected relay. 
+ * The function is will execute each RELAY_OPERATION_QUEUE_INTERVAL and
+ * it is important that this constant is set to a value equal to or
+ * greater than the minimum operating signal hold period of the
+ * physical relays installed on the host PCB. For most latching
+ * relays this will be around 20ms.
+ * 
+ * The function begins by switching off all H-bridge outputs, ensuring
+ * that any output that may have been switched on in the previous
+ * operating cycle is terminated.
+ * 
+ * The RELAY_OPERATION_QUEUE is checked and any head entry opcode is
+ * removed and processed. The retrieved opcode will be a signed integer
+ * whose absolute value specifies an output channel and whose sign
+ * indicates whether the channel should be turned on (set) or turned
+ * off (reset).
+ * 
+ * The function sets up H-bridge SET and RST GPIOs appropriately and
+ * then switches on the selected channel's ENABLE GPIO, thus energising
+ * the associated relay coil. A call is made to request transmission of
+ * an NMEA message signalling the state change.
  */
 void processRelayOperationQueueMaybe() {
   static unsigned long deadline = 0UL;
@@ -348,16 +364,34 @@ void processRelayOperationQueueMaybe() {
         digitalWrite(GPIO_RELAY_SET, 0); digitalWrite(GPIO_RELAY_RST, 1);
       }
       switch (opcode) {
-        case 1: case -1: digitalWrite(GPIO_RELAY1_ENABLE, 1); N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 1, ); break;
-        case 2: case -2: digitalWrite(GPIO_RELAY2_ENABLE, 1); break;
-        case 3: case -3: digitalWrite(GPIO_RELAY3_ENABLE, 1); break;
-        case 4: case -4: digitalWrite(GPIO_RELAY4_ENABLE, 1); break;
-        case 5: case -5: digitalWrite(GPIO_RELAY5_ENABLE, 1); break;
-        case 6: case -6: digitalWrite(GPIO_RELAY6_ENABLE, 1); break;
+        case 1: case -1:
+          digitalWrite(GPIO_RELAY1_ENABLE, 1);
+          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 1, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          break;
+        case 2: case -2:
+          digitalWrite(GPIO_RELAY2_ENABLE, 1);
+          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 2, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          break;
+        case 3: case -3:
+          digitalWrite(GPIO_RELAY3_ENABLE, 1);
+          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 3, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          break;
+        case 4: case -4:
+          digitalWrite(GPIO_RELAY4_ENABLE, 1);
+          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 4, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          break;
+        case 5: case -5:
+          digitalWrite(GPIO_RELAY5_ENABLE, 1);
+          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 5, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          break;
+        case 6: case -6:
+          digitalWrite(GPIO_RELAY6_ENABLE, 1);
+          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 6, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          break;
         default: break;
       }
       operating = true;
-
+      transmitSwitchbankStatusMaybe(true);
     }
     
     deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
@@ -366,8 +400,13 @@ void processRelayOperationQueueMaybe() {
   
 /**********************************************************************
  * transmitSwitchbankStatusMaybe() should be called directly from
- * loop(). The function proceeds to transmit a switchbank binary status
- * message if PGN127501_TRANSMIT_INTERVAL has elapsed or <force> is true.
+ * loop() in which case it will operate once every
+ * PGN127501_TRANSMIT_INTERVAL milliseconds.
+ * 
+ * The function can also be called with its <force> argument set TRUE
+ * in which case it will operate immediately.
+ * 
+ * 
  */
 void transmitSwitchbankStatusMaybe(bool force) {
   static unsigned long deadline = 0UL;
@@ -386,7 +425,7 @@ void transmitSwitchbankStatusMaybe(bool force) {
     #endif
 
     transmitPGN127501();
-    
+
     updateLeds(true);
     SCHEDULER.schedule([](){ updateLeds(false); }, 50);
 
@@ -400,7 +439,7 @@ void transmitSwitchbankStatusMaybe(bool force) {
  */ 
 void updateLeds(bool transmit) {
   unsignded char out = 0;
-  for (int c = 1; c <= 6; c++) out = out + (((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0) * (2 ^ (c - 1)));
+  for (int c = 6; c >= 1; c--) out = (out << 1) | ((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0);
   out += (64 + (transmit:128:0));
   digitalWrite(GPIO_MPX_LATCH, 0);
   shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, out);
