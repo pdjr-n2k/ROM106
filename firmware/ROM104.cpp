@@ -47,8 +47,6 @@
 #include <N2kMessages.h>
 #include <DilSwitch.h>
 #include <arraymacros.h>
-#include <Scheduler.h>
-#include <Debouncer.h>
 
 /**********************************************************************
  * SERIAL DEBUG
@@ -155,7 +153,6 @@
 
 #define DEFAULT_SOURCE_ADDRESS 22           // Seed value for source address claim
 #define INSTANCE_UNDEFINED 255              // Flag value
-#define SCHEDULER_TICK 20UL                   // The frequency of scheduler management
 #define PGN127501_TRANSMIT_INTERVAL 4000UL  // Normal transmission rate
 #define RELAY_OPERATION_QUEUE_SIZE 10       // Max number of entries
 #define RELAY_OPERATION_QUEUE_INTERVAL 20UL // Frequency of relay queue processing
@@ -168,7 +165,9 @@ void messageHandler(const tN2kMsg&);
 void handlePGN127502(const tN2kMsg n2kMsg);
 void transmitSwitchbankStatusMaybe(bool force = false);
 void transmitPGN127501();
-void updateLeds(bool transmit);
+void updateLedDisplayMaybe();
+void overrideLedDisplay(unsigned char state);
+void cancelLedDisplayOverride();
 void processRelayOperationQueueMaybe();
 void isr();
 
@@ -194,11 +193,6 @@ int INSTANCE_PINS[] = GPIO_INSTANCE_PINS;
 DilSwitch DIL_SWITCH (INSTANCE_PINS, ELEMENTCOUNT(INSTANCE_PINS));
 
 /**********************************************************************
- * SCHEDULER callback scheduler.
- */
-Scheduler SCHEDULER (SCHEDULER_TICK);
-
-/**********************************************************************
  * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
  * specifies a relay (1 through 4) and an operation: SET if the opcode
  * is positive; reset if the opcode is negative. Relay operations are
@@ -222,9 +216,15 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
 tN2kBinaryStatus SWITCHBANK_STATUS;
 
 /**********************************************************************
- * FORCE_LED_UPDATE - flag which can be set to force an LED update.
+ * FORCE_LED_UPDATE - flag which can be set to force an immediate LED
+ * update.
  */
 bool FORCE_LED_UPDATE = false;
+
+/**********************************************************************
+ * OVERRIDE_LED_UPDATE - flag which can be set to prevent regular LED
+ * updates.
+ */
 bool OVERRIDE_LED_UPDATE = false;
 
 /**********************************************************************
@@ -313,9 +313,6 @@ void loop() {
 
   // Update LED display
   updateLedDisplayMaybe();
-
-  // Process deferred callbacks.
-  SCHEDULER.loop();
 }
 
 /**********************************************************************
@@ -382,32 +379,32 @@ void processRelayOperationQueueMaybe() {
       switch (opcode) {
         case 1: case -1:
           digitalWrite(GPIO_RELAY1_ENABLE, 1);
-          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 1, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 1);
           break;
         case 2: case -2:
           digitalWrite(GPIO_RELAY2_ENABLE, 1);
-          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 2, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 2);
           break;
         case 3: case -3:
           digitalWrite(GPIO_RELAY3_ENABLE, 1);
-          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 3, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 3);
           break;
         case 4: case -4:
           digitalWrite(GPIO_RELAY4_ENABLE, 1);
-          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 4, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 4);
           break;
         case 5: case -5:
           digitalWrite(GPIO_RELAY5_ENABLE, 1);
-          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 5, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 5);
           break;
         case 6: case -6:
           digitalWrite(GPIO_RELAY6_ENABLE, 1);
-          N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 6, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 6);
           break;
         default: break;
       }
       operating = true;
-      FORCE_LED_UPDATE = true;
+      transmitSwitchbankStatusMaybe(true);
     }
     
     deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
@@ -415,18 +412,25 @@ void processRelayOperationQueueMaybe() {
 }
   
 /**********************************************************************
- * transmitSwitchbankStatusMaybe() should be called directly from
- * loop() when it will operate once every PGN127501_TRANSMIT_INTERVAL
- * milliseconds. The function can also be called with <force> set TRUE
- * in which case it will operate immediately.
+ * This function is used to broadcast the switchbank status onto the
+ * host NMEA bus.  The NMEA specification requires that such broadcasts
+ * happen regularly every few seconds and immediately when there is a
+ * switchbank state change. Consequently, the function has two use
+ * patterns.
  * 
- * The function transmits a PGN 127501 status message broadcasting
- * SWITCHBANK_STATUS and updates the module LEDs to match. 
+ * transmitSwitchbankStatusMaybe() is used to implement the regular
+ * status broadcast. The function should be called from loop() and it
+ * will operate once every PGN127501_TRANSMIT_INTERVAL milliseconds.
+ * 
+ * transmitSwitchbankStatusMaybe(true) should be called immediately a
+ * switchbank channel is updated. The function will operate promptly and
+ * flag the underlying state change by setting FORCE_LED_UPDATE so that
+ * the LED display processes are advised that they need to change the
+ * module's LED display.
  */
 void transmitSwitchbankStatusMaybe(bool force) {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
-  unsigned char ledstate = 0;
 
   if ((now > deadline) || force) {
     #ifdef DEBUG_SERIAL
@@ -440,21 +444,24 @@ void transmitSwitchbankStatusMaybe(bool force) {
     #endif
 
     transmitPGN127501();
+    FORCE_LED_UPDATE = force;
 
     deadline = (now + PGN127501_TRANSMIT_INTERVAL);
   }
 }
 
 /**********************************************************************
- * This function should be called from loop(). with no <force> argument.
+ * This function should be called from loop() to perform regular and
+ * exceptional updates of the module's LED display. If
+ * OVERRIDE_LED_UPDATE is true then no display updates will be
+ * performed and the function will return directly to the caller,
  * 
- * whenever the state of an output channel changes. The module has
- * eight LED indicators connected to an output buffer - changes to the
- * display require an update of the complete buffer.
- * 
- * With no arguments, LEDs 1..6 display output channel state; LED 7
- * indicates power and LED 8 is flashed when the module transmits an
- * NMEA status update message.
+ * LED updates are normally performed every LED_UPDATE_INTERVAL, but if
+ * FORCE_LED_UPDATE is true then the update will happen immediately.
+ *
+ * FORCE_LED_UPDATE should be set true by the NMEA message transmission
+ * process each time it transmits and will result in the  "transmit" LED
+ * being switched on for a single execution cycle.
  */ 
 void updateLedDisplayMaybe() {
   static unsigned long deadline = 0UL;
@@ -464,7 +471,7 @@ void updateLedDisplayMaybe() {
   if (((now > deadline) || FORCE_LED_UPDATE) && (!OVERRIDE_LED_UPDATE)) {
     for (int c = 6; c >= 1; c--) ledstate = (ledstate << 1) | ((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0);
     ledstate |= 64; // Power LED on
-    ledstate |= 128; // Transmit LED on
+    ledstate |= (FORCE_LED_UPDATE)?128:0; // Transmit LED on
 
     digitalWrite(GPIO_MPX_LATCH, 0);
     shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, ledstate);
@@ -475,6 +482,11 @@ void updateLedDisplayMaybe() {
   }
 } 
 
+/**********************************************************************
+ * Override (i.e. stop) the normal LED updates performed by
+ * updateLedDisplayMaybe() and instead set the LED display to the value
+ * specified by <state>.
+ */ 
 void overrideLedDisplay(unsigned char state) {
   OVERRIDE_LED_UPDATE = true;
   
@@ -483,6 +495,10 @@ void overrideLedDisplay(unsigned char state) {
   digitalWrite(GPIO_MPX_LATCH, 1);
 }
 
+/**********************************************************************
+ * Cancel the override (set by a prior call to overrideLedDisplay())
+ * and resume normal update behaviour.
+ */
 void cancelLedDisplayOverride() {
   OVERRIDE_LED_UPDATE = false;
 }
