@@ -456,7 +456,6 @@ void transmitSwitchbankStatusMaybe(bool force) {
  * indicates power and LED 8 is flashed when the module transmits an
  * NMEA status update message.
  */ 
-<<<<<<< Updated upstream
 void updateLedDisplayMaybe() {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
@@ -479,14 +478,8 @@ void updateLedDisplayMaybe() {
 void overrideLedDisplay(unsigned char state) {
   OVERRIDE_LED_UPDATE = true;
   
-=======
-void updateLeds(bool transmit) {
-  unsigned char out = 0;
-  for (int c = 1; c <= 6; c++) out = out + (((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0) * (2 ^ (c - 1)));
-  out += (64 + (transmit?128:0));
->>>>>>> Stashed changes
   digitalWrite(GPIO_MPX_LATCH, 0);
-  shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, ledstate);
+  shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, state);
   digitalWrite(GPIO_MPX_LATCH, 1);
 }
 
