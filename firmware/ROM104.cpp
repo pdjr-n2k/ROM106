@@ -348,7 +348,7 @@ void processRelayOperationQueueMaybe() {
         digitalWrite(GPIO_RELAY_SET, 0); digitalWrite(GPIO_RELAY_RST, 1);
       }
       switch (opcode) {
-        case 1: case -1: digitalWrite(GPIO_RELAY1_ENABLE, 1); break;
+        case 1: case -1: digitalWrite(GPIO_RELAY1_ENABLE, 1); N2kSetStatusOnBinaryStatus(SWITCHBANK_STATUS, 1, ); break;
         case 2: case -2: digitalWrite(GPIO_RELAY2_ENABLE, 1); break;
         case 3: case -3: digitalWrite(GPIO_RELAY3_ENABLE, 1); break;
         case 4: case -4: digitalWrite(GPIO_RELAY4_ENABLE, 1); break;
@@ -357,6 +357,7 @@ void processRelayOperationQueueMaybe() {
         default: break;
       }
       operating = true;
+
     }
     
     deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
@@ -430,7 +431,6 @@ void handlePGN127502(const tN2kMsg n2kMsg) {
   unsigned char instance;
   tN2kBinaryStatus bankStatus;
   tN2kOnOff channelStatus;
-  bool changed = false;
   
   if (ParseN2kPGN127501(n2kMsg, instance, bankStatus)) {
     if (instance == SWITCHBANK_INSTANCE) {
@@ -439,13 +439,8 @@ void handlePGN127502(const tN2kMsg n2kMsg) {
         if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
           if (channelStatus != N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c)) {
             RELAY_OPERATION_QUEUE.enqueue((int) (c * ((channelStatus == N2kOnOff_On)?1:-1)));
-            changed = true;
           }
         }
-      }
-      if (changed) {
-        transmitSwitchbankStatusMaybe(true);
-        updateLeds(true);
       }
     }
   }
