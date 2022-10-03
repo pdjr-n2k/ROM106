@@ -159,6 +159,7 @@
 #define PGN127501_TRANSMIT_INTERVAL 4000UL  // Normal transmission rate
 #define RELAY_OPERATION_QUEUE_SIZE 10       // Max number of entries
 #define RELAY_OPERATION_QUEUE_INTERVAL 20UL // Frequency of relay queue processing
+#define LED_UPDATE_INTERVAL 50              // Frquency of LED display update
 
 /**********************************************************************
  * Declarations of local functions.
@@ -221,6 +222,12 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
 tN2kBinaryStatus SWITCHBANK_STATUS;
 
 /**********************************************************************
+ * FORCE_LED_UPDATE - flag which can be set to force an LED update.
+ */
+bool FORCE_LED_UPDATE = false;
+bool OVERRIDE_LED_UPDATE = false;
+
+/**********************************************************************
  * MAIN PROGRAM - setup()
  */
 void setup() {
@@ -253,6 +260,11 @@ void setup() {
   DIL_SWITCH.sample();
   SWITCHBANK_INSTANCE = DIL_SWITCH.value();
 
+  // Confirm LED operation and briefly display instance number.
+  overrideLedDisplay(0xff); delay(100);
+  overrideLedDisplay(SWITCHBANK_INSTANCE); delay(1000);
+  cancelLedDisplayOverride();
+  
   // Initialise module status
   N2kResetBinaryStatus(SWITCHBANK_STATUS);
 
@@ -298,6 +310,9 @@ void loop() {
 
   // Process relay operation queue.
   processRelayOperationQueueMaybe();
+
+  // Update LED display
+  updateLedDisplayMaybe();
 
   // Process deferred callbacks.
   SCHEDULER.loop();
@@ -356,6 +371,7 @@ void processRelayOperationQueueMaybe() {
       digitalWrite(GPIO_RELAY6_ENABLE, 0);
       operating = false;
     }
+
     if (!RELAY_OPERATION_QUEUE.isEmpty()) {
       opcode = RELAY_OPERATION_QUEUE.dequeue();
       if (opcode > 0) {
@@ -391,7 +407,7 @@ void processRelayOperationQueueMaybe() {
         default: break;
       }
       operating = true;
-      transmitSwitchbankStatusMaybe(true);
+      FORCE_LED_UPDATE = true;
     }
     
     deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
@@ -400,17 +416,17 @@ void processRelayOperationQueueMaybe() {
   
 /**********************************************************************
  * transmitSwitchbankStatusMaybe() should be called directly from
- * loop() in which case it will operate once every
- * PGN127501_TRANSMIT_INTERVAL milliseconds.
- * 
- * The function can also be called with its <force> argument set TRUE
+ * loop() when it will operate once every PGN127501_TRANSMIT_INTERVAL
+ * milliseconds. The function can also be called with <force> set TRUE
  * in which case it will operate immediately.
  * 
- * 
+ * The function transmits a PGN 127501 status message broadcasting
+ * SWITCHBANK_STATUS and updates the module LEDs to match. 
  */
 void transmitSwitchbankStatusMaybe(bool force) {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
+  unsigned char ledstate = 0;
 
   if ((now > deadline) || force) {
     #ifdef DEBUG_SERIAL
@@ -426,30 +442,55 @@ void transmitSwitchbankStatusMaybe(bool force) {
 
     transmitPGN127501();
 
-    updateLeds(true);
-    SCHEDULER.schedule([](){ updateLeds(false); }, 50);
-
     deadline = (now + PGN127501_TRANSMIT_INTERVAL);
   }
 }
 
 /**********************************************************************
- * Update the relay state indicator LEDs so that they reflect the value
- * of <status>.
+ * This function should be called from loop(). with no <force> argument.
+ * 
+ * whenever the state of an output channel changes. The module has
+ * eight LED indicators connected to an output buffer - changes to the
+ * display require an update of the complete buffer.
+ * 
+ * With no arguments, LEDs 1..6 display output channel state; LED 7
+ * indicates power and LED 8 is flashed when the module transmits an
+ * NMEA status update message.
  */ 
-void updateLeds(bool transmit) {
-  unsignded char out = 0;
-  for (int c = 6; c >= 1; c--) out = (out << 1) | ((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0);
-  out += (64 + (transmit:128:0));
+void updateLedDisplayMaybe() {
+  static unsigned long deadline = 0UL;
+  unsigned long now = millis();
+  unsigned char ledstate = 0;
+
+  if (((now > deadline) || FORCE_LED_UPDATE) && (!OVERRIDE_LED_UPDATE)) {
+    for (int c = 6; c >= 1; c--) ledstate = (ledstate << 1) | ((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0);
+    ledstate |= 64; // Power LED on
+    ledstate |= 128; // Transmit LED on
+
+    digitalWrite(GPIO_MPX_LATCH, 0);
+    shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, ledstate);
+    digitalWrite(GPIO_MPX_LATCH, 1);
+ 
+    FORCE_LED_UPDATE = false;
+    deadline = (now + LED_UPDATE_INTERVAL);
+  }
+} 
+
+void overrideLedDisplay(unsigned char state) {
+  OVERRIDE_LED_UPDATE = true;
+  
   digitalWrite(GPIO_MPX_LATCH, 0);
-  shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, out);
+  shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, ledstate);
   digitalWrite(GPIO_MPX_LATCH, 1);
 }
 
+void cancelLedDisplayOverride() {
+  OVERRIDE_LED_UPDATE = false;
+}
+
 /**********************************************************************
- * Assemble and transmit a PGN 127501 Binary Status Update message over
- * the host NMEA bus. <instance> specifies the switchbank instance
- * number and <status> the switchbank channel states. 
+ * Assemble and transmit a PGN 127501 Binary Status Update message
+ * reflecting the current switchbank state.
  */
 void transmitPGN127501() {
   static tN2kMsg N2kMsg;
@@ -462,9 +503,9 @@ void transmitPGN127501() {
  * Process a received PGN 127502 Switch Bank Control message by
  * decoding the switchbank status message and comparing the requested
  * channel state(s) with the current SWITCHBANK_STATUS. Any mismatch 
- * results in an opcode representing an appropriate set or reset
- * operation being added to the RELAY_OPERATION_QUEUE for subsequent
- * operation of the nonconformant relay(s).
+ * results in one or more opcodes representing an appropriate set or
+ * reset operation on each changed channel being queued for subsequent
+ * processing.
  */
 void handlePGN127502(const tN2kMsg n2kMsg) {
   unsigned char instance;
