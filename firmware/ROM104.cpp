@@ -79,7 +79,7 @@
  * GPIO pin definitions for the Teensy 3.2 MCU and some collections
  * that can be used as array initialisers
  */
-#define GPIO_MPX_CLOCK 0                   GPIO_CH0_LED 0
+#define GPIO_MPX_CLOCK 0
 #define GPIO_MPX_LATCH 1
 #define GPIO_MPX_DATA 2
 #define GPIO_CAN_TX 3
@@ -431,7 +431,6 @@ void transmitSwitchbankStatusMaybe(bool force) {
   if ((now > deadline) || force) {
     #ifdef DEBUG_SERIAL
     Serial.print("Transmitting status:");
-    (N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, 1) == N2kOnOff_On)
     Serial.print(" "); Serial.print((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, 1) == N2kOnOff_On)); 
     Serial.print(" "); Serial.print((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, 2) == N2kOnOff_On)); 
     Serial.print(" "); Serial.print((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, 3) == N2kOnOff_On)); 
@@ -457,6 +456,7 @@ void transmitSwitchbankStatusMaybe(bool force) {
  * indicates power and LED 8 is flashed when the module transmits an
  * NMEA status update message.
  */ 
+<<<<<<< Updated upstream
 void updateLedDisplayMaybe() {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
@@ -479,6 +479,12 @@ void updateLedDisplayMaybe() {
 void overrideLedDisplay(unsigned char state) {
   OVERRIDE_LED_UPDATE = true;
   
+=======
+void updateLeds(bool transmit) {
+  unsigned char out = 0;
+  for (int c = 1; c <= 6; c++) out = out + (((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0) * (2 ^ (c - 1)));
+  out += (64 + (transmit?128:0));
+>>>>>>> Stashed changes
   digitalWrite(GPIO_MPX_LATCH, 0);
   shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, ledstate);
   digitalWrite(GPIO_MPX_LATCH, 1);
