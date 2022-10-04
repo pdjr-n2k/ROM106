@@ -182,4 +182,4 @@ code.
 | :---     | :---    |
 | &#9898;&#9898;&#9898;&#9898;&#9898;&#9898;&#9898;&#9898; | Led check (displayed immediately power is applied. |
 | &#9681;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681; | Configured instance number (displayed after LED check).
-| &#9899;&#9899;&#9898;&#9898;&#9898;&#9898;&#9898;&#9898; | Queue overflow. |
+| &#9711;&#9899;&#9898;&#9898;&#9898;&#9898;&#9898;&#9898; | Queue overflow. |
