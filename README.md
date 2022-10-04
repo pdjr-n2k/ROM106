@@ -182,6 +182,6 @@ code.
 | :---     | :---    |
 | &#9898;&#9898;&#9898;&#9898;&#9898;&#9898;&#9898;&#9898; | Led check (displayed immediately power is applied. |
 | &#9681;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681; | Configured instance number (displayed after LED check).
-| &#9898;&#9711;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681; | Madule active not transmitting (relay channels on).
-| &#9898;&#9898;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681; | Madule active and transmitting (relay channels on).
+| &#9898;&#9711;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681; | Module active not transmitting (relay channels on).
+| &#9898;&#9898;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681; | Module active and transmitting (relay channels on).
 | &#9711;&#9711;&#9898;&#9898;&#9898;&#9898;&#9898;&#9898; | Queue overflow. |
