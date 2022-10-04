@@ -330,7 +330,7 @@ void isr() {
  * processRelayOperationQueueMaybe() should be called directly from
  * loop.
  * 
- * The function is will execute each RELAY_OPERATION_QUEUE_INTERVAL and
+ * The function will execute each RELAY_OPERATION_QUEUE_INTERVAL and
  * it is important that this constant is set to a value equal to or
  * greater than the minimum operating signal hold period of the
  * physical relays installed on the host PCB. For most latching
@@ -341,7 +341,7 @@ void isr() {
  * operating cycle is terminated.
  * 
  * The RELAY_OPERATION_QUEUE is checked and any head entry opcode is
- * removed and processed. The retrieved opcode will be a signed integer
+ * removed and processed. A retrieved opcode will be a signed integer
  * whose absolute value specifies an output channel and whose sign
  * indicates whether the channel should be turned on (set) or turned
  * off (reset).
