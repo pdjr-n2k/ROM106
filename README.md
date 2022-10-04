@@ -156,8 +156,12 @@ and then install it in its normal operating location.
 
 The module will enter operation immediately upon connection to the NMEA bus.
 
-Immediately power is applied to the module the eight display LEDs are set
-to indicate the module's configured instance number.
+Immediately power is applied to the module:
+
+1. All eight display LEDs will briefly illuminate to confirm that they are
+   working.
+2. The LED display will indicate the configured instance number in binary.
+
 After a few seconds the display LED's will be used in the following way.
 
 | LED   | State | Meaning |
@@ -170,3 +174,10 @@ After a few seconds the display LED's will be used in the following way.
 | 6     | ON    | Output channel 4 is ON |
 | 7     | ON    | Output channel 5 is ON |
 | 8     | ON    | Output channel 6 is ON |
+
+If the firmware detects an error the LEDs wil indicate an error
+code.
+
+| Code     | Meaning |
+| :---     | :---    |
+| &#9711;&#9711&#9679;&#9679;&#9679;&#9679;&#9679;&#9679; | Relay operating queue overflow. |
