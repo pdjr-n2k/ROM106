@@ -180,4 +180,4 @@ code.
 
 | Code     | Meaning |
 | :---     | :---    |
-| &#9711;&#9711&#9679;&#9679;&#9679;&#9679;&#9679;&#9679; | Relay operating queue overflow. |
+| &#9711;&#9711&#9677;&#9677;&#9677;&#9677;&#9677;&#9677; | Relay operating queue overflow. |
