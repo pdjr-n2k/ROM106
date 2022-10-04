@@ -1,42 +1,45 @@
 /**********************************************************************
- * ROM104.cpp - firmware for the ROM104 relay output module.
+ * ROM106.cpp - firmware for the ROM106 relay output module.
  * Copyright (c) 2021-22 Paul Reeve <preeve@pdjr.eu>
  *
  * Target platform: Teensy 3.2
  * 
- * ROM104 is a 4-channel relay module with integrated CAN connectivity
+ * ROM106 is a 6-channel relay module with integrated CAN connectivity
  * built around a Teensy 3.2 microcontroller.
  * 
- * This firmware implements an NMEA 2000 interface for ROM104.
+ * This firmware implements an NMEA 2000 interface for ROM106.
  * 
  * In NMEA 2000 networks, relay output modules (and switch input
- * modules) are identified by an 8-bit instance address which is set by
- * the network engineer when the module is installed. ROM104 includes a
- * DIL switch which is used to configure the module's instance address
- * and this is read by firmware when the module boots.
+ * modules) are uniquely identified by 8-bit instance address which is
+ * set by the network engineer when the module is installed. ROM106
+ * includes a DIL switch which is used to configure the module's
+ * instance address and this is read by firmware when the module boots.
  * 
  * Once started the firmware issues a PGN127501 Binary Status Report
  * every four seconds or immediately upon a relay state change. This
- * broadcast reports the current status of the module's relays.
+ * broadcast reports the current status of all the module's relays.
  * 
  * The firmware listens on the NMEA 2000 bus for PGN127502 Binary
  * Status Update messages addressed to its configured instance number.
- * These messages operate the ROM104 relay outputs whilst attempting to
- * minimise the module's overall power consumption. The relays used
- * in the ROM104 module are single-coil, bistable, latching devices.
+ * Such messages are the only means of operating the module's output
+ * relays.
  * 
- * The use of latching relays reduces power consumption because the
- * relay coil only needs to be energised for a short time in order to
- * effect a state change. The firmware further manages power use by
- * queueing state change requests so that only one relay coil will be
+ * The relays used in the ROM104 module are single-coil, bistable,
+ * devices. The use of latching relays reduces power consumption
+ * because the relay coil only needs to be energised for a short time
+ * in order to effect a state change.
+ * 
+ * Use of a single coil relay requires the firmware to manage polarity
+ * changes across the coil to effect set and reset operations. The
+ * firmware operates H-bridge driver ICSs which perform the actual
+ * relay coil operation.
+ * 
+ * The firmware further manages power use by queueing state change
+ * requests received over NMEA so that only one relay coil will be
  * energised at a time.
- * 
- * Use of a single coil relay demands polarity changes across the coil
- * to effect set and reset operations. ROM104 includes twin H-bridge
- * drivers that the firmware manipulates to operate the relay outputs.
- * 
- * Local feedback on relay states is presented by modulating the ROM104
- * indicator LEDs.
+ *
+ * Local feedback on relay states and module operation generally is
+ * presented by modulating the ROM104 indicator LEDs.
  */
 
 #include <Arduino.h>
@@ -83,7 +86,7 @@
 #define GPIO_CAN_TX 3
 #define GPIO_CAN_RX 4
 #define GPIO_INSTANCE_BIT0 5
-#define GPIO_INSTANCE_BIT1 6
+#define GPIO_INSTANCE_BIT1 6 
 #define GPIO_INSTANCE_BIT2 7
 #define GPIO_INSTANCE_BIT3 8
 #define GPIO_INSTANCE_BIT4 9
@@ -157,6 +160,7 @@
 #define RELAY_OPERATION_QUEUE_SIZE 10       // Max number of entries
 #define RELAY_OPERATION_QUEUE_INTERVAL 20UL // Frequency of relay queue processing
 #define LED_UPDATE_INTERVAL 50              // Frquency of LED display update
+#define LED_QUEUE_FULL_ERROR_PATTERN 63
 
 /**********************************************************************
  * Declarations of local functions.
@@ -166,7 +170,7 @@ void handlePGN127502(const tN2kMsg n2kMsg);
 void transmitSwitchbankStatusMaybe(bool force = false);
 void transmitPGN127501();
 void updateLedDisplayMaybe();
-void overrideLedDisplay(unsigned char state);
+void overrideLedDisplay(unsigned char state = 0);
 void cancelLedDisplayOverride();
 void processRelayOperationQueueMaybe();
 void isr();
@@ -485,7 +489,7 @@ void updateLedDisplayMaybe() {
 /**********************************************************************
  * Override (i.e. stop) the normal LED updates performed by
  * updateLedDisplayMaybe() and instead set the LED display to the value
- * specified by <state>.
+ * specified by 'state'.
  */ 
 void overrideLedDisplay(unsigned char state) {
   OVERRIDE_LED_UPDATE = true;
@@ -521,6 +525,10 @@ void transmitPGN127501() {
  * results in one or more opcodes representing an appropriate set or
  * reset operation on each changed channel being queued for subsequent
  * processing.
+ * 
+ * If the relay operation queue is full, the LED display is set to
+ * LED_QUEUE_FULL_ERROR_PATTERN and locked until the queue again
+ * becomes usable.
  */
 void handlePGN127502(const tN2kMsg n2kMsg) {
   unsigned char instance;
@@ -533,7 +541,12 @@ void handlePGN127502(const tN2kMsg n2kMsg) {
         channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, c);
         if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
           if (channelStatus != N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c)) {
-            RELAY_OPERATION_QUEUE.enqueue((int) (c * ((channelStatus == N2kOnOff_On)?1:-1)));
+            if (!RELAY_OPERATION_QUEUE.isFull()) {
+              cancelLedDisplayOverride();
+              RELAY_OPERATION_QUEUE.enqueue((int) (c * ((channelStatus == N2kOnOff_On)?1:-1)));
+            } else {
+              overrideLedDisplay(LED_QUEUE_FULL_ERROR_PATTERN);
+            }
           }
         }
       }
