@@ -11,7 +11,7 @@
 class LedDisplay {
 
 public:
-    LedDisplay(unsigned char (*getStatus)(), unsigned long interval, int gpioData, int gpioClock, int gpioLatch);
+    LedDisplay(unsigned char (*getStatus)(), unsigned long interval, int gpioClock, int gpioData, int gpioLatch);
     void loop();
     void preempt();
     void override(unsigned char state);
@@ -22,8 +22,8 @@ protected:
 private:
     unsigned char (*getStatus)();
     unsigned long interval;
-    int gpioData;
     int gpioClock;
+    int gpioData;
     int gpioLatch;
     bool PREEMPT_FLAG;
     bool OVERRIDE_FLAG;
