@@ -5,14 +5,14 @@
 
 #include "LedDisplay.h"
 
-LedDisplay::LedDisplay(unsigned char *defaultBuffer, unsigned long interval, int gpioData, int gpioClock, int gpioLatch) {
-    this->defaultBuffer = defaultBuffer;
+LedDisplay::LedDisplay(unsigned char (*getStatus)(), unsigned long interval, int gpioData, int gpioClock, int gpioLatch) {
+    this->getStatus = getStatus;
     this->interval = interval;
     this->gpioData = gpioData;
     this->gpioClock = gpioClock;
     this->gpioLatch = gpioLatch;
-    this->preempt = false;
-    this->override = false;
+    this->PREEMPT_FLAG = false;
+    this->OVERRIDE_FLAG = false;
 }
 
 
@@ -20,39 +20,30 @@ void LedDisplay::loop() {
     static unsigned long deadline = 0UL;
     unsigned long now = millis();
 
-    if (((now > deadline) || this->preempt) && (!this->override)) {
+    if (((now > deadline) || this->PREEMPT_FLAG) && (!this->OVERRIDE_FLAG)) {
         digitalWrite(this->gpioLatch, 0);
-        shiftOut(this->gpioData, this->gpioClock, LSBFIRST, &this->defaultBuffer);
+        shiftOut(this->gpioData, this->gpioClock, LSBFIRST, this->getStatus());
         digitalWrite(this->gpioLatch, 1);
 
-        this->preempt = false;
+        this->PREEMPT_FLAG = false;
         deadline = (now + this->interval);
   }
 }
 
-void LedDisplay::preempt(unsigned char state) {
-    this->preempt = true;
+void LedDisplay::preempt() {
+    this->PREEMPT_FLAG = true;
+    digitalWrite(this->gpioLatch, 0);
+    shiftOut(this->gpioData, this->gpioClock, LSBFIRST, this->getStatus());
+    digitalWrite(this->gpioLatch, 1);
+}
+
+void LedDisplay::override(unsigned char state) {
+    this->OVERRIDE_FLAG = true;
     digitalWrite(this->gpioLatch, 0);
     shiftOut(this->gpioData, this->gpioClock, LSBFIRST, state);
     digitalWrite(this->gpioLatch, 1);
 }
 
-void LedDisplay::override(unsigned char state) {
-    this->override = true;
-
+void LedDisplay::cancelOverride() {
+    this->OVERRIDE_FLAG = false;
 }
-    void cancelOverride();
-
-protected:
-
-private:
-    unsigned char *defaultBuffer;
-    int gpioData;
-    int gpioClock;
-    int gpioLatch;
-    bool preempt;
-    bool override;
-
-};
-
-#endif

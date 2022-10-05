@@ -49,6 +49,7 @@
 #include <N2kTypes.h>
 #include <N2kMessages.h>
 #include <DilSwitch.h>
+#include <LedDisplay.h>
 #include <arraymacros.h>
 
 /**********************************************************************
@@ -169,10 +170,8 @@ void messageHandler(const tN2kMsg&);
 void handlePGN127502(const tN2kMsg n2kMsg);
 void transmitSwitchbankStatusMaybe(bool force = false);
 void transmitPGN127501();
-void updateLedDisplayMaybe();
-void overrideLedDisplay(unsigned char state = 0);
-void cancelLedDisplayOverride();
 void processRelayOperationQueueMaybe();
+unsigned char getLedStatus();
 void isr();
 
 /**********************************************************************
@@ -196,6 +195,9 @@ tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0L, 0 } };
 int INSTANCE_PINS[] = GPIO_INSTANCE_PINS;
 DilSwitch DIL_SWITCH (INSTANCE_PINS, ELEMENTCOUNT(INSTANCE_PINS));
 
+LedDisplay LED_DISPLAY (getLedStatus, LED_UPDATE_INTERVAL, GPIO_MPX_DATA, GPIO_MPX_CLOCK, GPIO_MPX_LATCH);
+bool OPERATE_TRANSMIT_LED = false;
+
 /**********************************************************************
  * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
  * specifies a relay (1 through 4) and an operation: SET if the opcode
@@ -218,18 +220,6 @@ unsigned char SWITCHBANK_INSTANCE = INSTANCE_UNDEFINED;
  * of the module.
  */
 tN2kBinaryStatus SWITCHBANK_STATUS;
-
-/**********************************************************************
- * FORCE_LED_UPDATE - flag which can be set to force an immediate LED
- * update.
- */
-bool FORCE_LED_UPDATE = false;
-
-/**********************************************************************
- * OVERRIDE_LED_UPDATE - flag which can be set to prevent regular LED
- * updates.
- */
-bool OVERRIDE_LED_UPDATE = false;
 
 /**********************************************************************
  * MAIN PROGRAM - setup()
@@ -265,9 +255,9 @@ void setup() {
   SWITCHBANK_INSTANCE = DIL_SWITCH.value();
 
   // Confirm LED operation and briefly display instance number.
-  overrideLedDisplay(0xff); delay(100);
-  overrideLedDisplay(SWITCHBANK_INSTANCE); delay(1000);
-  cancelLedDisplayOverride();
+  LED_DISPLAY.override(0xff); delay(100);
+  LED_DISPLAY.override(SWITCHBANK_INSTANCE); delay(1000);
+  LED_DISPLAY.cancelOverride();
   
   // Initialise module status
   N2kResetBinaryStatus(SWITCHBANK_STATUS);
@@ -316,7 +306,7 @@ void loop() {
   processRelayOperationQueueMaybe();
 
   // Update LED display
-  updateLedDisplayMaybe();
+  LED_DISPLAY.loop();
 }
 
 /**********************************************************************
@@ -370,7 +360,6 @@ void processRelayOperationQueueMaybe() {
       digitalWrite(GPIO_RELAY4_ENABLE, 0);
       digitalWrite(GPIO_RELAY5_ENABLE, 0);
       digitalWrite(GPIO_RELAY6_ENABLE, 0);
-      operating = false;
     }
 
     if (!RELAY_OPERATION_QUEUE.isEmpty()) {
@@ -448,64 +437,23 @@ void transmitSwitchbankStatusMaybe(bool force) {
     #endif
 
     transmitPGN127501();
-    FORCE_LED_UPDATE = force;
+    LED_DISPLAY.preempt();
 
     deadline = (now + PGN127501_TRANSMIT_INTERVAL);
   }
 }
 
 /**********************************************************************
- * This function should be called from loop() to perform regular and
- * exceptional updates of the module's LED display. If
- * OVERRIDE_LED_UPDATE is true then no display updates will be
- * performed and the function will return directly to the caller,
- * 
- * LED updates are normally performed every LED_UPDATE_INTERVAL, but if
- * FORCE_LED_UPDATE is true then the update will happen immediately.
- *
- * FORCE_LED_UPDATE should be set true by the NMEA message transmission
- * process each time it transmits and will result in the  "transmit" LED
- * being switched on for a single execution cycle.
  */ 
-void updateLedDisplayMaybe() {
-  static unsigned long deadline = 0UL;
-  unsigned long now = millis();
+unsigned char getLedStatus() {
   unsigned char ledstate = 0;
 
-  if (((now > deadline) || FORCE_LED_UPDATE) && (!OVERRIDE_LED_UPDATE)) {
-    for (int c = 6; c >= 1; c--) ledstate = (ledstate << 1) | ((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0);
-    ledstate |= 64; // Power LED on
-    ledstate |= (FORCE_LED_UPDATE)?128:0; // Transmit LED on
-
-    digitalWrite(GPIO_MPX_LATCH, 0);
-    shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, ledstate);
-    digitalWrite(GPIO_MPX_LATCH, 1);
- 
-    FORCE_LED_UPDATE = false;
-    deadline = (now + LED_UPDATE_INTERVAL);
-  }
+  for (int c = 6; c >= 1; c--) ledstate = (ledstate << 1) | ((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c) == N2kOnOff_On)?1:0);
+  ledstate |= 64; // Power LED on
+  ledstate |= (OPERATE_TRANSMIT_LED)?128:0; // Transmit LED on
+  OPERATE_TRANSMIT_LED = false;
+  return(ledstate);
 } 
-
-/**********************************************************************
- * Override (i.e. stop) the normal LED updates performed by
- * updateLedDisplayMaybe() and instead set the LED display to the value
- * specified by 'state'.
- */ 
-void overrideLedDisplay(unsigned char state) {
-  OVERRIDE_LED_UPDATE = true;
-  
-  digitalWrite(GPIO_MPX_LATCH, 0);
-  shiftOut(GPIO_MPX_DATA, GPIO_MPX_CLOCK, LSBFIRST, state);
-  digitalWrite(GPIO_MPX_LATCH, 1);
-}
-
-/**********************************************************************
- * Cancel the override (set by a prior call to overrideLedDisplay())
- * and resume normal update behaviour.
- */
-void cancelLedDisplayOverride() {
-  OVERRIDE_LED_UPDATE = false;
-}
 
 /**********************************************************************
  * Assemble and transmit a PGN 127501 Binary Status Update message
@@ -542,10 +490,10 @@ void handlePGN127502(const tN2kMsg n2kMsg) {
         if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
           if (channelStatus != N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c)) {
             if (!RELAY_OPERATION_QUEUE.isFull()) {
-              cancelLedDisplayOverride();
+              LED_DISPLAY.cancelOverride();
               RELAY_OPERATION_QUEUE.enqueue((int) (c * ((channelStatus == N2kOnOff_On)?1:-1)));
             } else {
-              overrideLedDisplay(LED_QUEUE_FULL_ERROR_PATTERN);
+              LED_DISPLAY.override(LED_QUEUE_FULL_ERROR_PATTERN);
             }
           }
         }
