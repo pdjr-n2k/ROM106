@@ -1,12 +1,12 @@
 /**********************************************************************
- * LedDisplay - handle a parallel buffer based LED display.
+ * 74HC595.cpp - operate a 74HC595 serial-parallel buffer.
  * 2022 (c) Paul Reeve.
  */
 
 #include "LedDisplay.h"
 
 /**********************************************************************
- * Create a new LedDisplay instance and initialise it for managing a
+ * Create a new 74HC595 instance and initialise it for managing a
  * serial-parallel 8-bit buffer.
  * 
  * getStatus should specify a callback function that can be used to
@@ -25,14 +25,27 @@
  * gpioLatch specifies the MPU digital pin that connects to the buffer
  * latch input.
  */
-LedDisplay::LedDisplay(unsigned char (*getStatus)(), unsigned long interval, int gpioClock, int gpioData, int gpioLatch) {
-    this->getStatus = getStatus;
-    this->interval = interval;
+74HC595::74HC595(int gpioClock, int gpioData, int gpioLatch, unsigned char state) {
     this->gpioData = gpioClock;
     this->gpioData = gpioData;
     this->gpioLatch = gpioLatch;
+    this->getStatus = 0;
+    this->interval = 20;
     this->PREEMPT_FLAG = false;
     this->OVERRIDE_FLAG = false;
+
+    this->update(state);
+}
+
+void 74HC595::update(unsigned char state, int direction) {
+    digitalWrite(this->gpioLatch, 0);
+    shiftOut(this->gpioData, this->gpioClock, direction, state);
+    digitalWrite(this->gpioLatch, 1);
+}
+
+void 74HC595::updateAutomatically(unsigned char (*getState)(), unsigned long interval) {
+    this->getState = getState;
+    this->interval = interval;
 }
 
 /**********************************************************************
