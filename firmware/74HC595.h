@@ -1,5 +1,5 @@
 /**********************************************************************
- * LedDisplay - handle a parallel buffer based LED display.
+ * 74HC595 - handle a parallel buffer based LED display.
  * 2022 (c) Paul Reeve.
  */
 
@@ -11,7 +11,7 @@
 class 74HC595 {
 
 public:
-    74HC595(int gpioClock, int gpioData, int gpioLatch, unsigned char state = 0, unsigned char defaultDirection = 99);
+    74HC595(int gpioClock, int gpioData, int gpioLatch, unsigned char state = 0, unsigned char defaultDirection);
     void setDefaultDirection(unsigned char direction = 99);
     void update(unsigned char state, unsigned char direction = 99);
     void enableLoopUpdates(unsigned char (*getState)(), unsigned long interval);

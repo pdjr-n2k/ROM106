@@ -34,7 +34,7 @@
     this->gpioLatch = gpioLatch;
     this->getStatus = 0;
     this->interval = 20;
-    this->defaultDirection = (defaultDirection == 99)?LSBFIRST:defaultDirection;
+    this->defaultDirection = defaultDirection;
     this->PREEMPT_FLAG = false;
     this->OVERRIDE_FLAG = false;
 
