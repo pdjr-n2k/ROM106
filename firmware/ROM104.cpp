@@ -49,7 +49,7 @@
 #include <N2kTypes.h>
 #include <N2kMessages.h>
 #include <DilSwitch.h>
-#include <LedDisplay.h>
+#include <B74HC595.h>
 #include <arraymacros.h>
 
 /**********************************************************************
@@ -195,7 +195,7 @@ tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0L, 0 } };
 int INSTANCE_PINS[] = GPIO_INSTANCE_PINS;
 DilSwitch DIL_SWITCH (INSTANCE_PINS, ELEMENTCOUNT(INSTANCE_PINS));
 
-LedDisplay LED_DISPLAY (getLedStatus, LED_UPDATE_INTERVAL, GPIO_MPX_DATA, GPIO_MPX_CLOCK, GPIO_MPX_LATCH);
+B74HC595 LED_DISPLAY (getLedStatus, LED_UPDATE_INTERVAL, GPIO_MPX_DATA, GPIO_MPX_CLOCK, GPIO_MPX_LATCH);
 bool OPERATE_TRANSMIT_LED = false;
 
 /**********************************************************************
