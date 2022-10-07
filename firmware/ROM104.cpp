@@ -444,6 +444,7 @@ void transmitSwitchbankStatusMaybe(bool force) {
     #endif
 
     transmitPGN127501();
+    OPERATE_TRANSMIT_LED = true;
     LED_DISPLAY.preempt();
 
     deadline = (now + PGN127501_TRANSMIT_INTERVAL);

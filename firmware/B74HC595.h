@@ -62,12 +62,12 @@ public:
     void update(unsigned char state, unsigned char direction = 99);
 
     /******************************************************************
-     * Enable automatic, periodic, buffer updates from loop(). getState
+     * Enable automatic, periodic, buffer updates from loop(). getStatus
      * should specify a callback function which will be used to recover
      * a buffer state value and interval specifies the loop update
      * frequency in milliseconds.
      */
-    void enableLoopUpdates(unsigned char (*getState)(), unsigned long interval);
+    void enableLoopUpdates(unsigned char (*getStatus)(), unsigned long interval);
     
     /******************************************************************
      * Perform automatic buffer updates using the settings previously

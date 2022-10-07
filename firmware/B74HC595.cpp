@@ -28,8 +28,8 @@ void B74HC595::update(unsigned char state, unsigned char direction) {
     digitalWrite(this->gpioLatch, 1);
 }
 
-void B74HC595::enableLoopUpdates(unsigned char (*getState)(), unsigned long interval) {
-    this->getState = getState;
+void B74HC595::enableLoopUpdates(unsigned char (*getStatus)(), unsigned long interval) {
+    this->getStatus = getStatus;
     this->interval = interval;
 }
 
