@@ -8,15 +8,28 @@
  * 
  * Example:
  * 
- * // Declare an instance and specify the GPIO pins. 
+ * ...
+ * unsigned char getLedState();
+ * ...
  * B74HC595 LED_DISPLAY (3,4,5);
+ * ...
  * 
- * // In setup(), specify a callback function that can be used to get
- * // the buffer value and the number of milliseconds between updates.
- * LED_DISPLAY.enableLoopUpdates(getLedState, 50UL);
+ * void setup() {
+ *   ...
+ *   LED_DISPLAY.enableLoopUpdates(getLedState, 50UL);
+ *   ...
+ * }
  * 
- * // In loop(), call the automatic update method.
- * LED_DISPLAY.loop();
+ * void loop() {
+ *   ...
+ *   LED_DISPLAY.loop();
+ *   ...
+ * }
+ * 
+ * unsigned char getLedState() {
+ *   return((unsigned char) rand());
+ * }
+ * 
  */
 
 #ifndef B74HC595_H

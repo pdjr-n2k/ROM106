@@ -195,7 +195,14 @@ tNMEA2000Handler NMEA2000Handlers[]={ { 127502L, handlePGN127502 }, { 0L, 0 } };
 int INSTANCE_PINS[] = GPIO_INSTANCE_PINS;
 DilSwitch DIL_SWITCH (INSTANCE_PINS, ELEMENTCOUNT(INSTANCE_PINS));
 
+/**********************************************************************
+ * LED_DISPLAY parallel buffer IC interface for operating LEDs.
+ */
 B74HC595 LED_DISPLAY (getLedStatus, LED_UPDATE_INTERVAL, GPIO_MPX_DATA, GPIO_MPX_CLOCK, GPIO_MPX_LATCH);
+
+/**********************************************************************
+ * Whether or not to enable operation of the transmit LED.
+ */
 bool OPERATE_TRANSMIT_LED = false;
 
 /**********************************************************************

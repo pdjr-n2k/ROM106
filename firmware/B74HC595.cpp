@@ -37,7 +37,7 @@ void B74HC595::loop() {
     static unsigned long deadline = 0UL;
     unsigned long now = millis();
 
-    if (((now > deadline) || this->PREEMPT_FLAG) && (!this->OVERRIDE_FLAG) && (this->interval > 0)) {
+    if (((now > deadline) || this->PREEMPT_FLAG) && (!this->OVERRIDE_FLAG) && (this->interval) && (this->getStatus)) {
         this->update(this->getStatus());
         this->PREEMPT_FLAG = false;
 
