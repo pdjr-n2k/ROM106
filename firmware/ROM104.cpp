@@ -198,7 +198,7 @@ DilSwitch DIL_SWITCH (INSTANCE_PINS, ELEMENTCOUNT(INSTANCE_PINS));
 /**********************************************************************
  * LED_DISPLAY parallel buffer IC interface for operating LEDs.
  */
-B74HC595 LED_DISPLAY (getLedStatus, LED_UPDATE_INTERVAL, GPIO_MPX_DATA, GPIO_MPX_CLOCK, GPIO_MPX_LATCH);
+B74HC595 LED_DISPLAY (GPIO_MPX_DATA, GPIO_MPX_CLOCK, GPIO_MPX_LATCH);
 
 /**********************************************************************
  * Whether or not to enable operation of the transmit LED.
@@ -262,9 +262,10 @@ void setup() {
   SWITCHBANK_INSTANCE = DIL_SWITCH.value();
 
   // Confirm LED operation and briefly display instance number.
-  LED_DISPLAY.override(0xff); delay(100);
-  LED_DISPLAY.override(SWITCHBANK_INSTANCE); delay(1000);
-  LED_DISPLAY.cancelOverride();
+  LED_DISPLAY.update(0xff); delay(100);
+  LED_DISPLAY.update(SWITCHBANK_INSTANCE); delay(1000);
+  LED_DISPLAY.enableLoopUpdates(getLedStatus, LED_UPDATE_INTERVAL);
+ 
   
   // Initialise module status
   N2kResetBinaryStatus(SWITCHBANK_STATUS);
