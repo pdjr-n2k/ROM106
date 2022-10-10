@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../firmware-factory"
+		},
+		{
+			"name": "sketch",
+			"path": "../../firmware-factory/sketch"
+		}
+	],
+	"settings": {}
+}
