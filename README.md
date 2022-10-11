@@ -2,10 +2,7 @@
 
 This project implements an NMEA 2000 relay output module with
 support for up to six relay output channels.
-You may want to check out
-[SIM108](https://github.com/preeve9534/SIM108/),
-a complementary project that implements an eight-channel NMEA
-2000 switch input module.
+
 
 __ROM106__ consists of a microcontroller-based hardware design
 and an associated firmware.
@@ -185,3 +182,7 @@ code.
 | &#9898;&#9711;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681; | Module active not transmitting (relay channels on).
 | &#9898;&#9898;&#9681;&#9681;&#9681;&#9681;&#9681;&#9681; | Module active and transmitting (relay channels on).
 | &#9711;&#9711;&#9898;&#9898;&#9898;&#9898;&#9898;&#9898; | Queue overflow. |
+
+## See also
+
+* [SIM108](https://github.com/preeve9534/SIM108/) - NMEA 2000 switch input module.
