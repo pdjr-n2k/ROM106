@@ -353,14 +353,14 @@ F 3 "~" H 10150 5350 50  0001 C CNN
 	1    10150 5350
 	-1   0    0    1   
 $EndComp
-Text Label 9100 2350 2    50   ~ 0
-CH3_EN
 Text Label 9100 2450 2    50   ~ 0
-CH2_EN
+CH3_EN
 Text Label 9100 2550 2    50   ~ 0
-CH1_EN
+CH2_EN
 Text Label 9100 2650 2    50   ~ 0
-CH0_EN
+CH1_EN
+Text Label 9100 2150 2    50   ~ 0
+CH6_EN
 Text Label 9100 2750 2    50   ~ 0
 SET
 Text Label 9100 2850 2    50   ~ 0
@@ -396,9 +396,9 @@ Wire Wire Line
 	4750 5250 4450 5250
 Wire Wire Line
 	4450 5250 4450 6150
-Text Label 9100 2250 2    50   ~ 0
+Text Label 9100 2350 2    50   ~ 0
 CH4_EN
-Text Label 9100 2150 2    50   ~ 0
+Text Label 9100 2250 2    50   ~ 0
 CH5_EN
 $Comp
 L 74xx:74HC595 U6
@@ -1061,9 +1061,9 @@ Wire Wire Line
 	6250 1500 6850 1500
 Wire Wire Line
 	6250 1600 6250 1500
-Text Label 1050 900  2    50   ~ 0
+Text Label 1050 1000 2    50   ~ 0
 CH4_EN
-Text Label 1050 800  2    50   ~ 0
+Text Label 1050 900  2    50   ~ 0
 CH5_EN
 Wire Wire Line
 	5600 2000 5650 2000
@@ -1233,9 +1233,9 @@ Wire Wire Line
 	4000 1500 4600 1500
 Wire Wire Line
 	4000 1600 4000 1500
-Text Label 1050 1100 2    50   ~ 0
+Text Label 1050 1200 2    50   ~ 0
 CH2_EN
-Text Label 1050 1000 2    50   ~ 0
+Text Label 1050 1100 2    50   ~ 0
 CH3_EN
 Wire Wire Line
 	3350 2000 3400 2000
@@ -1413,9 +1413,9 @@ Wire Wire Line
 	1750 1500 2350 1500
 Wire Wire Line
 	1750 1600 1750 1500
+Text Label 1050 800  2    50   ~ 0
+CH6_EN
 Text Label 1050 1300 2    50   ~ 0
-CH0_EN
-Text Label 1050 1200 2    50   ~ 0
 CH1_EN
 $Comp
 L power:+5V #PWR06

@@ -1,4 +1,4 @@
-19437197888589107
+19442196607817107
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -59710,6 +59710,13 @@ PDJR-connectors
 6
 6
 PDJR-connectors
+CAMDEN_BOSS_CSTBV2-9_TERMINAL
+
+
+0
+18
+9
+PDJR-connectors
 DIP-10_200_ELL
 
 
@@ -59787,6 +59794,13 @@ Phoenix-FK-MPT-8-3,5
 8
 8
 PDJR-connectors
+RS-PLUG-TERMINAL-HORIZ-9-PIN
+
+
+0
+9
+9
+PDJR-connectors
 TMR-1-1211
 
 
@@ -59821,6 +59835,13 @@ WURTH-401B-12PIN
 0
 24
 12
+PDJR-connectors
+qrcode
+
+
+0
+0
+0
 Package_BGA
 Analog_BGA-28_4.0x6.25mm_Layout4x7_P0.8mm_Ball0.45mm_Pad0.4
 Analog BGA-28 4.0mm x 6.25mm package, pitch 0.4mm pad, based on https://www.analog.com/media/en/technical-documentation/data-sheets/8063fa.pdf
