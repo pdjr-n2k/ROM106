@@ -353,17 +353,17 @@ F 3 "~" H 10150 5350 50  0001 C CNN
 	1    10150 5350
 	-1   0    0    1   
 $EndComp
-Text Label 9100 2450 2    50   ~ 0
-CH3_EN
-Text Label 9100 2550 2    50   ~ 0
-CH2_EN
 Text Label 9100 2650 2    50   ~ 0
-CH1_EN
-Text Label 9100 2150 2    50   ~ 0
-CH6_EN
+CH3_EN
 Text Label 9100 2750 2    50   ~ 0
-SET
+CH2_EN
 Text Label 9100 2850 2    50   ~ 0
+CH1_EN
+Text Label 9100 2350 2    50   ~ 0
+CH6_EN
+Text Label 9100 2150 2    50   ~ 0
+SET
+Text Label 9100 2250 2    50   ~ 0
 RST
 NoConn ~ 9100 1850
 $Comp
@@ -396,9 +396,9 @@ Wire Wire Line
 	4750 5250 4450 5250
 Wire Wire Line
 	4450 5250 4450 6150
-Text Label 9100 2350 2    50   ~ 0
+Text Label 9100 2550 2    50   ~ 0
 CH4_EN
-Text Label 9100 2250 2    50   ~ 0
+Text Label 9100 2450 2    50   ~ 0
 CH5_EN
 $Comp
 L 74xx:74HC595 U6
