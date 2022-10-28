@@ -1,9 +1,0 @@
-EESchema-DOCLIB  Version 2.0
-#
-$CMP M12-5PIN
-D Push button switch, generic, two pins
-K switch normally-open pushbutton push-button
-F ~
-$ENDCMP
-#
-#End Doc Library

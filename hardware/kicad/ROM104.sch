@@ -367,12 +367,12 @@ Text Label 9100 2250 2    50   ~ 0
 RST
 NoConn ~ 9100 1850
 $Comp
-L ROM104-rescue:TMR_2411-pdjr U3
+L ROM104-rescue:TMR_2411-pdjr-ROM104-rescue U3
 U 1 1 6327DB22
 P 2950 5050
 F 0 "U3" H 2950 5400 50  0000 C CNN
 F 1 "TMR_2411" H 2950 4700 50  0000 C CNN
-F 2 "PDJR-connectors:TMR_2411" H 2950 4700 50  0001 C CNN
+F 2 "PDJR_DC-DC_Converters:TMR_2411" H 2950 4700 50  0001 C CNN
 F 3 "" H 2950 4550 50  0001 C CNN
 	1    2950 5050
 	-1   0    0    -1  
@@ -599,7 +599,7 @@ ADDR_6
 Text Label 6500 5550 0    50   ~ 0
 ADDR_7
 $Comp
-L ROM104-rescue:Teensy_3.2-pdjr U7
+L ROM104-rescue:Teensy_3.2-pdjr-ROM104-rescue U7
 U 1 1 60F2AB82
 P 10200 3150
 F 0 "U7" H 10500 1700 50  0000 C CNN
@@ -992,12 +992,12 @@ Wire Wire Line
 Wire Wire Line
 	7050 2700 7300 2700
 $Comp
-L ROM104-rescue:SPDT_RELAY-pdjr K6
+L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K6
 U 1 1 637805D9
 P 6950 3200
 F 0 "K6" V 6500 3250 50  0000 R CNN
-F 1 "SPDT_RELAY" V 7400 3200 50  0000 C CNN
-F 2 "PDJR-connectors:PE014F05" H 7400 3150 50  0001 L CNN
+F 1 "PE014F05" V 7400 3200 50  0000 C CNN
+F 2 "PDJR_Relays:PE014F05" H 7400 3150 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 6950 3200 50  0001 C CNN
 	1    6950 3200
 	0    1    1    0   
@@ -1014,12 +1014,12 @@ F 3 "~" H 6550 4200 50  0001 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L ROM104-rescue:SPDT_RELAY-pdjr K5
+L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K5
 U 1 1 637805CC
 P 6100 3200
 F 0 "K5" V 5650 3250 50  0000 R CNN
-F 1 "SPDT_RELAY" V 6550 3200 50  0000 C CNN
-F 2 "PDJR-connectors:PE014F05" H 6550 3150 50  0001 L CNN
+F 1 "PE014F05" V 6550 3200 50  0000 C CNN
+F 2 "PDJR_Relays:PE014F05" H 6550 3150 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 6100 3200 50  0001 C CNN
 	1    6100 3200
 	0    1    1    0   
@@ -1162,12 +1162,12 @@ Wire Wire Line
 Wire Wire Line
 	5000 3000 5050 3000
 $Comp
-L ROM104-rescue:SPDT_RELAY-pdjr K4
+L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K4
 U 1 1 63768F03
 P 4700 3200
 F 0 "K4" V 4250 3250 50  0000 R CNN
-F 1 "SPDT_RELAY" V 5150 3200 50  0000 C CNN
-F 2 "PDJR-connectors:PE014F05" H 5150 3150 50  0001 L CNN
+F 1 "PE014F05" V 5150 3200 50  0000 C CNN
+F 2 "PDJR_Relays:PE014F05" H 5150 3150 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 4700 3200 50  0001 C CNN
 	1    4700 3200
 	0    1    1    0   
@@ -1184,12 +1184,12 @@ F 3 "~" H 4300 4200 50  0001 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L ROM104-rescue:SPDT_RELAY-pdjr K3
+L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K3
 U 1 1 63768EF6
 P 3850 3200
 F 0 "K3" V 3400 3250 50  0000 R CNN
-F 1 "SPDT_RELAY" V 4300 3200 50  0000 C CNN
-F 2 "PDJR-connectors:PE014F05" H 4300 3150 50  0001 L CNN
+F 1 "PE014F05" V 4300 3200 50  0000 C CNN
+F 2 "PDJR_Relays:PE014F05" H 4300 3150 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 3850 3200 50  0001 C CNN
 	1    3850 3200
 	0    1    1    0   
@@ -1336,12 +1336,12 @@ Wire Wire Line
 Wire Wire Line
 	2750 3000 2800 3000
 $Comp
-L ROM104-rescue:SPDT_RELAY-pdjr K2
+L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K2
 U 1 1 632D0338
 P 2450 3200
 F 0 "K2" V 2000 3250 50  0000 R CNN
-F 1 "SPDT_RELAY" V 2900 3200 50  0000 C CNN
-F 2 "PDJR-connectors:PE014F05" H 2900 3150 50  0001 L CNN
+F 1 "PE014F05" V 2900 3200 50  0000 C CNN
+F 2 "PDJR_Relays:PE014F05" H 2900 3150 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 2450 3200 50  0001 C CNN
 	1    2450 3200
 	0    1    1    0   
@@ -1360,12 +1360,12 @@ F 3 "~" H 2050 4200 50  0001 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L ROM104-rescue:SPDT_RELAY-pdjr K1
+L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K1
 U 1 1 632C2C12
 P 1600 3200
 F 0 "K1" V 1150 3250 50  0000 R CNN
-F 1 "SPDT_RELAY" V 2050 3200 50  0000 C CNN
-F 2 "PDJR-connectors:PE014F05" H 2050 3150 50  0001 L CNN
+F 1 "PE014F05" V 2050 3200 50  0000 C CNN
+F 2 "PDJR_Relays:PE014F05" H 2050 3150 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 1600 3200 50  0001 C CNN
 	1    1600 3200
 	0    1    1    0   
