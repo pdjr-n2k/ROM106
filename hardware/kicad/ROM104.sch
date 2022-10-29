@@ -1003,17 +1003,6 @@ F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.
 	0    1    1    0   
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x06 J4
-U 1 1 637805D2
-P 6550 4200
-F 0 "J4" V 6650 4150 50  0000 C CNN
-F 1 "Screw_Terminal_01x06" V 6650 4500 50  0001 R CNN
-F 2 "PDJR_Connectors:879-1272_TERMINAL_HEADER_6-POLE" H 6550 4200 50  0001 C CNN
-F 3 "~" H 6550 4200 50  0001 C CNN
-	1    6550 4200
-	0    -1   1    0   
-$EndComp
-$Comp
 L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K5
 U 1 1 637805CC
 P 6100 3200
@@ -1171,17 +1160,6 @@ F 2 "PDJR_Relays:PE014F05" H 5150 3150 50  0001 L CNN
 F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 4700 3200 50  0001 C CNN
 	1    4700 3200
 	0    1    1    0   
-$EndComp
-$Comp
-L Connector:Screw_Terminal_01x06 J2
-U 1 1 63768EFC
-P 4300 4200
-F 0 "J2" V 4400 4150 50  0000 C CNN
-F 1 "Screw_Terminal_01x06" V 4400 4500 50  0001 R CNN
-F 2 "PDJR_Connectors:879-1272_TERMINAL_HEADER_6-POLE" H 4300 4200 50  0001 C CNN
-F 3 "~" H 4300 4200 50  0001 C CNN
-	1    4300 4200
-	0    -1   1    0   
 $EndComp
 $Comp
 L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K3
@@ -1348,17 +1326,6 @@ F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.
 $EndComp
 Wire Wire Line
 	2950 2000 3000 2000
-$Comp
-L Connector:Screw_Terminal_01x06 J1
-U 1 1 63302364
-P 2050 4200
-F 0 "J1" V 2150 4150 50  0000 C CNN
-F 1 "Screw_Terminal_01x06" V 2150 4500 50  0001 R CNN
-F 2 "PDJR_Connectors:879-1272_TERMINAL_HEADER_6-POLE" H 2050 4200 50  0001 C CNN
-F 3 "~" H 2050 4200 50  0001 C CNN
-	1    2050 4200
-	0    -1   1    0   
-$EndComp
 $Comp
 L ROM104-rescue:SPDT_RELAY-pdjr-ROM104-rescue K1
 U 1 1 632C2C12
@@ -1762,5 +1729,71 @@ F 2 "" H 10800 5850 50  0001 C CNN
 F 3 "" H 10800 5850 50  0001 C CNN
 	1    10800 5850
 	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x03 J1
+U 1 1 6369F8B1
+P 1950 4200
+F 0 "J1" V 1822 4012 50  0000 R CNN
+F 1 "Screw_Terminal_01x03" V 1913 4012 50  0000 R CNN
+F 2 "PDJR_Connectors:8971187_3_PIN_5MM_PLUGGABLE_HEADER" H 1950 4200 50  0001 C CNN
+F 3 "~" H 1950 4200 50  0001 C CNN
+	1    1950 4200
+	0    -1   1    0   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x03 J2
+U 1 1 636A224A
+P 2250 4200
+F 0 "J2" V 2122 4012 50  0000 R CNN
+F 1 "Screw_Terminal_01x03" V 2213 4012 50  0000 R CNN
+F 2 "PDJR_Connectors:8971187_3_PIN_5MM_PLUGGABLE_HEADER" H 2250 4200 50  0001 C CNN
+F 3 "~" H 2250 4200 50  0001 C CNN
+	1    2250 4200
+	0    -1   1    0   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x03 J4
+U 1 1 636A2D0F
+P 4200 4200
+F 0 "J4" V 4072 4012 50  0000 R CNN
+F 1 "Screw_Terminal_01x03" V 4163 4012 50  0000 R CNN
+F 2 "PDJR_Connectors:8971187_3_PIN_5MM_PLUGGABLE_HEADER" H 4200 4200 50  0001 C CNN
+F 3 "~" H 4200 4200 50  0001 C CNN
+	1    4200 4200
+	0    -1   1    0   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x03 J5
+U 1 1 636A484F
+P 4500 4200
+F 0 "J5" V 4372 4012 50  0000 R CNN
+F 1 "Screw_Terminal_01x03" V 4463 4012 50  0000 R CNN
+F 2 "PDJR_Connectors:8971187_3_PIN_5MM_PLUGGABLE_HEADER" H 4500 4200 50  0001 C CNN
+F 3 "~" H 4500 4200 50  0001 C CNN
+	1    4500 4200
+	0    -1   1    0   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x03 J6
+U 1 1 636A5787
+P 6450 4200
+F 0 "J6" V 6322 4012 50  0000 R CNN
+F 1 "Screw_Terminal_01x03" V 6413 4012 50  0000 R CNN
+F 2 "PDJR_Connectors:8971187_3_PIN_5MM_PLUGGABLE_HEADER" H 6450 4200 50  0001 C CNN
+F 3 "~" H 6450 4200 50  0001 C CNN
+	1    6450 4200
+	0    -1   1    0   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x03 J7
+U 1 1 636A695C
+P 6750 4200
+F 0 "J7" V 6622 4012 50  0000 R CNN
+F 1 "Screw_Terminal_01x03" V 6713 4012 50  0000 R CNN
+F 2 "PDJR_Connectors:8971187_3_PIN_5MM_PLUGGABLE_HEADER" H 6750 4200 50  0001 C CNN
+F 3 "~" H 6750 4200 50  0001 C CNN
+	1    6750 4200
+	0    -1   1    0   
 $EndComp
 $EndSCHEMATC
