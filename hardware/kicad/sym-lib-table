@@ -1,3 +1,4 @@
 (sym_lib_table
   (lib (name ROM104-rescue)(type Legacy)(uri ${KIPRJMOD}/ROM104-rescue.lib)(options "")(descr ""))
+  (lib (name ROM106-rescue)(type Legacy)(uri ${KIPRJMOD}/ROM106-rescue.lib)(options "")(descr ""))
 )
