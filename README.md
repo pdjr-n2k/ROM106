@@ -3,7 +3,6 @@
 This project implements an NMEA 2000 relay output module with
 support for up to six relay output channels.
 
-
 __ROM106__ consists of a microcontroller-based hardware design
 and an associated firmware.
 
