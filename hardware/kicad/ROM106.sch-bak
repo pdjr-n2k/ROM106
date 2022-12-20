@@ -781,4 +781,6 @@ $EndComp
 Connection ~ 1300 900 
 Wire Wire Line
 	1300 900  4600 900 
+NoConn ~ 1200 1900
+NoConn ~ 1200 2000
 $EndSCHEMATC
