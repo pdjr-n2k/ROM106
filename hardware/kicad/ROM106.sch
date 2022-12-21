@@ -675,8 +675,6 @@ Text Label 1200 1300 2    50   ~ 0
 D5
 Text Label 1200 1400 2    50   ~ 0
 D6
-Text Label 1200 1500 2    50   ~ 0
-D20
 Text Label 1200 1600 2    50   ~ 0
 D21
 Text Label 1200 1700 2    50   ~ 0
@@ -687,12 +685,6 @@ Text Label 1200 1900 2    50   ~ 0
 D9
 Text Label 1200 2000 2    50   ~ 0
 D8
-NoConn ~ 1200 1300
-NoConn ~ 1200 1400
-NoConn ~ 1200 1500
-NoConn ~ 1200 1600
-NoConn ~ 1200 1700
-NoConn ~ 1200 1800
 Wire Wire Line
 	1200 900  1300 900 
 Wire Wire Line
@@ -775,9 +767,97 @@ $EndComp
 Connection ~ 1300 900 
 Wire Wire Line
 	1300 900  4600 900 
-NoConn ~ 1200 1900
-NoConn ~ 1200 2000
 Wire Wire Line
 	4600 3000 4600 3400
 Connection ~ 4600 3400
+$Comp
+L Connector:TestPoint_Small #TP1008
+U 1 1 63A4D814
+P 1200 2000
+F 0 "#TP1008" H 1248 2000 50  0001 L CNN
+F 1 "TestPoint_Small" H 1248 1955 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm" H 1400 2000 50  0001 C CNN
+F 3 "~" H 1400 2000 50  0001 C CNN
+	1    1200 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Small #TP1007
+U 1 1 63A4E491
+P 1200 1900
+F 0 "#TP1007" H 1248 1900 50  0001 L CNN
+F 1 "TestPoint_Small" H 1248 1855 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm" H 1400 1900 50  0001 C CNN
+F 3 "~" H 1400 1900 50  0001 C CNN
+	1    1200 1900
+	1    0    0    -1  
+$EndComp
+Text Label 1200 1500 2    50   ~ 0
+D20
+$Comp
+L Connector:TestPoint_Small #TP1006
+U 1 1 63A4E88A
+P 1200 1800
+F 0 "#TP1006" H 1248 1800 50  0001 L CNN
+F 1 "TestPoint_Small" H 1248 1755 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm" H 1400 1800 50  0001 C CNN
+F 3 "~" H 1400 1800 50  0001 C CNN
+	1    1200 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Small #TP1005
+U 1 1 63A4EA67
+P 1200 1700
+F 0 "#TP1005" H 1248 1700 50  0001 L CNN
+F 1 "TestPoint_Small" H 1248 1655 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm" H 1400 1700 50  0001 C CNN
+F 3 "~" H 1400 1700 50  0001 C CNN
+	1    1200 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Small #TP1004
+U 1 1 63A4EC63
+P 1200 1600
+F 0 "#TP1004" H 1248 1600 50  0001 L CNN
+F 1 "TestPoint_Small" H 1248 1555 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm" H 1400 1600 50  0001 C CNN
+F 3 "~" H 1400 1600 50  0001 C CNN
+	1    1200 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Small #TP1003
+U 1 1 63A4EEFA
+P 1200 1500
+F 0 "#TP1003" H 1248 1546 50  0001 L CNN
+F 1 "TestPoint_Small" H 1248 1500 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm" H 1400 1500 50  0001 C CNN
+F 3 "~" H 1400 1500 50  0001 C CNN
+	1    1200 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Small #TP1002
+U 1 1 63A4F0A0
+P 1200 1400
+F 0 "#TP1002" H 1248 1446 50  0001 L CNN
+F 1 "TestPoint_Small" H 1248 1400 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm" H 1400 1400 50  0001 C CNN
+F 3 "~" H 1400 1400 50  0001 C CNN
+	1    1200 1400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Small #TP1001
+U 1 1 63A4F28A
+P 1200 1300
+F 0 "#TP1001" H 1248 1300 50  0001 L CNN
+F 1 "TestPoint_Small" H 1248 1255 50  0001 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm" H 1400 1300 50  0001 C CNN
+F 3 "~" H 1400 1300 50  0001 C CNN
+	1    1200 1300
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
