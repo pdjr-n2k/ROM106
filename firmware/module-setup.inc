@@ -1,12 +1,11 @@
 /**********************************************************************
  * module-setup.inc
  */
- 
-/**********************************************************************
- * We are using Button debouncers on our switch input channels and we
- * need to initialise these using the begin() method.
- */
-for (unsigned int i = 0; i < ELEMENTCOUNT(SWITCH_INPUTS); i++) SWITCH_INPUTS[i].begin();
+
+// Initialise all core GPIO pins.
+int rcopins[] = GPIO_RELAY_CONTROL_OUTPUT_PINS;
+for (unsigned int i = 0 ; i < ELEMENTCOUNT(rcopins); i++) pinMode(rcopins[i], OUTPUT);
+   
 
 /**********************************************************************
  * Clear switchbank status buffer.

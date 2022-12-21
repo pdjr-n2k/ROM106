@@ -28,7 +28,7 @@
  * software build. Really this needs automating.
  */
 #define DEVICE_CLASS 30                 // Electrical Distribution
-#define DEVICE_FUNCTION 140             // Binary Event Monitor
+#define DEVICE_FUNCTION 140             // Load Controller
 #define DEVICE_INDUSTRY_GROUP 4         // Maritime
 #define DEVICE_MANUFACTURER_CODE 2046   // Currently not allocated.
 #define DEVICE_UNIQUE_NUMBER 849        // Bump me?
@@ -46,8 +46,10 @@
 #define PRODUCT_LEN 1
 #define PRODUCT_N2K_VERSION 2022        // The N2K specification version?
 #define PRODUCT_SERIAL_CODE "002-849"   // PRODUCT_CODE + DEVICE_UNIQUE_NUMBER
-#define PRODUCT_TYPE "SIM108"           // The product name?
+#define PRODUCT_TYPE "ROM106"           // The product name?
 #define PRODUCT_VERSION "1.0 (Mar 2022)"
+
+
 
 /**********************************************************************
  * NMEA2000 LIBRARY DEFINITIONS
@@ -81,19 +83,31 @@
 /**********************************************************************
  * Aliases for GPIO pins connected to switch inputs. 
  */
-#define GPIO_RELAY1 GPIO_D23
-#define GPIO_RELAY2 GPIO_D22
-#define GPIO_RELAY3 GPIO_D21
-#define GPIO_RELAY4 GPIO_D20
-#define GPIO_RELAY5 GPIO_D6
-#define GPIO_RELAY6 GPIO_D5
-#define GPIO_ENABLE GPIO_D8
-#define GPIO_SELECT GPIO_D9
+#define GPIO_RELAY1_ENABLE GPIO_D23
+#define GPIO_RELAY2_ENABLE GPIO_D22
+#define GPIO_RELAY3_ENABLE GPIO_D21
+#define GPIO_RELAY4_ENABLE GPIO_D20
+#define GPIO_RELAY5_ENABLE GPIO_D6
+#define GPIO_RELAY6_ENABLE GPIO_D5
+#define GPIO_RELAY_SET GPIO_D8
+#define GPIO_RELAY_RST GPIO_D9
+#define GPIO_RELAY_CONTROL_OUTPUT_PINS { GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY6_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
+
 
 /**********************************************************************
  * Number of milliseconds between checks on switch input channel state.
  */
 #define RELAY_PROCESS_INTERVAL 100       // Process relay outputs every n ms
+
+/**********************************************************************
+ * Maximum number of entries in the relay operation queue.
+ */
+#define RELAY_OPERATION_QUEUE_SIZE 10       // Max number of entries
+
+/**********************************************************************
+ * Frequency of relay queue processing.
+ */
+#define RELAY_OPERATION_QUEUE_INTERVAL 20UL
 
 /**********************************************************************
  * Number of milliseconds between regular transmission of PGN 127501.
@@ -106,5 +120,5 @@
  */
 void transmitSwitchbankStatusMaybe(bool force = false);
 void transmitPGN127501();
-void handlePGN127502(tN2kMsg msg);
+void handlePGN127502(const tN2kMsg n2kMsg);
 int updateModuleInstance(int value);

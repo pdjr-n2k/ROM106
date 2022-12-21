@@ -6,11 +6,6 @@
  * functions must be declared at the end of module-definitions.inc.
  */
 
-/**********************************************************************
- * SWITCH_INPUTS - array of debounced GPIO inputs which connect the
- * module's external switch inputs.
- */
-Button SWITCH_INPUTS[] = { Button(GPIO_SWITCH_INPUT1), Button(GPIO_SWITCH_INPUT2), Button(GPIO_SWITCH_INPUT3), Button(GPIO_SWITCH_INPUT4), Button(GPIO_SWITCH_INPUT5), Button(GPIO_SWITCH_INPUT6), Button(GPIO_SWITCH_INPUT7), Button(GPIO_SWITCH_INPUT8) };
 
 /**********************************************************************
  * SWITCHBANK_STATUS - working storage for holding the most recently
@@ -20,32 +15,100 @@ Button SWITCH_INPUTS[] = { Button(GPIO_SWITCH_INPUT1), Button(GPIO_SWITCH_INPUT2
 tN2kBinaryStatus SWITCHBANK_STATUS;
 
 /**********************************************************************
- * processSwitchInputsMaybe() should be called directly from loop().
- * The function checks switch states every SWITCH_PROCESS_INTERVAL and
- * updates SWITCHBANK_STATUS with any changes. If a change is made,
- * then a call is made to transmit the update over NMEA.
+ * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
+ * specifies a relay (1 through 4) and an operation: SET if the opcode
+ * is positive; reset if the opcode is negative. Relay operations are
+ * queued for sequential processing in order to smooth out the uneven
+ * and possibly unsupportable power demands that could result from
+ * parallel or overlapping operation of multiple relays.
  */
-void processSwitchInputsMaybe() {
+ArduinoQueue<int> RELAY_OPERATION_QUEUE(RELAY_OPERATION_QUEUE_SIZE);
+
+  
+/**********************************************************************
+ * processRelayOperationQueueMaybe() should be called directly from
+ * loop.
+ * 
+ * The function will execute each RELAY_OPERATION_QUEUE_INTERVAL and
+ * it is important that this constant is set to a value equal to or
+ * greater than the minimum operating signal hold period of the
+ * physical relays installed on the host PCB. For most latching
+ * relays this will be around 20ms.
+ * 
+ * The function begins by switching off all H-bridge outputs, ensuring
+ * that any output that may have been switched on in the previous
+ * operating cycle is terminated.
+ * 
+ * The RELAY_OPERATION_QUEUE is checked and any head entry opcode is
+ * removed and processed. A retrieved opcode will be a signed integer
+ * whose absolute value specifies an output channel and whose sign
+ * indicates whether the channel should be turned on (set) or turned
+ * off (reset).
+ * 
+ * The function sets up H-bridge SET and RST GPIOs appropriately and
+ * then switches on the selected channel's ENABLE GPIO, thus energising
+ * the associated relay coil. A call is made to request transmission of
+ * an NMEA message signalling the state change.
+ */
+void processRelayOperationQueueMaybe() {
   static unsigned long deadline = 0UL;
   unsigned long now = millis();
-  bool updated = false;
-  tN2kOnOff switchStatus = N2kOnOff_Unavailable;
+  static bool operating = true;
+  int opcode;
 
   if (now > deadline) {
-    for (unsigned int i = 0; i < ELEMENTCOUNT(SWITCH_INPUTS); i++) {
-      if (SWITCH_INPUTS[i].toggled()) {
-        switchStatus = (SWITCH_INPUTS[i].read() == Button::PRESSED)?N2kOnOff_On:N2kOnOff_Off;
-        if (switchStatus != N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, (i + 1))) {
-          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, switchStatus, (i + 1));
-          updated = true;
-        }
-      }
+
+    if (operating) {
+      digitalWrite(GPIO_RELAY1_ENABLE, 0);
+      digitalWrite(GPIO_RELAY2_ENABLE, 0);
+      digitalWrite(GPIO_RELAY3_ENABLE, 0);
+      digitalWrite(GPIO_RELAY4_ENABLE, 0);
+      digitalWrite(GPIO_RELAY5_ENABLE, 0);
+      digitalWrite(GPIO_RELAY6_ENABLE, 0);
     }
-    if (updated) transmitSwitchbankStatusMaybe(true);
-    deadline = (now + SWITCH_PROCESS_INTERVAL);
+
+    if (!RELAY_OPERATION_QUEUE.isEmpty()) {
+      opcode = RELAY_OPERATION_QUEUE.dequeue();
+      if (opcode > 0) {
+        digitalWrite(GPIO_RELAY_SET, 1); digitalWrite(GPIO_RELAY_RST, 0);
+      } else {
+        digitalWrite(GPIO_RELAY_SET, 0); digitalWrite(GPIO_RELAY_RST, 1);
+      }
+      switch (opcode) {
+        case 1: case -1:
+          digitalWrite(GPIO_RELAY1_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 1);
+          break;
+        case 2: case -2:
+          digitalWrite(GPIO_RELAY2_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 2);
+          break;
+        case 3: case -3:
+          digitalWrite(GPIO_RELAY3_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 3);
+          break;
+        case 4: case -4:
+          digitalWrite(GPIO_RELAY4_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 4);
+          break;
+        case 5: case -5:
+          digitalWrite(GPIO_RELAY5_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 5);
+          break;
+        case 6: case -6:
+          digitalWrite(GPIO_RELAY6_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 6);
+          break;
+        default: break;
+      }
+      operating = true;
+      transmitSwitchbankStatusMaybe(true);
+    }
+    
+    deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
   }
 }
-  
+
 /**********************************************************************
  * transmitSwitchbankStatusMaybe() should be called directly from
  * loop(). The function proceeds to transmit a switchbank binary status
@@ -60,6 +123,42 @@ void transmitSwitchbankStatusMaybe(bool force) {
     digitalWrite(GPIO_POWER_LED, 1);
     TRANSMIT_LED_STATE = 1;
     deadline = (now + PGN127501_TRANSMIT_INTERVAL);
+  }
+}
+
+/**********************************************************************
+ * Process a received PGN 127502 Switch Bank Control message by
+ * decoding the switchbank status message and comparing the requested
+ * channel state(s) with the current SWITCHBANK_STATUS. Any mismatch 
+ * results in one or more opcodes representing an appropriate set or
+ * reset operation on each changed channel being queued for subsequent
+ * processing.
+ * 
+ * If the relay operation queue is full, the LED display is set to
+ * LED_QUEUE_FULL_ERROR_PATTERN and locked until the queue again
+ * becomes usable.
+ */
+void handlePGN127502(const tN2kMsg n2kMsg) {
+  unsigned char instance;
+  tN2kBinaryStatus bankStatus;
+  tN2kOnOff channelStatus;
+  
+  if (ParseN2kPGN127501(n2kMsg, instance, bankStatus)) {
+    if (instance == MODULE_INSTANCE) {
+      for (unsigned int c = 1; c <= 6; c++) {
+        channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, c);
+        if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
+          if (channelStatus != N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c)) {
+            if (!RELAY_OPERATION_QUEUE.isFull()) {
+              //LED_DISPLAY.cancelOverride();
+              RELAY_OPERATION_QUEUE.enqueue((int) (c * ((channelStatus == N2kOnOff_On)?1:-1)));
+            } else {
+              //LED_DISPLAY.override(LED_QUEUE_FULL_ERROR_PATTERN);
+            }
+          }
+        }
+      }
+    }
   }
 }
 
