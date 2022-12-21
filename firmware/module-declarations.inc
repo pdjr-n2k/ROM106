@@ -139,7 +139,7 @@ void transmitSwitchbankStatusMaybe(bool force) {
  * LED_QUEUE_FULL_ERROR_PATTERN and locked until the queue again
  * becomes usable.
  */
-void handlePGN127502(const tN2kMsg n2kMsg) {
+void handlePGN127502(const tN2kMsg &n2kMsg) {
   unsigned char instance;
   tN2kBinaryStatus bankStatus;
   tN2kOnOff channelStatus;
