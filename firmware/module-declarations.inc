@@ -70,9 +70,11 @@ void processRelayOperationQueueMaybe() {
     if (!RELAY_OPERATION_QUEUE.isEmpty()) {
       opcode = RELAY_OPERATION_QUEUE.dequeue();
       if (opcode > 0) {
-        digitalWrite(GPIO_RELAY_SET, 1); digitalWrite(GPIO_RELAY_RST, 0);
+        digitalWrite(GPIO_RELAY_SET, 1);
+        digitalWrite(GPIO_RELAY_RST, 0);
       } else {
-        digitalWrite(GPIO_RELAY_SET, 0); digitalWrite(GPIO_RELAY_RST, 1);
+        digitalWrite(GPIO_RELAY_SET, 0);
+        digitalWrite(GPIO_RELAY_RST, 1);
       }
       switch (opcode) {
         case 1: case -1:
@@ -120,7 +122,6 @@ void transmitSwitchbankStatusMaybe(bool force) {
 
   if ((now > deadline) || force) {
     transmitPGN127501();
-    digitalWrite(GPIO_POWER_LED, 1);
     TRANSMIT_LED_STATE = 1;
     deadline = (now + PGN127501_TRANSMIT_INTERVAL);
   }
