@@ -6,15 +6,14 @@
  * application functions
  */
   
- /**********************************************************************
+/**********************************************************************
  * DEVICE INFORMATION
  * 
  * Because of NMEA's closed standard, most of this is fiction. Maybe it
  * can be made better with more research.
  *
  * DEVICE_CLASS and DEVICE_FUNCTION are explained in the document
- * "NMEA 2000 Appendix B.6 Class & Function Codes". The example values
- * below would be approprate for a switch input module.
+ * "NMEA 2000 Appendix B.6 Class & Function Codes".
  * 
  * INDUSTRY_GROUP we can be confident about (4 says maritime).
  * 
@@ -25,7 +24,8 @@
  * UNIQUE_NUMBER is combined in some way so that together they define
  * a value which must be unique (is some way) on any N2K bus. An easy
  * way to achieve this is just to bump the unique number for every
- * software build. Really this needs automating.
+ * software build. Really this needs (i) understanding and
+ * (ii) automating.
  */
 #define DEVICE_CLASS 30                 // Electrical Distribution
 #define DEVICE_FUNCTION 140             // Load Controller
@@ -61,8 +61,8 @@
  * NMEA_PGN_HANDLERS is an initialiser for a jump vector which defines
  * a list of pairs each of which maps a PGN to the function responsible
  * for processing messages of the defined type when they are received
- * over the CAN interface. For example, { 127501, myFunc }. The list
- * must terminate with the special flag value { 0, 0 }.
+ * over the CAN interface. For example, { 127501L, myFunc }. The list
+ * must terminate with the special flag value { 0L, 0 }.
  */
 #define NMEA_TRANSMIT_MESSAGE_PGNS { 127501L, 0 }
 #define NMEA_PGN_HANDLERS  { { 127502L, handlePGN127502 }, { 0L, 0 } }

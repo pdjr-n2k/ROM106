@@ -16,7 +16,8 @@
 #include <ProcessQueue.h>
 #include <StateMachine.h>
 #include <arraymacros.h>
-#include <ArduinoQueue.h>
+
+#include "module-libraries.inc"
 
 /**********************************************************************
  * SERIAL DEBUG
@@ -96,9 +97,9 @@
  */
 void messageHandler(const tN2kMsg&);
 void flashTransmitLedMaybe();
-void processPrgButtonPress();
 uint8_t getStatusLedsStatus();
 void prgButtonHandler(bool released);
+int configureModuleInstance(int value);
 
 /**********************************************************************
  * List of PGNs transmitted by this program.
@@ -309,6 +310,17 @@ void prgButtonHandler(bool released) {
  * redefinition issues.
  */
 uint8_t getStatusLedsStatus() {
+  return(0);
+}
+#endif
+
+#ifndef CONFIGURE_MODULE_INSTANCE
+int configureModuleInstance(int value) {
+  if (!(value & 0x0100)) {
+    EEPROM.write(INSTANCE_ADDRESS_EEPROM_ADDRESS, value);
+    MODULE_INSTANCE = EEPROM.read(INSTANCE_ADDRESS_EEPROM_ADDRESS);
+  }
+  STATUS_LEDS.writeByte(MODULE_INSTANCE); delay(1000);
   return(0);
 }
 #endif

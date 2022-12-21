@@ -197,7 +197,7 @@ int updateModuleInstance(int value) {
 #define GET_STATUS_LEDS_STATUS
 uint8_t getStatusLedsStatus() {
   unsigned char retval = 0;
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 6; i++) {
     retval = (retval | (((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, (i + 1)) == N2kOnOff_On)?1:0) << i));
   }
   return(retval);
