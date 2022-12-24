@@ -121,4 +121,3 @@
 void transmitSwitchbankStatusMaybe(bool force = false);
 void transmitPGN127501();
 void handlePGN127502(const tN2kMsg &n2kMsg);
-int updateModuleInstance(int value);

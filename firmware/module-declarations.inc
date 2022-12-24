@@ -176,15 +176,6 @@ void transmitPGN127501() {
   }
 }  
 
-int updateModuleInstance(int value) {
-  if (!(value & 0x0100)) {
-    EEPROM.write(INSTANCE_ADDRESS_EEPROM_ADDRESS, value);
-    MODULE_INSTANCE = EEPROM.read(INSTANCE_ADDRESS_EEPROM_ADDRESS);
-  }
-  STATUS_LEDS.writeByte(MODULE_INSTANCE); delay(1000);
-  return(0);
-}
-
 /**********************************************************************
  * OVERRIDE OF FUNCTIONS IN NOP100
  */
