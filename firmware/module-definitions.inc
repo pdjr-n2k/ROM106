@@ -1,123 +1,196 @@
 /**********************************************************************
- * module-definitions.inc
+ * module-declarations.inc
  *
- * Contains #defines for the constant values which characterise our
- * module application and, a little incongruously, declarations for our
- * application functions
+ * Contains declarations of types, variables, etc. that are required
+ * for implementation of our application. Note that application
+ * functions must be declared at the end of module-definitions.inc.
  */
+
+
+/**********************************************************************
+ * SWITCHBANK_STATUS - working storage for holding the most recently
+ * read state of the Teensy switch inputs in the format used by the
+ * NMEA2000 library.
+ */
+tN2kBinaryStatus SWITCHBANK_STATUS;
+
+/**********************************************************************
+ * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
+ * specifies a relay (1 through 4) and an operation: SET if the opcode
+ * is positive; reset if the opcode is negative. Relay operations are
+ * queued for sequential processing in order to smooth out the uneven
+ * and possibly unsupportable power demands that could result from
+ * parallel or overlapping operation of multiple relays.
+ */
+ArduinoQueue<int> RELAY_OPERATION_QUEUE(RELAY_OPERATION_QUEUE_SIZE);
+
   
 /**********************************************************************
- * DEVICE INFORMATION
+ * processRelayOperationQueueMaybe() should be called directly from
+ * loop.
  * 
- * Because of NMEA's closed standard, most of this is fiction. Maybe it
- * can be made better with more research.
- *
- * DEVICE_CLASS and DEVICE_FUNCTION are explained in the document
- * "NMEA 2000 Appendix B.6 Class & Function Codes".
+ * The function will execute each RELAY_OPERATION_QUEUE_INTERVAL and
+ * it is important that this constant is set to a value equal to or
+ * greater than the minimum operating signal hold period of the
+ * physical relays installed on the host PCB. For most latching
+ * relays this will be around 20ms.
  * 
- * INDUSTRY_GROUP we can be confident about (4 says maritime).
+ * The function begins by switching off all H-bridge outputs, ensuring
+ * that any output that may have been switched on in the previous
+ * operating cycle is terminated.
  * 
- * MANUFACTURER_CODE is only allocated to subscribed NMEA members and,
- * unsurprisingly, an anonymous code has not been assigned: 2046 is
- * currently unused, so we adopt that.  
+ * The RELAY_OPERATION_QUEUE is checked and any head entry opcode is
+ * removed and processed. A retrieved opcode will be a signed integer
+ * whose absolute value specifies an output channel and whose sign
+ * indicates whether the channel should be turned on (set) or turned
+ * off (reset).
  * 
- * UNIQUE_NUMBER is combined in some way so that together they define
- * a value which must be unique (is some way) on any N2K bus. An easy
- * way to achieve this is just to bump the unique number for every
- * software build. Really this needs (i) understanding and
- * (ii) automating.
+ * The function sets up H-bridge SET and RST GPIOs appropriately and
+ * then switches on the selected channel's ENABLE GPIO, thus energising
+ * the associated relay coil. A call is made to request transmission of
+ * an NMEA message signalling the state change.
  */
-#define DEVICE_CLASS 30                 // Electrical Distribution
-#define DEVICE_FUNCTION 140             // Load Controller
-#define DEVICE_INDUSTRY_GROUP 4         // Maritime
-#define DEVICE_MANUFACTURER_CODE 2046   // Currently not allocated.
-#define DEVICE_UNIQUE_NUMBER 849        // Bump me?
+void processRelayOperationQueueMaybe() {
+  static unsigned long deadline = 0UL;
+  unsigned long now = millis();
+  static bool operating = true;
+  int opcode;
 
+  if (now > deadline) {
+
+    if (operating) {
+      digitalWrite(GPIO_RELAY1_ENABLE, 0);
+      digitalWrite(GPIO_RELAY2_ENABLE, 0);
+      digitalWrite(GPIO_RELAY3_ENABLE, 0);
+      digitalWrite(GPIO_RELAY4_ENABLE, 0);
+      digitalWrite(GPIO_RELAY5_ENABLE, 0);
+      digitalWrite(GPIO_RELAY6_ENABLE, 0);
+    }
+
+    if (!RELAY_OPERATION_QUEUE.isEmpty()) {
+      opcode = RELAY_OPERATION_QUEUE.dequeue();
+      if (opcode > 0) {
+        digitalWrite(GPIO_RELAY_SET, 1);
+        digitalWrite(GPIO_RELAY_RST, 0);
+      } else {
+        digitalWrite(GPIO_RELAY_SET, 0);
+        digitalWrite(GPIO_RELAY_RST, 1);
+      }
+      switch (opcode) {
+        case 1: case -1:
+          digitalWrite(GPIO_RELAY1_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 1);
+          break;
+        case 2: case -2:
+          digitalWrite(GPIO_RELAY2_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 2);
+          break;
+        case 3: case -3:
+          digitalWrite(GPIO_RELAY3_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 3);
+          break;
+        case 4: case -4:
+          digitalWrite(GPIO_RELAY4_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 4);
+          break;
+        case 5: case -5:
+          digitalWrite(GPIO_RELAY5_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 5);
+          break;
+        case 6: case -6:
+          digitalWrite(GPIO_RELAY6_ENABLE, 1);
+          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 6);
+          break;
+        default: break;
+      }
+      operating = true;
+      transmitSwitchbankStatusMaybe(true);
+    }
+    
+    deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
+  }
+}
 
 /**********************************************************************
- * PRODUCT INFORMATIOM
+ * transmitSwitchbankStatusMaybe() should be called directly from
+ * loop(). The function proceeds to transmit a switchbank binary status
+ * message if PGN127501_TRANSMIT_INTERVAL has elapsed or <force> is true.
+ */
+void transmitSwitchbankStatusMaybe(bool force) {
+  static unsigned long deadline = 0UL;
+  unsigned long now = millis();
+
+  if ((now > deadline) || force) {
+    transmitPGN127501();
+    TRANSMIT_LED_STATE = 1;
+    deadline = (now + PGN127501_TRANSMIT_INTERVAL);
+  }
+}
+
+/**********************************************************************
+ * Process a received PGN 127502 Switch Bank Control message by
+ * decoding the switchbank status message and comparing the requested
+ * channel state(s) with the current SWITCHBANK_STATUS. Any mismatch 
+ * results in one or more opcodes representing an appropriate set or
+ * reset operation on each changed channel being queued for subsequent
+ * processing.
  * 
- * This poorly structured set of values is what NMEA expects a product
- * description to be shoe-horned into.
+ * If the relay operation queue is full, the LED display is set to
+ * LED_QUEUE_FULL_ERROR_PATTERN and locked until the queue again
+ * becomes usable.
  */
-#define PRODUCT_CERTIFICATION_LEVEL 1
-#define PRODUCT_CODE 002
-#define PRODUCT_FIRMWARE_VERSION "1.1.0 (Jun 2022)"
-#define PRODUCT_LEN 1
-#define PRODUCT_N2K_VERSION 2022        // The N2K specification version?
-#define PRODUCT_SERIAL_CODE "002-849"   // PRODUCT_CODE + DEVICE_UNIQUE_NUMBER
-#define PRODUCT_TYPE "ROM106"           // The product name?
-#define PRODUCT_VERSION "1.0 (Mar 2022)"
-
-
+void handlePGN127502(const tN2kMsg &n2kMsg) {
+  unsigned char instance;
+  tN2kBinaryStatus bankStatus;
+  tN2kOnOff channelStatus;
+  
+  if (ParseN2kPGN127501(n2kMsg, instance, bankStatus)) {
+    if (instance == MODULE_INSTANCE) {
+      for (unsigned int c = 1; c <= 6; c++) {
+        channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, c);
+        if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
+          if (channelStatus != N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c)) {
+            if (!RELAY_OPERATION_QUEUE.isFull()) {
+              //LED_DISPLAY.cancelOverride();
+              RELAY_OPERATION_QUEUE.enqueue((int) (c * ((channelStatus == N2kOnOff_On)?1:-1)));
+            } else {
+              //LED_DISPLAY.override(LED_QUEUE_FULL_ERROR_PATTERN);
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 /**********************************************************************
- * NMEA2000 LIBRARY DEFINITIONS
- *
- * NMEA_TRANSMIT_MESSAGE_PGNS is an initialiser for an array of PGNs
- * which defines the messages transmitted by this firmware. The list
- * must terminate with a zero value.
- *
- * NMEA_PGN_HANDLERS is an initialiser for a jump vector which defines
- * a list of pairs each of which maps a PGN to the function responsible
- * for processing messages of the defined type when they are received
- * over the CAN interface. For example, { 127501L, myFunc }. The list
- * must terminate with the special flag value { 0L, 0 }.
+ * Assemble and transmit a PGN 127501 Binary Status Update message
+ * reflecting the current switchbank state.
  */
-#define NMEA_TRANSMIT_MESSAGE_PGNS { 127501L, 0 }
-#define NMEA_PGN_HANDLERS  { { 127502L, handlePGN127502 }, { 0L, 0 } }
+void transmitPGN127501() {
+  static tN2kMsg N2kMsg;
+
+  if (MODULE_INSTANCE < 253) {
+    SetN2kPGN127501(N2kMsg, MODULE_INSTANCE, SWITCHBANK_STATUS);
+    NMEA2000.SendMsg(N2kMsg);
+  }
+}  
 
 /**********************************************************************
- * STATE MACHINE CALLBACK DEFINITIONS
- *
- * PRG_JUMP_VECTOR is an initialiser for a jump vector which defines
- * a list of pairs each of which maps an integer "machine state" to the
- * function responsible for processing that state.
- *
- * The vector is used to configure a state machine that is used to
- * handle module configuration conducted through operation of the
- * hardware PRG button.
+ * OVERRIDE OF FUNCTIONS IN NOP100
  */
-#define PRG_JUMP_VECTOR { { 0, updateModuleInstance }, { 0, 0} }
 
 /**********************************************************************
- * Aliases for GPIO pins connected to switch inputs. 
+ * getStatusLedsStatus - overrides the default function in the generic
+ * firmware, returning a value that can be used to update the status
+ * LEDs with the input channel states.
  */
-#define GPIO_RELAY1_ENABLE GPIO_D23
-#define GPIO_RELAY2_ENABLE GPIO_D22
-#define GPIO_RELAY3_ENABLE GPIO_D21
-#define GPIO_RELAY4_ENABLE GPIO_D20
-#define GPIO_RELAY5_ENABLE GPIO_D6
-#define GPIO_RELAY6_ENABLE GPIO_D5
-#define GPIO_RELAY_SET GPIO_D8
-#define GPIO_RELAY_RST GPIO_D9
-#define GPIO_RELAY_CONTROL_OUTPUT_PINS { GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY6_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
+#define GET_STATUS_LEDS_STATUS
+uint8_t getStatusLedsStatus() {
+  unsigned char retval = 0;
+  for (int i = 0; i < 6; i++) {
+    retval = (retval | (((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, (i + 1)) == N2kOnOff_On)?1:0) << i));
+  }
+  return(retval);
+}
 
-
-/**********************************************************************
- * Number of milliseconds between checks on switch input channel state.
- */
-#define RELAY_PROCESS_INTERVAL 100       // Process relay outputs every n ms
-
-/**********************************************************************
- * Maximum number of entries in the relay operation queue.
- */
-#define RELAY_OPERATION_QUEUE_SIZE 10       // Max number of entries
-
-/**********************************************************************
- * Frequency of relay queue processing.
- */
-#define RELAY_OPERATION_QUEUE_INTERVAL 20UL
-
-/**********************************************************************
- * Number of milliseconds between regular transmission of PGN 127501.
- */
-#define PGN127501_TRANSMIT_INTERVAL 4000UL
-
-/**********************************************************************
- * Ok, these are declarations, not definitions, but we need to get the
- * jump vector callbacks in the world quite early...
- */
-void transmitSwitchbankStatusMaybe(bool force = false);
-void transmitPGN127501();
-void handlePGN127502(const tN2kMsg &n2kMsg);
