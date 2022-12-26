@@ -4,108 +4,47 @@
 [NOP100](https://github.com/preeve9534/NOP100)
 which implements a six channel NMEA 2000 relay output module.
 
-__ROM106__ consists of a microcontroller-based hardware design
-and an associated firmware.
+The module presents on the NMEA bus as a switchbank device with
+Class Code 30 (Electrical Distribution) and Function Code 140
+(Load Controller) and reports its status through transmission of
+PGN 127501 Binary Status Report messages.
+The module accepts PGN 127502 Switch Bank Control messages as the
+only means of controlling the state of its relay outputs.
 
-The stock firmware realises an NMEA 2000 switch bank interface
-that transmits
-[PGN 127501 Binary Status Report]() messages
-and responds to
-[PGN 127502 Switch Bank Control]() messages.
+The module is powered from the host NMEA bus and has an LEN of 0.5.
 
-The module is powered from the NMEA bus and has an LEN of 1.0.
+## Relay outputs
 
-## Design overview
+The relay output sub-system consists of six bistable relays with
+zero-volt CO, NO and NCC terminals availble for the connection of
+circuits that should be under module control.
 
-__ROM106__ uses a Teensy 3.2 microcontroller supported by
-power supply, CAN interface, configuration, display and
-relay output sub-systems.
+Relay connections are rated for a maximum of 5A at up to 220VAC
+or 30VDC.
 
-The power supply sub-system consists of a solid-state DC-DC
-converter which adapts the voltage of the NMEA host NMEA bus to
-the 5VDC required by the module's electronics.
-The power supply is rated at 2W and its bus connection is fused
-and reverse polarity protected.
+## Relay operation and status reporting
 
-The CAN interface sub-system manages all NMEA data bus I/O.
-The data bus connection can be switched by the installer to
-include a 120 Ohm bus termination resistor allowing the module
-to be installed as either a bus termination node or a drop node.
+__ROM106__'s relay states are updated by the receipt of a PGN 127502
+Switch Bank Control message addressed to the module's instance number.
 
-The configuration sub-system consists of an 8-position DIL switch
-and push-button which allow installer configuration of the module's
-NMEA instance number.
+Operation of individual relays is queued so that any request for state
+change of multiple relays cannot result in the a problematic concurrent
+relay switching load.
 
-The display sub-system provides a collection of LEDs which are used
-to give configuration feedback and indicate the module operating
-status.
+__ROM106__ transmits PGN 127501 Binary Status Report messages to report
+the module status.
 
-The relay output sub-system consists of three H-bridge driver
-ICs, each of which supports two output channels by providing a
-polarity reversing drive for two bistable SPDT relays.
-The use of bistable relays has the dual benefit of persisting relay
-states in the event of bus failure and of minimising the bus power
-consumed by relay operation.
-Each relay presents zero-volt CO, NC and NO connections through
-a pluggable terminal block and the relay and connections are rated
-for 5A at up to 220VAC/30VDC.
+By default a status report is transmitted once every four seconds or immediately following the receipt and handling of a PGN 17502 message.
+The default transmission interval can be configured by the user.
 
-__ROM104__'s stock firmware receives switchbank status instructions
-over NMEA and queues any requested relay state change operations so
-that concurrent relay switching loads cannot occur.
+## Module configuration
 
-The firmware transmits(T) and receives(R) the following NMEA 2000
-message types.
+**ROM106** understands the following configuration parameters.
 
-| PGN                           | Mode   | Description |
-| :---                          | :----: | :---------- |
-| 127501 (Binary Status Report) | T      | Issued every four seconds or immediately on the state change of any output channel. |
-| 127502 (Switch Bank Control)  | R      | Used to set one or more relay channel states. |  
-
-## Implementation
-
-### Parts list
-
-| REF      | Subsystem       | Component               | RS Part#|
-| :---     | :---            | :---                    | :--- |
-| --       | ENC             | [Plastic flanged enclosure](https://docs.rs-online.com/1460/0900766b814af994.pdf) | [919-0357](https://uk.rs-online.com/web/p/general-purpose-enclosures/9190357) |
-| --       | PCB             | [PCB](./ROM104.brd.pdf) | |
-| U7       | Microcontroller | [PJRC Teensy 3.2 MCU](https://www.pjrc.com/store/teensy32.html) |
-| C8       | Microcontroller | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
-| SW1      | Configuration   | [8-way SPST DIP switch](https://docs.rs-online.com/c98b/0900766b810b550f.pdf) | [756-1347](https://uk.rs-online.com/web/p/dip-sip-switches/7561347/) |
-| SW2      | Configuration   | [2-way SPST DIP switch](https://docs.rs-online.com/a014/0900766b81670159.pdf) | [177-4261](https://uk.rs-online.com/web/p/dip-sip-switches/1774261) |
-| SW3      | Configuration   | [Push button](https://docs.rs-online.com/9eaa/0900766b81403991.pdf) | [010-2327](https://uk.rs-online.com/web/p/keyboard-switches/0102327) |
-| ??       | Configuration   | [MAX6816 debouncer](https://docs.rs-online.com/617e/0900766b81729403.pdf) | [189-9248](https://uk.rs-online.com/web/p/bounce-eliminator-ics/1899248) |
-| U6       | Display         | [74HC595 shift register](https://uk.rs-online.com/web/p/counter-ics/7091971) | [709-1971](https://uk.rs-online.com/web/p/counter-ics/7091971) |
-| C9       | Display         | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
-| D1-D8    | Display         | [2mm rectangular LED](https://docs.rs-online.com/3547/0900766b81384f75.pdf) | [229-2447](https://uk.rs-online.com/web/p/leds/2292447) |
-| RN1      | Display         | [470R 8x resistor array](https://docs.rs-online.com/d532/0900766b8069ccfd.pdf) | [522-4273](https://uk.rs-online.com/web/p/resistor-arrays/5224273) |
-| U3       | Power supply    | [TracoPower TMR-2411 DC-DC converter](https://docs.rs-online.com/1b79/0900766b8172f5cb.pdf) | [433-8258](https://uk.rs-online.com/web/p/dc-dc-converters/4338258) |
-| F1       | Power supply    | [1A resettable fuse](https://docs.rs-online.com/ec39/0900766b80bc9043.pdf) | [657-1772](https://uk.rs-online.com/web/p/resettable-fuses/6571772) |
-| U2       | CAN interface   | [MCP2551-I/P CAN transceiver](https://docs.rs-online.com/f763/0900766b8140ba57.pdf) | [876-7259](https://uk.rs-online.com/web/p/can-interface-ics/8767259) | 
-| C1       | CAN interface | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
-| R1       | CAN interface   | [4K7 0.25W resistor](https://docs.rs-online.com/d566/A700000008919924.pdf) | [707-7260](https://uk.rs-online.com/web/p/through-hole-resistors/7077726) |
-| R2       | CAN interface   | [120R 0.5W resistor](https://docs.rs-online.com/1e48/0900766b8157ae0f.pdf) | [707-8154](https://uk.rs-online.com/web/p/through-hole-resistors/7078154) |
-| J3       | CAN interface   | [Terminal block 1x5 2.54"](https://docs.rs-online.com/85fb/0900766b816edda7.pdf) | [220-4298](https://uk.rs-online.com/web/p/pcb-terminal-blocks/2204298) |
-| J3*      | CAN interface   | [M12 5-pin male connector ](https://docs.rs-online.com/6e45/A700000007926144.pdf) | [877-1154](https://uk.rs-online.com/web/p/industrial-circular-connectors/8771154) |
-| U1,U4,U5 | Relay output | [L293D quadruple half-H driver](https://docs.rs-online.com/90a7/0900766b8135fae0.pdf) | [714-0622](https://uk.rs-online.com/web/p/motor-driver-ics/7140622) |
-| K1-K6    | Relay output | [TE Connectivity 5A latching relay](https://docs.rs-online.com/39e5/0900766b81397a52.pdf) | [616-8584](https://uk.rs-online.com/web/p/power-relays/6168584) |
-| J1,J2,J4 | Relay output | [Terminal block header](https://docs.rs-online.com/0a3e/0900766b8157d660.pdf) | [897-1272](https://uk.rs-online.com/web/p/pcb-headers/8971272) |
-| C2-C7    | Relay output | [100nF elctrolytic capacitor](https://docs.rs-online.com/6ccf/0900766b8143e698.pdf)| [862-4146](https://uk.rs-online.com/web/p/aluminium-capacitors/8624146) |
-
-### Assembly
-
-Components must be placed and soldered with care taken to ensure
-correct orientation and polarity.
-
-The host NMEA bus can be wired directly to J3 or (and preferably)
-the ENCLOSURE drilled to accommodate J3* and J3*'s flying leads
-connected to the J3 header.
-
-D1 through D8 can be soldered with long leads and holes drilled in
-ENCLOSURE to expose the LED lenses or (and preferably), each LED can
-be mounted normally on the PCB and elaborated with a light pipe
-mounted to the enclosure.
+| Address | Name | Default value | Description |
+| :---:   | :--- | :---:         | :--- |
+| 0x01    | MODULE INSTANCE NUMBER | 0xFF | |
+| 0x02    
 
 ## Use
 
