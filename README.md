@@ -41,10 +41,12 @@ The default transmission interval can be configured by the user.
 
 **ROM106** understands the following configuration parameters.
 
-| Address | Name | Default value | Description |
-| :---:   | :--- | :---:         | :--- |
-| 0x01    | MODULE INSTANCE NUMBER | 0xFF | |
-| 0x02    
+| Address | Name                         | Default value | Description |
+| :---:   | :---                         | :---:         | :--- |
+| 0x01    | MODULE INSTANCE NUMBER       | 0xFF          | |
+| 0x02    | PGN 127501 TRANSMIT INTERVAL | 0x04          | |
+
+
 
 ## Use
 
