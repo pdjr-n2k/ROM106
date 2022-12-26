@@ -1,15 +1,19 @@
 # ROM106 - NMEA 2000 relay output module
 
-**ROM106** is a specialisation of
+This module is a specialisation of
 [NOP100](https://github.com/preeve9534/NOP100)
 which implements a six channel NMEA 2000 relay output module.
 
-The module presents on the NMEA bus as a switchbank device with
+**ROM106** presents on the NMEA bus as a switchbank device with
 Class Code 30 (Electrical Distribution) and Function Code 140
-(Load Controller) and reports its status through transmission of
-PGN 127501 Binary Status Report messages.
-The module accepts PGN 127502 Switch Bank Control messages as the
-only means of controlling the state of its relay outputs.
+(Load Controller).
+
+PGN 127501 Binary Status Report messages are broadcast to the
+host NMEA bus reporting module status to any listeners.
+
+PGN 127502 Switch Bank Control messages addressed to the module's
+instance number are accepted and used to set the state of the module's
+relay outputs.
 
 The module is powered from the host NMEA bus and has an LEN of 0.5.
 
