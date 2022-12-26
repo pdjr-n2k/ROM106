@@ -1,27 +1,23 @@
 # ROM106 - NMEA 2000 relay output module
 
-This module is a specialisation of
+This project is a specialisation of
 [NOP100](https://github.com/preeve9534/NOP100)
-which implements a six channel NMEA 2000 relay output module.
+and implements a six channel NMEA 2000 relay output module which
+presents on the host NMEA bus as a switchbank device with Class
+Code 30 (Electrical Distribution) and Function Code 140 (Load
+Controller).
 
-**ROM106** presents on the NMEA bus as a switchbank device with
-Class Code 30 (Electrical Distribution) and Function Code 140
-(Load Controller).
-
-PGN 127501 Binary Status Report messages are broadcast to the
-host NMEA bus reporting module status to any listeners.
-
-PGN 127502 Switch Bank Control messages addressed to the module's
-instance number are accepted and used to set the state of the module's
-relay outputs.
+The module transmits PGN 127501 Binary Status Report messages and
+responds to PGN 127502 Switch Bank Control messages addressed to
+the module's instance number.
 
 The module is powered from the host NMEA bus and has an LEN of 0.5.
 
 ## Relay outputs
 
-The relay output sub-system consists of six bistable relays with
-zero-volt CO, NO and NCC terminals availble for the connection of
-circuits that should be under module control.
+The module's relay output sub-system consists of six bistable relays
+with zero-volt CO, NO and NCC terminals availble for the connection
+of circuits under module control.
 
 Relay connections are rated for a maximum of 5A at up to 220VAC
 or 30VDC.
@@ -32,13 +28,13 @@ __ROM106__'s relay states are updated by the receipt of a PGN 127502
 Switch Bank Control message addressed to the module's instance number.
 
 Operation of individual relays is queued so that any request for state
-change of multiple relays cannot result in the a problematic concurrent
-relay switching load.
+change of multiple relays cannot result in a possibly problematic
+concurrent relay switching load.
 
-__ROM106__ transmits PGN 127501 Binary Status Report messages to report
-the module status.
-
-By default a status report is transmitted once every four seconds or immediately following the receipt and handling of a PGN 17502 message.
+__ROM106__ reports module status by regularly broadcasting a PGN 127501
+Binary Status Report message.
+A report is always transmitted immediately following the receipt and
+handling of a PGN 127502 message.
 The default transmission interval can be configured by the user.
 
 ## Module configuration
