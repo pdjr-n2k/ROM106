@@ -1,8 +1,8 @@
 # ROM106 - NMEA 2000 relay output module
 
 **ROM106** is a specialisation of
-[NOP100](https://github.com/preeve9534/NOP100]
-which implements a six-channel NMEA 2000 relay output module.
+[NOP100](https://github.com/preeve9534/NOP100)
+which implements a six channel NMEA 2000 relay output module.
 
 __ROM106__ consists of a microcontroller-based hardware design
 and an associated firmware.
