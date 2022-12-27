@@ -1,5 +1,5 @@
 /**********************************************************************
- * module-definitions.inc
+ * module-directives.inc
  *
  * Contains #defines for the constant values which characterise our
  * module application and, a little incongruously, declarations for our
@@ -68,19 +68,6 @@
 #define NMEA_PGN_HANDLERS  { { 127502L, handlePGN127502 }, { 0L, 0 } }
 
 /**********************************************************************
- * STATE MACHINE CALLBACK DEFINITIONS
- *
- * PRG_JUMP_VECTOR is an initialiser for a jump vector which defines
- * a list of pairs each of which maps an integer "machine state" to the
- * function responsible for processing that state.
- *
- * The vector is used to configure a state machine that is used to
- * handle module configuration conducted through operation of the
- * hardware PRG button.
- */
-#define PRG_JUMP_VECTOR { { 0, updateModuleInstance }, { 0, 0} }
-
-/**********************************************************************
  * Aliases for GPIO pins connected to switch inputs. 
  */
 #define GPIO_RELAY1_ENABLE GPIO_D23
@@ -93,6 +80,7 @@
 #define GPIO_RELAY_RST GPIO_D9
 #define GPIO_RELAY_CONTROL_OUTPUT_PINS { GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY6_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
 
+#define PGN127501_TRANSMIT_INTERVAL_EEPROM_ADDRESS 02
 
 /**********************************************************************
  * Number of milliseconds between checks on switch input channel state.
@@ -112,7 +100,7 @@
 /**********************************************************************
  * Number of milliseconds between regular transmission of PGN 127501.
  */
-#define PGN127501_TRANSMIT_INTERVAL 4000UL
+#define PGN127501_DEFAULT_TRANSMIT_INTERVAL 4000UL
 
 /**********************************************************************
  * Ok, these are declarations, not definitions, but we need to get the

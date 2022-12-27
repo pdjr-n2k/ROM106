@@ -14,6 +14,8 @@
  */
 tN2kBinaryStatus SWITCHBANK_STATUS;
 
+unsigned long PGN127501_TRANSMIT_INTERVAL = PGN127501_DEFAULT_TRANSMIT_INTERVAL;
+
 /**********************************************************************
  * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
  * specifies a relay (1 through 4) and an operation: SET if the opcode
