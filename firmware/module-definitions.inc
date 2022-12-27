@@ -14,6 +14,10 @@
  */
 tN2kBinaryStatus SWITCHBANK_STATUS;
 
+/**********************************************************************
+ * PGN127501_TRANSMIT_INTERVAL - working storage for the transmit
+ * interval.
+ */
 unsigned long PGN127501_TRANSMIT_INTERVAL = PGN127501_DEFAULT_TRANSMIT_INTERVAL;
 
 /**********************************************************************

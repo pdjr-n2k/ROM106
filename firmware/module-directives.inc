@@ -80,6 +80,9 @@
 #define GPIO_RELAY_RST GPIO_D9
 #define GPIO_RELAY_CONTROL_OUTPUT_PINS { GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY6_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
 
+/**********************************************************************
+ * Storage location of the transmit interval configuration value.
+ */
 #define PGN127501_TRANSMIT_INTERVAL_EEPROM_ADDRESS 02
 
 /**********************************************************************
