@@ -6,11 +6,13 @@
  * functions must be declared at the end of module-definitions.inc.
  */
 
-#define CONFIGURATION_INITIALISER
-/*********************************************************************
+/*****************************************************************//**
+ * #define disables default definition.
+ * 
  * Load configuration from EEPROM or, if this is first use, set
  * defaults and save to EEPROM.
  */
+#define CONFIGURATION_INITIALISER
 unsigned char* configurationInitialiser(int& size, unsigned int eepromAddress) {
   static unsigned char *buffer = new unsigned char[size = CONFIGURATION_SIZE];
   EEPROM.get(eepromAddress, buffer);
@@ -23,10 +25,12 @@ unsigned char* configurationInitialiser(int& size, unsigned int eepromAddress) {
   return(buffer);
 }
 
-#define CONFIGURATION_VALIDATOR
 /**********************************************************************
+ * #define disables default definition.
+ *
  * Validate configuration update data.
  */
+#define CONFIGURATION_VALIDATOR
 bool configurationValidator(unsigned int index, unsigned char value) {
   switch (index) {
     case CONFIGURATION_CAN_SOURCE_INDEX:
@@ -43,12 +47,13 @@ bool configurationValidator(unsigned int index, unsigned char value) {
   }
 }
 
-#define GET_STATUS_LEDS_STATUS
 /**********************************************************************
- * getStatusLedsStatus - overrides the default function in the generic
- * firmware, returning a value that can be used to update the status
- * LEDs with the input channel states.
+ * #define disables default definition.
+ *
+ * Returns a value that can be used to update the status LEDs with the
+ * switchbank channel states.
  */
+#define GET_STATUS_LEDS_STATUS
 uint8_t getStatusLedsStatus() {
   unsigned char retval = 0;
   for (int i = 0; i < 6; i++) {
@@ -58,9 +63,8 @@ uint8_t getStatusLedsStatus() {
 }
 
 /**********************************************************************
- * SWITCHBANK_STATUS - working storage for holding the most recently
- * read state of the Teensy switch inputs in the format used by the
- * NMEA2000 library.
+ * SWITCHBANK_STATUS - working storage for holding the current state of
+ * the switchbank in the format used by the NMEA2000 library.
  */
 tN2kBinaryStatus SWITCHBANK_STATUS;
 

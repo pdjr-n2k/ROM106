@@ -50,7 +50,6 @@
 #define PRODUCT_VERSION "1.0 (Mar 2022)"
 
 
-
 /**********************************************************************
  * NMEA2000 LIBRARY DEFINITIONS
  *
@@ -67,6 +66,7 @@
 #define NMEA_TRANSMIT_MESSAGE_PGNS { 127501L, 0 }
 #define NMEA_PGN_HANDLERS  { { 127502L, handlePGN127502 }, { 0L, 0 } }
 
+
 /**********************************************************************
  * Aliases for GPIO pins connected to switch inputs. 
  */
@@ -80,6 +80,10 @@
 #define GPIO_RELAY_RST GPIO_D9
 #define GPIO_RELAY_CONTROL_OUTPUT_PINS { GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY6_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
 
+
+/**********************************************************************
+ * Module configuration stuff.
+ *
 #define CONFIGURATION_SIZE 3
 
 #define CONFIGURATION_CAN_SOURCE_INDEX 0
@@ -104,10 +108,3 @@
  */
 #define RELAY_OPERATION_QUEUE_INTERVAL 20UL
 
-/**********************************************************************
- * Ok, these are declarations, not definitions, but we need to get the
- * jump vector callbacks in the world quite early...
- */
-void transmitSwitchbankStatusMaybe(bool force = false);
-void transmitPGN127501();
-void handlePGN127502(const tN2kMsg &n2kMsg);
