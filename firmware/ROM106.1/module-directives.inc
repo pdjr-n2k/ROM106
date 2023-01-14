@@ -63,6 +63,7 @@
  * over the CAN interface. For example, { 127501L, myFunc }. The list
  * must terminate with the special flag value { 0L, 0 }.
  */
+void handlePGN127502(const tN2kMsg &n2kMsg);
 #define NMEA_TRANSMIT_MESSAGE_PGNS { 127501L, 0 }
 #define NMEA_PGN_HANDLERS  { { 127502L, handlePGN127502 }, { 0L, 0 } }
 
@@ -83,7 +84,7 @@
 
 /**********************************************************************
  * Module configuration stuff.
- *
+ */
 #define CONFIGURATION_SIZE 3
 
 #define CONFIGURATION_CAN_SOURCE_INDEX 0

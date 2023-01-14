@@ -6,6 +6,16 @@
  * functions must be declared at the end of module-definitions.inc.
  */
 
+void transmitSwitchbankStatusMaybe(bool force = false);
+void transmitPGN127501();
+
+
+/**********************************************************************
+ * SWITCHBANK_STATUS - working storage for holding the current state of
+ * the switchbank in the format used by the NMEA2000 library.
+ */
+tN2kBinaryStatus SWITCHBANK_STATUS;
+
 /*****************************************************************//**
  * #define disables default definition.
  * 
@@ -61,12 +71,6 @@ uint8_t getStatusLedsStatus() {
   }
   return(retval);
 }
-
-/**********************************************************************
- * SWITCHBANK_STATUS - working storage for holding the current state of
- * the switchbank in the format used by the NMEA2000 library.
- */
-tN2kBinaryStatus SWITCHBANK_STATUS;
 
 /**********************************************************************
  * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
@@ -217,7 +221,8 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
   }
 }
 
-/**********************************************************************
+/******************************************************************//**
+ * @
  * Assemble and transmit a PGN 127501 Binary Status Update message
  * reflecting the current switchbank state.
  */
