@@ -80,10 +80,14 @@
 #define GPIO_RELAY_RST GPIO_D9
 #define GPIO_RELAY_CONTROL_OUTPUT_PINS { GPIO_RELAY1_ENABLE, GPIO_RELAY2_ENABLE, GPIO_RELAY3_ENABLE, GPIO_RELAY4_ENABLE, GPIO_RELAY5_ENABLE, GPIO_RELAY6_ENABLE, GPIO_RELAY_SET, GPIO_RELAY_RST }
 
-/**********************************************************************
- * Storage location of the transmit interval configuration value.
- */
-#define PGN127501_TRANSMIT_INTERVAL_EEPROM_ADDRESS 02
+#define CONFIGURATION_SIZE 3
+
+#define CONFIGURATION_CAN_SOURCE_INDEX 0
+#define CONFIGURATION_INSTANCE_INDEX 1
+#define CONFIGURATION_TRANSMIT_INTERVAL_INDEX 2
+
+#define INSTANCE_DEFAULT_VALUE 0xff
+#define TRANSMIT_INTERVAL_DEFAULT_VALUE 0x04
 
 /**********************************************************************
  * Number of milliseconds between checks on switch input channel state.
@@ -99,11 +103,6 @@
  * Frequency of relay queue processing.
  */
 #define RELAY_OPERATION_QUEUE_INTERVAL 20UL
-
-/**********************************************************************
- * Number of milliseconds between regular transmission of PGN 127501.
- */
-#define PGN127501_DEFAULT_TRANSMIT_INTERVAL 4000UL
 
 /**********************************************************************
  * Ok, these are declarations, not definitions, but we need to get the

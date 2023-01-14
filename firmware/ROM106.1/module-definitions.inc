@@ -6,6 +6,56 @@
  * functions must be declared at the end of module-definitions.inc.
  */
 
+#define CONFIGURATION_INITIALISER
+/*********************************************************************
+ * Load configuration from EEPROM or, if this is first use, set
+ * defaults and save to EEPROM.
+ */
+unsigned char* configurationInitialiser(int& size, unsigned int eepromAddress) {
+  static unsigned char *buffer = new unsigned char[size = CONFIGURATION_SIZE];
+  EEPROM.get(eepromAddress, buffer);
+  if (buffer[CONFIGURATION_CAN_SOURCE_INDEX] == 0xff) {
+    buffer[CONFIGURATION_CAN_SOURCE_INDEX] = CAN_SOURCE_DEFAULT_VALUE;
+    buffer[CONFIGURATION_INSTANCE_INDEX] = INSTANCE_DEFAULT_VALUE;
+    buffer[CONFIGURATION_TRANSMIT_INTERVAL_INDEX] = TRANSMIT_INTERVAL_DEFAULT_VALUE;
+    EEPROM.put(eepromAddress, buffer);
+  }
+  return(buffer);
+}
+
+#define CONFIGURATION_VALIDATOR
+/**********************************************************************
+ * Validate configuration update data.
+ */
+bool configurationValidator(unsigned int index, unsigned char value) {
+  switch (index) {
+    case CONFIGURATION_CAN_SOURCE_INDEX:
+      return(true);
+    case CONFIGURATION_INSTANCE_INDEX:
+      return((value < 252) || (value == 255));
+      break;
+    case CONFIGURATION_TRANSMIT_INTERVAL_INDEX:
+      return(value >= 4);
+      break;
+    default:
+      return(false);
+      break;
+  }
+}
+
+#define GET_STATUS_LEDS_STATUS
+/**********************************************************************
+ * getStatusLedsStatus - overrides the default function in the generic
+ * firmware, returning a value that can be used to update the status
+ * LEDs with the input channel states.
+ */
+uint8_t getStatusLedsStatus() {
+  unsigned char retval = 0;
+  for (int i = 0; i < 6; i++) {
+    retval = (retval | (((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, (i + 1)) == N2kOnOff_On)?1:0) << i));
+  }
+  return(retval);
+}
 
 /**********************************************************************
  * SWITCHBANK_STATUS - working storage for holding the most recently
@@ -13,12 +63,6 @@
  * NMEA2000 library.
  */
 tN2kBinaryStatus SWITCHBANK_STATUS;
-
-/**********************************************************************
- * PGN127501_TRANSMIT_INTERVAL - working storage for the transmit
- * interval.
- */
-unsigned long PGN127501_TRANSMIT_INTERVAL = PGN127501_DEFAULT_TRANSMIT_INTERVAL;
 
 /**********************************************************************
  * RELAY_OPERATION_QUEUE is a queue of integer opcodes each of which
@@ -128,8 +172,8 @@ void transmitSwitchbankStatusMaybe(bool force) {
 
   if ((now > deadline) || force) {
     transmitPGN127501();
-    TRANSMIT_LED_STATE = 1;
-    deadline = (now + PGN127501_TRANSMIT_INTERVAL);
+    TRANSMIT_LED.setLedState(0, StatusLeds::LedState::once);
+    deadline = (now + (1000UL * MODULE_CONFIGURATION.getByte(CONFIGURATION_TRANSMIT_INTERVAL_INDEX)));
   }
 }
 
@@ -151,7 +195,7 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
   tN2kOnOff channelStatus;
   
   if (ParseN2kPGN127501(n2kMsg, instance, bankStatus)) {
-    if (instance == MODULE_INSTANCE) {
+    if (instance == MODULE_CONFIGURATION.getByte(CONFIGURATION_INSTANCE_INDEX)) {
       for (unsigned int c = 1; c <= 6; c++) {
         channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, c);
         if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
@@ -176,27 +220,8 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
 void transmitPGN127501() {
   static tN2kMsg N2kMsg;
 
-  if (MODULE_INSTANCE < 253) {
-    SetN2kPGN127501(N2kMsg, MODULE_INSTANCE, SWITCHBANK_STATUS);
+  if (MODULE_CONFIGURATION.getByte(CONFIGURATION_INSTANCE_INDEX) < 253) {
+    SetN2kPGN127501(N2kMsg, MODULE_CONFIGURATION.getByte(CONFIGURATION_INSTANCE_INDEX), SWITCHBANK_STATUS);
     NMEA2000.SendMsg(N2kMsg);
   }
 }  
-
-/**********************************************************************
- * OVERRIDE OF FUNCTIONS IN NOP100
- */
-
-/**********************************************************************
- * getStatusLedsStatus - overrides the default function in the generic
- * firmware, returning a value that can be used to update the status
- * LEDs with the input channel states.
- */
-#define GET_STATUS_LEDS_STATUS
-uint8_t getStatusLedsStatus() {
-  unsigned char retval = 0;
-  for (int i = 0; i < 6; i++) {
-    retval = (retval | (((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, (i + 1)) == N2kOnOff_On)?1:0) << i));
-  }
-  return(retval);
-}
-
