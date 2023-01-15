@@ -1,14 +1,16 @@
-/**********************************************************************
- * module-directives.inc
- *
- * Contains #defines for the constant values which characterise our
- * module application and, a little incongruously, declarations for our
- * application functions
- */
-  
-/**********************************************************************
- * DEVICE INFORMATION
+/**
+ * @file module-directives.h
+ * @author Paul Reeve (preeve@pdjr.eu)
+ * @brief CPP directives for ROM106.
+ * @version 0.1
+ * @date 2023-01-15
  * 
+ * @copyright Copyright (c) 2023
+ */
+
+/**
+ * @brief Device information required by NMEA2000 library.
+ *  
  * Because of NMEA's closed standard, most of this is fiction. Maybe it
  * can be made better with more research.
  *
@@ -25,7 +27,7 @@
  * a value which must be unique (is some way) on any N2K bus. An easy
  * way to achieve this is just to bump the unique number for every
  * software build. Really this needs (i) understanding and
- * (ii) automating.
+ * (ii) automating. 
  */
 #define DEVICE_CLASS 30                 // Electrical Distribution
 #define DEVICE_FUNCTION 140             // Load Controller
@@ -33,12 +35,8 @@
 #define DEVICE_MANUFACTURER_CODE 2046   // Currently not allocated.
 #define DEVICE_UNIQUE_NUMBER 849        // Bump me?
 
-
-/**********************************************************************
- * PRODUCT INFORMATIOM
- * 
- * This poorly structured set of values is what NMEA expects a product
- * description to be shoe-horned into.
+/**
+ * @brief Product information required by the NMEA2000 library.
  */
 #define PRODUCT_CERTIFICATION_LEVEL 1
 #define PRODUCT_CODE 002
@@ -49,10 +47,9 @@
 #define PRODUCT_TYPE "ROM106"           // The product name?
 #define PRODUCT_VERSION "1.0 (Mar 2022)"
 
-
-/**********************************************************************
- * NMEA2000 LIBRARY DEFINITIONS
- *
+/**
+ * @brief PGN processing declarations required by NMEA2000 library.
+ * 
  * NMEA_TRANSMIT_MESSAGE_PGNS is an initialiser for an array of PGNs
  * which defines the messages transmitted by this firmware. The list
  * must terminate with a zero value.

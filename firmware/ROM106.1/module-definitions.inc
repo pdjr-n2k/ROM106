@@ -1,3 +1,6 @@
+
+
+
 /**********************************************************************
  * module-declarations.inc
  *
@@ -221,10 +224,8 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
   }
 }
 
-/******************************************************************//**
- * @
- * Assemble and transmit a PGN 127501 Binary Status Update message
- * reflecting the current switchbank state.
+/**********************************************************************
+ *
  */
 void transmitPGN127501() {
   static tN2kMsg N2kMsg;
