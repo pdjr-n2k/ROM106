@@ -9,7 +9,12 @@
  * functions must be declared at the end of module-definitions.inc.
  */
 
-void transmitSwitchbankStatusMaybe(bool force = false);
+/**
+ * @brief Create a scheduler instance for transmission of PGN 127501.
+ */
+tN2kSyncScheduler PGN127501Scheduler;
+
+
 void transmitPGN127501();
 
 
@@ -19,23 +24,18 @@ void transmitPGN127501();
  */
 tN2kBinaryStatus SWITCHBANK_STATUS;
 
-/*****************************************************************//**
- * #define disables default definition.
+/**
+ * @brief Callback with actions to perform on CAN address claim.
  * 
- * Load configuration from EEPROM or, if this is first use, set
- * defaults and save to EEPROM.
+ * Set the period and offset for transmission of PGN 127501 from module
+ * configuration data. The SetPeriodAndOffset() function alos starts the
+ * scheduler.
  */
-#define CONFIGURATION_INITIALISER
-unsigned char* configurationInitialiser(int& size, unsigned int eepromAddress) {
-  static unsigned char *buffer = new unsigned char[size = CONFIGURATION_SIZE];
-  EEPROM.get(eepromAddress, buffer);
-  if (buffer[CONFIGURATION_CAN_SOURCE_INDEX] == 0xff) {
-    buffer[CONFIGURATION_CAN_SOURCE_INDEX] = CAN_SOURCE_DEFAULT_VALUE;
-    buffer[CONFIGURATION_INSTANCE_INDEX] = INSTANCE_DEFAULT_VALUE;
-    buffer[CONFIGURATION_TRANSMIT_INTERVAL_INDEX] = TRANSMIT_INTERVAL_DEFAULT_VALUE;
-    EEPROM.put(eepromAddress, buffer);
-  }
-  return(buffer);
+void onN2kOpen() {
+  PGN127501Scheduler.SetPeriodAndOffset(
+    (uint32_t) (MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_PGN127501_TRANSMIT_PERIOD_INDEX) * 1000),
+    (uint32_t) (MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_PGN127501_TRANSMIT_OFFSET_INDEX) * 10)
+  );
 }
 
 /**********************************************************************
@@ -46,13 +46,16 @@ unsigned char* configurationInitialiser(int& size, unsigned int eepromAddress) {
 #define CONFIGURATION_VALIDATOR
 bool configurationValidator(unsigned int index, unsigned char value) {
   switch (index) {
-    case CONFIGURATION_CAN_SOURCE_INDEX:
+    case MODULE_CONFIGURATION_CAN_SOURCE_INDEX:
       return(true);
-    case CONFIGURATION_INSTANCE_INDEX:
+    case MODULE_CONFIGURATION_INSTANCE_INDEX:
       return((value < 252) || (value == 255));
       break;
-    case CONFIGURATION_TRANSMIT_INTERVAL_INDEX:
-      return(value >= 4);
+    case MODULE_CONFIGURATION_PGN127501_TRANSMIT_PERIOD_INDEX:
+      return(true);
+      break;
+    case MODULE_CONFIGURATION_PGN127501_TRANSMIT_OFFSET_INDEX:
+      return(true);
       break;
     default:
       return(false);
@@ -165,26 +168,10 @@ void processRelayOperationQueueMaybe() {
         default: break;
       }
       operating = true;
-      transmitSwitchbankStatusMaybe(true);
+      transmitPGN127501();
     }
     
     deadline = (now + RELAY_OPERATION_QUEUE_INTERVAL);
-  }
-}
-
-/**********************************************************************
- * transmitSwitchbankStatusMaybe() should be called directly from
- * loop(). The function proceeds to transmit a switchbank binary status
- * message if PGN127501_TRANSMIT_INTERVAL has elapsed or <force> is true.
- */
-void transmitSwitchbankStatusMaybe(bool force) {
-  static unsigned long deadline = 0UL;
-  unsigned long now = millis();
-
-  if ((now > deadline) || force) {
-    transmitPGN127501();
-    TRANSMIT_LED.setLedState(0, StatusLeds::LedState::once);
-    deadline = (now + (1000UL * MODULE_CONFIGURATION.getByte(CONFIGURATION_TRANSMIT_INTERVAL_INDEX)));
   }
 }
 
@@ -206,7 +193,7 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
   tN2kOnOff channelStatus;
   
   if (ParseN2kPGN127501(n2kMsg, instance, bankStatus)) {
-    if (instance == MODULE_CONFIGURATION.getByte(CONFIGURATION_INSTANCE_INDEX)) {
+    if (instance == MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX)) {
       for (unsigned int c = 1; c <= 6; c++) {
         channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, c);
         if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
@@ -230,8 +217,8 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
 void transmitPGN127501() {
   static tN2kMsg N2kMsg;
 
-  if (MODULE_CONFIGURATION.getByte(CONFIGURATION_INSTANCE_INDEX) < 253) {
-    SetN2kPGN127501(N2kMsg, MODULE_CONFIGURATION.getByte(CONFIGURATION_INSTANCE_INDEX), SWITCHBANK_STATUS);
+  if (MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX) < 253) {
+    SetN2kPGN127501(N2kMsg, MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX), SWITCHBANK_STATUS);
     NMEA2000.SendMsg(N2kMsg);
   }
 }  
