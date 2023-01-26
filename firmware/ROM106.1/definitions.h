@@ -31,6 +31,7 @@ tN2kBinaryStatus SWITCHBANK_STATUS;
  * configuration data. The SetPeriodAndOffset() function alos starts the
  * scheduler.
  */
+#define ON_N2K_OPEN
 void onN2kOpen() {
   PGN127501Scheduler.SetPeriodAndOffset(
     (uint32_t) (MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_PGN127501_TRANSMIT_PERIOD_INDEX) * 1000),
