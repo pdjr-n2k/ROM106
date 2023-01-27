@@ -34,8 +34,8 @@ tN2kBinaryStatus SWITCHBANK_STATUS;
 #define ON_N2K_OPEN
 void onN2kOpen() {
   PGN127501Scheduler.SetPeriodAndOffset(
-    (uint32_t) (MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_PGN127501_TRANSMIT_PERIOD_INDEX) * 1000),
-    (uint32_t) (MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_PGN127501_TRANSMIT_OFFSET_INDEX) * 10)
+    (uint32_t) (ModuleConfiguration.getByte(MODULE_CONFIGURATION_PGN127501_TRANSMIT_PERIOD_INDEX) * 1000),
+    (uint32_t) (ModuleConfiguration.getByte(MODULE_CONFIGURATION_PGN127501_TRANSMIT_OFFSET_INDEX) * 10)
   );
 }
 
@@ -194,7 +194,7 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
   tN2kOnOff channelStatus;
   
   if (ParseN2kPGN127501(n2kMsg, instance, bankStatus)) {
-    if (instance == MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX)) {
+    if (instance == ModuleConfiguration.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX)) {
       for (unsigned int c = 1; c <= 6; c++) {
         channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, c);
         if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
@@ -218,8 +218,8 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
 void transmitPGN127501() {
   static tN2kMsg N2kMsg;
 
-  if (MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX) < 253) {
-    SetN2kPGN127501(N2kMsg, MODULE_CONFIGURATION.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX), SWITCHBANK_STATUS);
+  if (ModuleConfiguration.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX) < 253) {
+    SetN2kPGN127501(N2kMsg, ModuleConfiguration.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX), SWITCHBANK_STATUS);
     NMEA2000.SendMsg(N2kMsg);
   }
 }  
