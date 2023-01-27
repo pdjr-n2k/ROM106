@@ -39,6 +39,7 @@
  * @brief PGN overrides for ROM106.
  * */
 void handlePGN127502(const tN2kMsg &n2kMsg);
+
 #define NMEA_TRANSMIT_MESSAGE_PGNS { 127501L, 0 }
 #define NMEA_PGN_HANDLERS  { { 127502L, handlePGN127502 }, { 0L, 0 } }
 
@@ -77,3 +78,5 @@ void handlePGN127502(const tN2kMsg &n2kMsg);
  */
 #define RELAY_OPERATION_QUEUE_INTERVAL 20UL
 
+#define ON_N2K_OPEN
+#define CONFIGURATION_VALIDATOR

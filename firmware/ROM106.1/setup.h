@@ -11,4 +11,4 @@ for (unsigned int i = 0 ; i < ELEMENTCOUNT(rcopins); i++) pinMode(rcopins[i], OU
 /**********************************************************************
  * Clear switchbank status buffer.
  */
-N2kResetBinaryStatus(SWITCHBANK_STATUS);
+N2kResetBinaryStatus(SwitchbankStatus);

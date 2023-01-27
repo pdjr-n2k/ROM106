@@ -1,12 +1,8 @@
-
-
-
-/**********************************************************************
- * module-declarations.inc
- *
- * Contains declarations of types, variables, etc. that are required
- * for implementation of our application. Note that application
- * functions must be declared at the end of module-definitions.inc.
+/**
+ * @file definitions.h
+ * @author Paul Reeve (preeve@pdjr.eu)
+ * @brief Definitions for ROM106.
+ * @copyright Copyright (c) 2023
  */
 
 /**
@@ -14,15 +10,13 @@
  */
 tN2kSyncScheduler PGN127501Scheduler;
 
-
 void transmitPGN127501();
 
-
 /**********************************************************************
- * SWITCHBANK_STATUS - working storage for holding the current state of
+ * SwitchbankStatus - working storage for holding the current state of
  * the switchbank in the format used by the NMEA2000 library.
  */
-tN2kBinaryStatus SWITCHBANK_STATUS;
+tN2kBinaryStatus SwitchbankStatus;
 
 /**
  * @brief Callback with actions to perform on CAN address claim.
@@ -31,7 +25,6 @@ tN2kBinaryStatus SWITCHBANK_STATUS;
  * configuration data. The SetPeriodAndOffset() function alos starts the
  * scheduler.
  */
-#define ON_N2K_OPEN
 void onN2kOpen() {
   PGN127501Scheduler.SetPeriodAndOffset(
     (uint32_t) (ModuleConfiguration.getByte(MODULE_CONFIGURATION_PGN127501_TRANSMIT_PERIOD_INDEX) * 1000),
@@ -44,7 +37,6 @@ void onN2kOpen() {
  *
  * Validate configuration update data.
  */
-#define CONFIGURATION_VALIDATOR
 bool configurationValidator(unsigned int index, unsigned char value) {
   switch (index) {
     case MODULE_CONFIGURATION_CAN_SOURCE_INDEX:
@@ -62,21 +54,6 @@ bool configurationValidator(unsigned int index, unsigned char value) {
       return(false);
       break;
   }
-}
-
-/**********************************************************************
- * #define disables default definition.
- *
- * Returns a value that can be used to update the status LEDs with the
- * switchbank channel states.
- */
-#define GET_STATUS_LEDS_STATUS
-uint8_t getStatusLedsStatus() {
-  unsigned char retval = 0;
-  for (int i = 0; i < 6; i++) {
-    retval = (retval | (((N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, (i + 1)) == N2kOnOff_On)?1:0) << i));
-  }
-  return(retval);
 }
 
 /**********************************************************************
@@ -144,27 +121,27 @@ void processRelayOperationQueueMaybe() {
       switch (opcode) {
         case 1: case -1:
           digitalWrite(GPIO_RELAY1_ENABLE, 1);
-          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 1);
+          N2kSetStatusBinaryOnStatus(SwitchbankStatus, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 1);
           break;
         case 2: case -2:
           digitalWrite(GPIO_RELAY2_ENABLE, 1);
-          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 2);
+          N2kSetStatusBinaryOnStatus(SwitchbankStatus, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 2);
           break;
         case 3: case -3:
           digitalWrite(GPIO_RELAY3_ENABLE, 1);
-          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 3);
+          N2kSetStatusBinaryOnStatus(SwitchbankStatus, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 3);
           break;
         case 4: case -4:
           digitalWrite(GPIO_RELAY4_ENABLE, 1);
-          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 4);
+          N2kSetStatusBinaryOnStatus(SwitchbankStatus, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 4);
           break;
         case 5: case -5:
           digitalWrite(GPIO_RELAY5_ENABLE, 1);
-          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 5);
+          N2kSetStatusBinaryOnStatus(SwitchbankStatus, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 5);
           break;
         case 6: case -6:
           digitalWrite(GPIO_RELAY6_ENABLE, 1);
-          N2kSetStatusBinaryOnStatus(SWITCHBANK_STATUS, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 6);
+          N2kSetStatusBinaryOnStatus(SwitchbankStatus, (opcode == 1)?N2kOnOff_On:N2kOnOff_Off, 6);
           break;
         default: break;
       }
@@ -179,7 +156,7 @@ void processRelayOperationQueueMaybe() {
 /**********************************************************************
  * Process a received PGN 127502 Switch Bank Control message by
  * decoding the switchbank status message and comparing the requested
- * channel state(s) with the current SWITCHBANK_STATUS. Any mismatch 
+ * channel state(s) with the current SwitchbankStatus. Any mismatch 
  * results in one or more opcodes representing an appropriate set or
  * reset operation on each changed channel being queued for subsequent
  * processing.
@@ -198,7 +175,7 @@ void handlePGN127502(const tN2kMsg &n2kMsg) {
       for (unsigned int c = 1; c <= 6; c++) {
         channelStatus = N2kGetStatusOnBinaryStatus(bankStatus, c);
         if ((channelStatus == N2kOnOff_On) || (channelStatus == N2kOnOff_Off)) {        
-          if (channelStatus != N2kGetStatusOnBinaryStatus(SWITCHBANK_STATUS, c)) {
+          if (channelStatus != N2kGetStatusOnBinaryStatus(SwitchbankStatus, c)) {
             if (!RELAY_OPERATION_QUEUE.isFull()) {
               //LED_DISPLAY.cancelOverride();
               RELAY_OPERATION_QUEUE.enqueue((int) (c * ((channelStatus == N2kOnOff_On)?1:-1)));
@@ -219,7 +196,7 @@ void transmitPGN127501() {
   static tN2kMsg N2kMsg;
 
   if (ModuleConfiguration.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX) < 253) {
-    SetN2kPGN127501(N2kMsg, ModuleConfiguration.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX), SWITCHBANK_STATUS);
+    SetN2kPGN127501(N2kMsg, ModuleConfiguration.getByte(MODULE_CONFIGURATION_INSTANCE_INDEX), SwitchbankStatus);
     NMEA2000.SendMsg(N2kMsg);
   }
 }  
